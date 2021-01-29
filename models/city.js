@@ -25,8 +25,8 @@ const citySchema = new Schema({
         type: String,
         required: true
     },
-    general: {},
-    'city-specific': {}
+    'General Information': {},
+    'City-Specific': {}
 });
 
 module.exports = mongoose.model('City', citySchema);
