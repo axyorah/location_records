@@ -36,24 +36,22 @@ const map = new mapboxgl.Map({
 // }
 
 map.on('load', function () {
-    for (let areaName in area2color) {
-        const area = areas.filter(area => area.name === areaName)[0];
-        console.log(`AREA: ${areaName}`);
-        console.log(area);
-        map.addSource(`cities-${areaName}`, {
+    for (let area of areas) {
+        // add city-data of the current area
+        map.addSource(`cities-${area.name}`, {
             'type': 'geojson',
             'data': {
                 'type': 'FeatureCollection',
                 'features': area.cities
             }
         });
-        // Add a layer showing the places.
+        // add a layer showing the places.
         map.addLayer({
-            'id': `cities-${areaName}`,
+            'id': `cities-${area.name}`,
             'type': 'circle',
-            'source': `cities-${areaName}`,
+            'source': `cities-${area.name}`,
             'paint': { 
-                'circle-color': area2color[areaName],
+                'circle-color': area2color[area.name],
                 'circle-radius': 8
             }
         });
