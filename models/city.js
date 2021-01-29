@@ -25,6 +25,11 @@ const citySchema = new Schema({
         type: String,
         required: true
     },
+    area: {
+        type: Schema.Types.ObjectId,
+        ref: 'Area',
+        required: true
+    },
     'General Information': {},
     'City-Specific': {}
 });

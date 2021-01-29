@@ -23,7 +23,7 @@ const showFullInfo = (item) => {
 
     // add data of currently selected region
     const lvl = 2;
-    const ingoredKeyList = ['name', 'quickInfo', 'geometry', 'code', '_id', '__v']
+    const ingoredKeyList = ['name', 'quickInfo', 'geometry', 'code', 'area', '_id', '__v']
     regionInfoHtml.appendChild(showObject(item, lvl, ingoredKeyList));
 }
 

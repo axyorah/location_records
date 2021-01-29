@@ -22,10 +22,17 @@ const seedDB = async () => {
     for (let area in areas) {
         console.log(`Populating "${area}"`);
 
+        const newArea = new Area({
+            name: areas[area].name,
+            code: areas[area].name,
+            quickInfo: areas[area].quickInfo
+        })
+
         const cities = [];
         for (let city of areas[area].cities) {
             console.log(`  ${city.name}`);
             const newCity = new City({});
+            newCity.area = newArea._id;
             for (let field in city) {
                 if (field === 'latLng') {
                     const latLng = city[field];
@@ -41,12 +48,7 @@ const seedDB = async () => {
             cities.push(newCity);
         }
 
-        const newArea = new Area({
-            name: areas[area].name,
-            code: areas[area].name,
-            quickInfo: areas[area].quickInfo,
-            cities: cities
-        })
+        newArea.cities = cities;
 
         await newArea.save();
     }
