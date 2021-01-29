@@ -6,7 +6,10 @@ const mbxToken = process.env.MAPBOX_TOKEN;
 const baseClient = mbxClient({ accessToken: mbxToken });
 
 module.exports.index = async (req,res) => {
-    const code = 'AML';
+    const code = '75';
+
+    const areas = await Area.find({});
+    const cities = await City.find({});
 
     const area = await Area.findOne({ code: code }).populate('cities');
     const city = await City.findOne({ code: code });
@@ -14,5 +17,5 @@ module.exports.index = async (req,res) => {
 
     console.log(item);
 
-    res.render('./rov/mapView.ejs', { item: item });
+    res.render('./rov/mapView.ejs', { item, areas, cities });
 }

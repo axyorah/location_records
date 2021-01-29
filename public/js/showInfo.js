@@ -27,4 +27,4 @@ const showFullInfo = (item) => {
     regionInfoHtml.appendChild(showObject(item, lvl, ingoredKeyList));
 }
 
-showFullInfo(JSON.parse(item));
+showFullInfo(JSON.parse(itemJSON));
