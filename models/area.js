@@ -14,8 +14,9 @@ const areaSchema = new Schema({
         type: String,
         required: true
     },
-    info: {
-        type: mongoose.Schema.Types.ObjectId,        
+    color: {
+        type: String,
+        required: true
     },
     cities: {
         type: [ {
@@ -23,8 +24,8 @@ const areaSchema = new Schema({
             ref: 'City'
         } ],
     },
-    general: {},
-    'area-specific': {}
+    'General Information': {},
+    'Area-Specific': {}
 });
 
 module.exports = mongoose.model('Area', areaSchema);

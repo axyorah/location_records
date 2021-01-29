@@ -25,7 +25,10 @@ const seedDB = async () => {
         const newArea = new Area({
             name: areas[area].name,
             code: areas[area].name,
-            quickInfo: areas[area].quickInfo
+            color: areas[area].color,
+            quickInfo: areas[area].quickInfo,
+            'General Information': areas[area]['General Information'],
+            'Area-Specific': areas[area]['Area-Specific']
         })
 
         const cities = [];

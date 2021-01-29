@@ -6,7 +6,7 @@ const mbxToken = process.env.MAPBOX_TOKEN;
 const baseClient = mbxClient({ accessToken: mbxToken });
 
 module.exports.index = async (req,res) => {
-    const code = '75';
+    const code = 'AML';
 
     const areas = await Area.find({}).populate('cities');
     const cities = await City.find({});

@@ -1,6 +1,18 @@
 const regionNameHtml = document.querySelector('#region-name');
 const regionInfoHtml = document.querySelector('#region-info');
 
+// resp fields will not be displayed in the browser
+const ingoredKeyList = [
+    'name', 
+    'quickInfo', 
+    'geometry', 
+    'code', 
+    'area', 
+    'color',
+    '_id', 
+    '__v'
+]
+
 const showQuickInfo = (el, code) => {
     // show quick info on map
     el.html(el.html() + '<br>' + data[code].quickInfo);
@@ -22,8 +34,7 @@ const showFullInfo = (item) => {
     }
 
     // add data of currently selected region
-    const lvl = 2;
-    const ingoredKeyList = ['name', 'quickInfo', 'geometry', 'code', 'area', '_id', '__v']
+    const lvl = 2;    
     regionInfoHtml.appendChild(showObject(item, lvl, ingoredKeyList));
 }
 

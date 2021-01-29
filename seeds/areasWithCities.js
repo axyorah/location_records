@@ -22,7 +22,8 @@ const areas = {
     'AML': {
         name: 'AML',
         quickInfo: 'AML',
-        general: {'eve': 'eveervew', 'aserv': 'evertv'},
+        color: 'rgba(189,13,76,0.7)',
+        'General Information': {'eve': 'eveervew', 'aserv': 'evertv'},
         cities: area2city['AML']
             .map(code => completeCityProfile(code))
             .filter((city) => city !== undefined)
@@ -30,6 +31,7 @@ const areas = {
     'GEBIED-1': {
         name: 'GEBIED-1',
         quickInfo: 'GEBIED-1',
+        color: 'rgba(13,112,189,0.7)',
         cities: area2city['GEBIED-1']
             .map(code => completeCityProfile(code))
             .filter((city) => city !== undefined)
@@ -37,6 +39,7 @@ const areas = {
     'GEBIED-2A2C': {
         name: 'GEBIED-2A2C',
         quickInfo: 'GEBIED-2A2C',
+        color: 'rgba(178,145,13,0.7)',
         cities: area2city['GEBIED-2A2C']
             .map(code => completeCityProfile(code))
             .filter((city) => city !== undefined)
@@ -44,6 +47,7 @@ const areas = {
     'GEBIED-2B': {
         name: 'GEBIED-2B',
         quickInfo: 'GEBIED-2B',
+        color: 'rgba(156,99,99,0.7)',
         cities: area2city['GEBIED-2B']
             .map(code => completeCityProfile(code))
             .filter((city) => city !== undefined)
@@ -51,6 +55,7 @@ const areas = {
     'GEBIED-3': {
         name: 'GEBIED-3',
         quickInfo: 'GEBIED-3',
+        color: 'rgba(23,200,101,0.7)',
         cities: area2city['GEBIED-3']
             .map(code => completeCityProfile(code))
             .filter((city) => city !== undefined)

@@ -3,14 +3,6 @@ mapboxgl.accessToken = mapBoxToken;
 const areas = JSON.parse(areasJSON);
 const cities = JSON.parse(citiesJSON);
 
-const area2color = {
-    'AML': 'rgba(189,13,76,0.7)',
-    'GEBIED-1': 'rgba(13,112,189,0.7)',
-    'GEBIED-2A2C': 'rgba(178,145,13,0.7)',
-    'GEBIED-2B': 'rgba(156,99,99,0.7)',
-    'GEBIED-3': 'rgba(23,200,101,0.7)'
-}
-
 let city, area;
 if (JSON.parse(selectedJSON).area) {
     city = JSON.parse(selectedJSON);
@@ -52,7 +44,7 @@ map.on('load', function () {
             'type': 'circle',
             'source': `cities-${area.name}`,
             'paint': { 
-                'circle-color': area2color[area.name],
+                'circle-color': area.color,
                 'circle-radius': 8
             }
         });
@@ -79,6 +71,12 @@ map.on('load', function () {
         // remove popup
         map.on('mouseleave', `cities-${area.name}`, function (e) {
             popup.remove();
+        });
+
+        // upadate detailed city info
+        // remove popup
+        map.on('click', `cities-${area.name}`, function (e) {
+            console.log(e);
         });
     }    
 });
