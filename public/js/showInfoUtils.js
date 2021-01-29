@@ -53,6 +53,39 @@ const makeCollapsable = (key, val, lvl, ignoredKeyList) => {
     return outerDiv;
 }
 
+const addSubsetOfObjectKeysToUL = (ul, obj, lvl, keyList, ignoredKeyList) => {
+    for (let key of keyList) {
+        if (!ignoredKeyList.includes(key)) {
+            const val = obj[key];
+
+            const li = document.createElement('li');
+            li.setAttribute('class', 'list-group-item');
+            
+            const collapsable = makeCollapsable(key, val, lvl, ignoredKeyList);            
+
+            li.appendChild(collapsable);
+
+            ul.appendChild(li);
+        }
+    }
+}
+
+const addCitiesToUL = (ul, obj, lvl, ignoredKeyList) => {
+    if (obj.cities) {
+        for (let city of obj.cities) {
+            const li = document.createElement('li');
+            li.setAttribute('class', 'list-group-item');
+            
+            const collapsable = makeCollapsable(
+                `${city.name} (${city.code})`, city, lvl, ignoredKeyList);            
+
+            li.appendChild(collapsable);
+
+            ul.appendChild(li);
+        }
+    }
+}
+
 const showArray = (arr, lvl, ignoredKeyList) => {
     const ul = document.createElement('ul');
     for (let val of arr) {
@@ -70,40 +103,14 @@ const showObject = (obj, lvl, ignoredKeyList) => {
     ignoredKeyList = (ignoredKeyList === undefined) ? [] : ignoredKeyList;
     lvl = (lvl === undefined) ? 5 : lvl;
 
+    const specialKeyList = ['cities'];
+    const regularKeyList = Object.keys(obj).filter(key => !specialKeyList.includes(key));
+
     const ul = document.createElement('ul');
     ul.setAttribute('class', 'list-group list-group-flush');
-    for (let key in obj) {
-        if (!ignoredKeyList.includes(key) && key !== 'cities') {
-            const val = obj[key];
 
-            const li = document.createElement('li');
-            li.setAttribute('class', 'list-group-item');
-            
-            const collapsable = makeCollapsable(key, val, lvl, ignoredKeyList);            
-
-            li.appendChild(collapsable);
-
-            ul.appendChild(li);
-        }
-    }
-
-    // show cities after everything else
-    if (obj.cities) {
-        //const cities = showCities(obj.cities, lvl, ignoredKeyList);
-        for (let city of obj.cities) {
-            const li = document.createElement('li');
-            li.setAttribute('class', 'list-group-item');
-            
-            const collapsable = makeCollapsable(
-                `${city.name} (${city.code})`, city, lvl, ignoredKeyList);            
-
-            li.appendChild(collapsable);
-
-            ul.appendChild(li);
-        }
-    }
-
-    // i'd want the same for `general`...
+    addSubsetOfObjectKeysToUL(ul, obj, lvl, regularKeyList, ignoredKeyList);
+    addCitiesToUL(ul, obj, lvl, ignoredKeyList);
 
     return ul;
 }
