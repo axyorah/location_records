@@ -8,7 +8,7 @@ const baseClient = mbxClient({ accessToken: mbxToken });
 module.exports.index = async (req,res) => {
     const code = '75';
 
-    const areas = await Area.find({});
+    const areas = await Area.find({}).populate('cities');
     const cities = await City.find({});
 
     const area = await Area.findOne({ code: code }).populate('cities');
