@@ -27,5 +27,4 @@ const showFullInfo = (item) => {
     regionInfoHtml.appendChild(showObject(item, lvl, ingoredKeyList));
 }
 
-const obj = item.replaceAll('&#34;', '"');
-showFullInfo(JSON.parse(obj));
+showFullInfo(JSON.parse(item));

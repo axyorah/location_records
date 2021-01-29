@@ -20,7 +20,7 @@
 
 <script>
     const mapBoxToken = '<%= process.env.MAPBOX_TOKEN %>';
-    const item = '<%= item %>';
+    const item = '<%- JSON.stringify(item) %>';
 </script>
 <script src="/js/map.js"></script>
 <script src="/js/showInfoUtils.js"></script>

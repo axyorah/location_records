@@ -10,7 +10,7 @@ module.exports.index = async (req,res) => {
 
     const area = await Area.findOne({ code: code }).populate('cities');
     const city = await City.findOne({ code: code });
-    const item = JSON.stringify(area || city);
+    const item = area || city;
 
     console.log(item);
 
