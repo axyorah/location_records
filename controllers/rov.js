@@ -13,9 +13,9 @@ module.exports.index = async (req,res) => {
 
     const area = await Area.findOne({ code: code }).populate('cities');
     const city = await City.findOne({ code: code });
-    const item = area || city;
+    const selected = area || city;
 
-    console.log(item);
+    console.log(selected);
 
-    res.render('./rov/mapView.ejs', { item, areas, cities });
+    res.render('./rov/mapView.ejs', { selected, areas, cities });
 }
