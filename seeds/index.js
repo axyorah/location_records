@@ -17,6 +17,7 @@ db.once('open', () => {
 
 const seedDB = async () => {
     await Area.deleteMany({});
+    await City.deleteMany({});
 
     for (let area in areas) {
         console.log(`Populating "${area}"`);
