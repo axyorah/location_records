@@ -10,7 +10,7 @@
 
     <div class="col-xl-8 pt-5">
         <div class="card w-100">
-            <h1 id="region-name" class="card-title m-4"><%= selected.code %></h1>
+            <h1 id="region-name" class="card-title m-4">Select Region</h1>
             <div class="card-body" id="region-info"></div>
         </div>
     </div>
@@ -19,14 +19,11 @@
 
 
 <script>
-    const regionNameHtml = document.querySelector('#region-name');
-    const regionInfoHtml = document.querySelector('#region-info');
-
     const mapBoxToken = '<%= process.env.MAPBOX_TOKEN %>';
     const selectedJSON = '<%- JSON.stringify(selected) %>';
     const areasJSON = '<%- JSON.stringify(areas) %>';
     const citiesJSON = '<%- JSON.stringify(cities) %>';
 </script>
+<script src="/js/map.js"></script>
 <script src="/js/showInfoUtils.js"></script>
 <script src="/js/showInfo.js"></script>
-<script src="/js/map.js"></script>

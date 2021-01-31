@@ -1,6 +1,3 @@
-const regionNameHtml = document.querySelector('#region-name');
-const regionInfoHtml = document.querySelector('#region-info');
-
 // resp fields will not be displayed in the browser
 const ingoredKeyList = [
     'name', 
