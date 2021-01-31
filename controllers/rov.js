@@ -18,7 +18,7 @@ module.exports.index = async (req,res) => {
 
     console.log(selected);
 
-    res.render('./rov/mapView.ejs', { selected, areas, cities });
+    res.render('./rov/index.ejs', { selected, areas, cities });
 }
 
 module.exports.selected = async (req,res) => {
