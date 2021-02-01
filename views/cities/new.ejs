@@ -1,0 +1,66 @@
+<% layout('layout/boilerplate.ejs') %>
+
+    <h1>Add New City</h1>
+
+    <div class="row">
+        <div class="col-xl-8 pt-5">
+
+            <form method="POST" action="#">
+                <div class="card w-100">
+                    <div class="card-body" id="region-info">
+
+                        <label for="city[name]">City Name</label>
+                        <input class="form-control" type="text" id="city[name]" name="city[name]">
+
+                        <label for="city[code]">City Code</label>
+                        <input class="form-control" type="text" id="city[code]" name="city[code]">
+
+                        <label for="city[area]">Area that the city belongs to</label>
+                        <select class="form-control" id="city[area]" name="city[area]">
+                            <option disabled selected>Select Area</option>
+                            <% for (let area of areas) { %>
+                                <option value="<%= area.name %>"><%= area.name %></option>
+                            <% } %>
+                        </select>
+                        
+                        <div>
+                            <a data-bs-toggle="collapse" href="#collapsable-map" aria-expanded="false">City Location</a>
+                            <div class="collapsable multi-collapse" id="collapsable-map">                                
+                                
+                                <div id="map-new" class="w-100" style="height: 250px;"></div>
+
+                                <div class="row">
+                                    <div class="col-6">
+                                        <label class="muted-text" for="city[lat]">Latitude</label>
+                                        <input class="form-control muted-text" type="text" id="city[lat]" name="city[lat]">                            
+                                    </div>
+                                    <div class="col-6">
+                                        <label class="muted-text" for="city[lng]">Longitude</label>
+                                        <input class="form-control muted-text" type="text" id="city[lng]" name="city[lng]">
+                                    </div>
+                                </div>
+
+                            </div>                            
+                        </div>
+
+                        <label for="city[quickInfo]">Short note that will appear mouse hover</label>
+                        <textarea class="form-control" id="city[quickInfo]" name="city[quickInfo]"></textarea>
+
+                    </div>
+                </div>
+
+                <div class="mt-3">
+                    <button type="submit" class="btn btn-outline-secondary">Submit</button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+
+
+    <script>
+        const mapBoxToken = '<%= process.env.MAPBOX_TOKEN %>';
+        const areasJSON = '<%- JSON.stringify(areas) %>';
+        const citiesJSON = '<%- JSON.stringify(cities) %>';
+    </script>
+    <script src="/js/mapNew.js"></script>
