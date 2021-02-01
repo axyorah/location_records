@@ -7,4 +7,7 @@ router.route('/cities/new')
     .get(city.renderNew)
     .post(city.addNew);
 
+router.route('/cities/:id')
+    .post(city.show);
+
 module.exports = router;

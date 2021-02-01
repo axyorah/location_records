@@ -88,7 +88,7 @@ map.on('load', function () {
         // upadate detailed city info
         map.on('click', `cities-${area.name}`, function (e) {
             const id = e.features[0].properties._id;
-            postData(`/${id}`, { id })
+            postData(`/cities/${id}`, { id })
                 .then((data) => showFullInfo(data))
                 .catch((err) => console.log(err));
         });

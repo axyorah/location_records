@@ -5,6 +5,13 @@ const City = require('../models/city.js');
 const mbxToken = process.env.MAPBOX_TOKEN;
 const baseClient = mbxClient({ accessToken: mbxToken });
 
+module.exports.home = async (req,res) => {
+    const areas = await Area.find({}).populate('cities');
+    const cities = await City.find({});
+
+    res.render('./rov/home.ejs', { areas, cities });
+}
+
 module.exports.index = async (req,res) => {
     // initial...
     const code = 'AML';
