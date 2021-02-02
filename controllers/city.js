@@ -36,6 +36,7 @@ module.exports.renderNew = async (req,res) => {
 }
 
 module.exports.addNew = async (req,res) => {
+    console.log('REQ.BODY.CITY:');
     console.log(req.body.city);
     const { name, code, lat, lng, quickInfo, area } = req.body.city;
 
