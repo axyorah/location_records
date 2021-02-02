@@ -25,14 +25,14 @@
                         
                         <div>
                             <a data-bs-toggle="collapse" href="#collapsable-map" aria-expanded="false">City Location</a>
-                            <div class="collapsable multi-collapse" id="collapsable-map">                                
+                            <div class="collapsable multi-collapse" id="collapsable-map">
                                 
-                                <div id="map-new" class="w-100" style="height: 250px;"></div>
+                                <div id="map-nl" class="w-100" style="height: 250px;"></div>
 
                                 <div class="row">
                                     <div class="col-6">
                                         <label class="muted-text" for="city[lat]">Latitude</label>
-                                        <input class="form-control muted-text" type="text" id="city[lat]" name="city[lat]">                            
+                                        <input class="form-control muted-text" type="text" id="city[lat]" name="city[lat]">
                                     </div>
                                     <div class="col-6">
                                         <label class="muted-text" for="city[lng]">Longitude</label>
@@ -40,7 +40,7 @@
                                     </div>
                                 </div>
 
-                            </div>                            
+                            </div>
                         </div>
 
                         <label for="city[quickInfo]">Short note that will appear mouse hover</label>
@@ -63,4 +63,5 @@
         const areasJSON = '<%- JSON.stringify(areas) %>';
         const citiesJSON = '<%- JSON.stringify(cities) %>';
     </script>
+    <script src="/js/mapSetup.js"></script>
     <script src="/js/mapNew.js"></script>
