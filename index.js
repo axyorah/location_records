@@ -11,6 +11,7 @@ const methodOverride = require('method-override');
 
 const rovRoutes = require('./routes/rov.js');
 const cityRoutes = require('./routes/city.js');
+const areaRoutes = require('./routes/area.js');
 const Area = require('./models/area.js');
 
 // --- MONGOOSE SETUP --- 
@@ -41,6 +42,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 // --- ROUTE HANDLERS ---
 app.use('/', rovRoutes);
 app.use('/', cityRoutes);
+app.use('/', areaRoutes);
 
 
 app.listen(3000, () => {

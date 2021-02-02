@@ -22,8 +22,7 @@ const showFullInfo = (item) => {
         regionNameHtml.innerHTML =  `${item.name} (${item.code})`;
     } else {
         regionNameHtml.innerHTML =  `${item.name}`;
-    }
-    
+    }    
 
     // remove data from previously clicked region
     while (regionInfoHtml.firstChild) {
@@ -35,4 +34,6 @@ const showFullInfo = (item) => {
     regionInfoHtml.appendChild(showObject(item, lvl, ingoredKeyList));
 }
 
-showFullInfo(JSON.parse(selectedJSON));
+if (selectedJSON) {
+    showFullInfo(JSON.parse(selectedJSON));
+}
