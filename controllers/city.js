@@ -5,18 +5,27 @@ const City = require('../models/city.js');
 const mbxToken = process.env.MAPBOX_TOKEN;
 const baseClient = mbxClient({ accessToken: mbxToken });
 
+module.exports.data = async (req,res) => {
+    const { id } = req.params;
+    
+    const selected = await City.findOne({ _id: id });
+
+    console.log('SELECTED CITY:');
+    console.log(selected);    
+    res.send(selected);
+}
+
 module.exports.show = async (req,res) => {
 
     const { id } = req.params;
-    
-    const area = await Area.findOne({ _id: id }).populate('cities');
-    const city = await City.findOne({ _id: id });
-    const selected = area || city;
+    const selected = await City.findOne({ _id: id });
 
-    console.log('SELECTED:');
+    const areas = await Area.find({}).populate('cities');
+    const cities = await City.find({});
+
+    console.log('SELECTED CITY:');
     console.log(selected);
-
-    res.send(selected);
+    res.render('./rov/show.ejs', { selected, areas, cities});
 }
 
 module.exports.renderNew = async (req,res) => {
