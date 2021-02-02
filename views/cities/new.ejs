@@ -5,18 +5,22 @@
     <div class="row">
         <div class="col-xl-8 pt-5">
 
-            <form method="POST" action="#">
+            <form method="POST" action="/cities/new"
+                class="needs-validation" novalidate>
+
                 <div class="card w-100">
                     <div class="card-body" id="region-info">
 
                         <label for="city[name]">City Name</label>
-                        <input class="form-control" type="text" id="city[name]" name="city[name]">
+                        <input class="form-control" type="text" 
+                            id="city[name]" name="city[name]" required>
 
                         <label for="city[code]">City Code</label>
-                        <input class="form-control" type="text" id="city[code]" name="city[code]">
+                        <input class="form-control" type="text" 
+                            id="city[code]" name="city[code]" required>
 
                         <label for="city[area]">Area that the city belongs to</label>
-                        <select class="form-control" id="city[area]" name="city[area]">
+                        <select class="form-control" id="city[area]" name="city[area]" required>
                             <option disabled selected>Select Area</option>
                             <% for (let area of areas) { %>
                                 <option value="<%= area.name %>"><%= area.name %></option>
@@ -32,11 +36,11 @@
                                 <div class="row">
                                     <div class="col-6">
                                         <label class="muted-text" for="city[lat]">Latitude</label>
-                                        <input class="form-control muted-text" type="text" id="city[lat]" name="city[lat]">
+                                        <input class="form-control muted-text" type="text" id="city[lat]" name="city[lat]" required>
                                     </div>
                                     <div class="col-6">
                                         <label class="muted-text" for="city[lng]">Longitude</label>
-                                        <input class="form-control muted-text" type="text" id="city[lng]" name="city[lng]">
+                                        <input class="form-control muted-text" type="text" id="city[lng]" name="city[lng]" required>
                                     </div>
                                 </div>
 
