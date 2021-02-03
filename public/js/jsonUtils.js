@@ -8,8 +8,11 @@ const jsonEscape = (str) => {
 
 const jsonHtmlify = (str) => {
     return String(str)
-        .replaceAll("<", "&#60;")
-        .replaceAll(">", "&#62;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")        
+        .replaceAll("\"", "&quot;")
+        .replaceAll("\'", "&apos;")
+        .replaceAll("&", "&amp;")
         .replaceAll("\\n", "<br>")
         .replaceAll("\\r", "")
         .replaceAll("\\t", "&#9;")
