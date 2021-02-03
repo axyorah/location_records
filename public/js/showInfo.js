@@ -35,5 +35,5 @@ const showFullInfo = (item) => {
 }
 
 if (selectedJSON) {
-    showFullInfo(JSON.parse(selectedJSON));
+    showFullInfo(JSON.parse(jsonEscape(selectedJSON)));
 }

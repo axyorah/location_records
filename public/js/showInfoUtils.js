@@ -7,7 +7,7 @@ const resolveSingleItem = (val, lvl, ignoredKeyList) => {
     const div = document.createElement('div');
 
     if (typeof(val) === 'string' || typeof(val) === 'number') {
-        div.innerText = val;
+        div.innerHTML = jsonHtmlify(val);
     } else if (Array.isArray(val)) {
         div.appendChild(showArray(val, 5, ignoredKeyList));
     } else {
