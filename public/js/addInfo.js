@@ -1,6 +1,5 @@
 const genInfoRootHtml = document.getElementById('city[generalInfo]');
-const btns = [];
-const modButtonText = {
+const titleButtonText = {
     'add': 'Add Title',
     'del': 'Remove Title'
 };
@@ -25,9 +24,9 @@ const getAddButton = (name) => {
         // always add textarea without title first
         addTextAreaToUl(ul, name);
 
-        // adjust the text of the modButton (regulates whether there is a title)
-        const modButton = document.getElementById(`${name}_mod`);
-        modButton.innerHTML = modButtonText.add;
+        // adjust the text of the titleButton (regulates whether there is a title)
+        const titleButton = document.getElementById(`${name}_title`);
+        titleButton.innerHTML = titleButtonText.add;
     })
 
     return btn
@@ -46,49 +45,47 @@ const getDelButton = (name) => {
             ul.removeChild(lastChild);
         }
 
-        // adjust modButton text
-        const modButton = document.getElementById(`${name}_mod`);
+        // adjust titleButton text
+        const titleButton = document.getElementById(`${name}_title`);
         if (ul.children.length) {
             const lastChild = ul.children[ul.children.length-1];
 
             if (lastChild.children.length == 1) {
-                modButton.innerHTML = modButtonText.add;
+                titleButton.innerHTML = titleButtonText.add;
             } else {
-                modButton.innerHTML = modButtonText.del;
+                titleButton.innerHTML = titleButtonText.del;
             }
         } else {
-            modButton.innerHTML = modButtonText.add;
+            titleButton.innerHTML = titleButtonText.add;
         }
     })
     
     return btn;
 }
 
-const getModButton = (name) => {
-    const btn = getButton(name, 'mod');
-    btn.innerHTML = modButtonText.add;
+const getTitleButton = (name) => {
+    const btn = getButton(name, 'title');
+    btn.innerHTML = titleButtonText.add;
 
     btn.addEventListener('click', function (evt) {
         const name = btn.id.split('_')[0];
         const ul = document.getElementById(`${name}_ul`);
 
         if (ul.children.length) {
-            if (btn.innerHTML === modButtonText.add) {
+            if (btn.innerHTML === titleButtonText.add) {
                 // swap button name
-                btn.innerHTML = modButtonText.del;
+                btn.innerHTML = titleButtonText.del;
                 // add title
                 addTitleToLastLiOfUl(ul, name);
             } else {
                 // swap button name
-                btn.innerHTML = modButtonText.add;
+                btn.innerHTML = titleButtonText.add;
                 // remove title
                 if (lastChild.children[0].type === 'text') {
                     lastChild.removeChild(lastChild.children[0]);
                 }
             }            
         } 
-
-        console.log('toggle mod button');
     });
 
     return btn;
@@ -98,7 +95,7 @@ const getEditButtons = (name) => {
         
     const btnAdd = getAddButton(name);
     const btnDel = getDelButton(name);
-    const btnMod = getModButton(name);
+    const btnTitle = getTitleButton(name);
 
     const divInner = document.createElement('div');
     divInner.setAttribute('class', 'btn-group mx-4');
@@ -109,7 +106,7 @@ const getEditButtons = (name) => {
 
     const divOuter = document.createElement('div');
     divOuter.appendChild(divInner);
-    divOuter.appendChild(btnMod);
+    divOuter.appendChild(btnTitle);
 
     return divOuter;
 }
@@ -162,13 +159,5 @@ const showGenInfoInit = () => {
 
     genInfoRootHtml.appendChild(div);
 }
-
-for (let btn of btns) {
-    btn.addEventListener('click', (evt) => {
-        console.log(evt);
-        console.log(btn.id);
-    })
-}
-
 
 showGenInfoInit();
