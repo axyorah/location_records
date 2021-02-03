@@ -24,9 +24,9 @@ map.on('load', function () {
                         '_id': city._id,
                         'name': city.name,
                         'description': 
-                            `<strong>${city.name} `+
-                            `(${city.code})</strong><br>`+
-                            `${city.quickInfo}`
+                            `<strong>${jsonHtmlify(city.name)} `+
+                            `(${jsonHtmlify(city.code)})</strong><br>`+
+                            `${jsonHtmlify(city.quickInfo)}`
                     }
                 })),
             }

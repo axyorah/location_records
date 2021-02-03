@@ -12,7 +12,7 @@ const ingoredKeyList = [
 
 const showQuickInfo = (el, code) => {
     // show quick info on map
-    el.html(el.html() + '<br>' + data[code].quickInfo);
+    el.html(el.html() + '<br>' + jsonHtmlify(data[code].quickInfo));
 }
 
 const showFullInfo = (item) => {
