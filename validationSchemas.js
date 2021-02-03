@@ -8,7 +8,7 @@ module.exports.citySchema = Joi.object({
         code: Joi.string().required(),
         area: Joi.string().required(),
         quickInfo: Joi.string(),
-        'General Information': Joi.object(),
-        'City-Specific': Joi.object()
+        'General Information': Joi.array(),
+        'City-Specific': Joi.array()
     }).required()
 });
