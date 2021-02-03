@@ -1,9 +1,11 @@
 const mbxClient = require('@mapbox/mapbox-sdk');
 
-const Area = require('../models/area.js');
-const City = require('../models/city.js');
 const mbxToken = process.env.MAPBOX_TOKEN;
 const baseClient = mbxClient({ accessToken: mbxToken });
+
+const Area = require('../models/area.js');
+const City = require('../models/city.js');
+const { parseMixedSchema } = require('../utils/formUtils.js');
 
 module.exports.data = async (req,res) => {
     const { id } = req.params;
@@ -39,6 +41,8 @@ module.exports.addNew = async (req,res) => {
     console.log('REQ.BODY.CITY:');
     console.log(req.body.city);
     const { name, code, lat, lng, quickInfo, area } = req.body.city;
+    const generalInfo = req.body.city['General Information'];
+    //const citySpecific = req.body.city['City-Specific'];
 
     const areaObj = await Area.findOne({ name: area });
 
@@ -52,8 +56,17 @@ module.exports.addNew = async (req,res) => {
         quickInfo: quickInfo,
         area: areaObj
     });
+
+    // add mixed schema fields separately
+    city['General Information'] = parseMixedSchema(generalInfo);
+    //city['City-Specific'] = parseMixedSchema(citySpecific);
+
+    city.markModified('General Information'); // mixed schema fields require explicit update
+    //city.marlModified('City-Specific');    
+
     await city.save();
 
+    // add city to resp. area and save
     areaObj.cities.push(city);
     await areaObj.save();
 
