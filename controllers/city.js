@@ -5,7 +5,7 @@ const baseClient = mbxClient({ accessToken: mbxToken });
 
 const Area = require('../models/area.js');
 const City = require('../models/city.js');
-const { parseMixedSchema } = require('../utils/formUtils.js');
+const { jsonEscape, parseMixedSchema } = require('../utils/formUtils.js');
 
 module.exports.data = async (req,res) => {
     const { id } = req.params;
@@ -40,8 +40,8 @@ module.exports.renderNew = async (req,res) => {
 module.exports.addNew = async (req,res) => {
     console.log('REQ.BODY.CITY:');
     console.log(req.body.city);
-    const { name, code, lat, lng, quickInfo, area } = req.body.city;
-    const generalInfo = req.body.city['General Information'];
+    const { name, code, lat, lng, quickInfo, area } = await req.body.city;
+    const generalInfo = await req.body.city['General Information'];
     //const citySpecific = req.body.city['City-Specific'];
 
     const areaObj = await Area.findOne({ name: area });
@@ -53,7 +53,7 @@ module.exports.addNew = async (req,res) => {
             coordinates: [parseFloat(lng), parseFloat(lat)]
         },
         code: code,
-        quickInfo: quickInfo,
+        quickInfo: jsonEscape(quickInfo),
         area: areaObj
     });
 
