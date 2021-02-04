@@ -33,11 +33,11 @@
 <script>
     const regionNameHtml = document.querySelector('#region-name');
     const regionInfoHtml = document.querySelector('#region-info');
-
+    
     const mapBoxToken = '<%= process.env.MAPBOX_TOKEN %>';
     const selectedJSON = '<%- JSON.stringify(selected) %>';
     const areasJSON = '<%- JSON.stringify(areas) %>';
-    const citiesJSON = '<%- JSON.stringify(cities) %>';
+    const citiesJSON = '<%- JSON.stringify(cities) %>';    
 </script>
 <script src="/js/jsonUtils.js"></script>
 <script src="/js/mapSetup.js"></script>
