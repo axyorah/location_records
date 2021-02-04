@@ -21,7 +21,7 @@
 
                         <label for="city[area]">Area that the city belongs to</label>
                         <select class="form-control" id="city[area]" name="city[area]" required>
-                            <option disabled selected>Select Area</option>
+                            <option disabled selected value="">Select Area</option>
                             <% for (let area of areas) { %>
                                 <option value="<%= area.name %>"><%= area.name %></option>
                             <% } %>
