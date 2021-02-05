@@ -16,6 +16,9 @@ module.exports.home = async (req,res) => {
     const { areaId } = req.query;
     const selected = areaId ? await Area.findById(areaId).populate('cities') : undefined;
 
+    console.log('ROV.HOME: SELECTED');
+    console.log(selected);
+
     res.render('./rov/home.ejs', { selected, areas, cities });
 }
 

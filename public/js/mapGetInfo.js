@@ -22,6 +22,11 @@ map.on('load', function () {
         map.on('click', `cities-${area.name}`, function (e) {
             const id = e.features[0].properties._id;
             postData(`/cities/${id}`, { id })
+                //.then((data) => console.log(JSON.parse(data)))
+                //.then((data) => showFullInfo(jsonHtmlify(jsonEscape(JSON.parse(data)))))//showFullInfo(data))
+                .then((data) => JSON.stringify(data))
+                .then((data) => jsonEscape(data))
+                .then((data) => JSON.parse(data))
                 .then((data) => showFullInfo(data))
                 .catch((err) => console.log(err));
         });

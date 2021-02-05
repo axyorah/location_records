@@ -10,10 +10,10 @@ const ingoredKeyList = [
     '__v'
 ]
 
-const showQuickInfo = (el, code) => {
-    // show quick info on map
-    el.html(el.html() + '<br>' + jsonHtmlify(data[code].quickInfo));
-}
+// const showQuickInfo = (el, code) => {
+//     // show quick info on map
+//     el.html(el.html() + '<br>' + jsonHtmlify(data[code].quickInfo));
+// }
 
 const showFullInfo = (item) => {
     // show detailed info in right col
@@ -35,5 +35,6 @@ const showFullInfo = (item) => {
 }
 
 if (selectedJSON) {
-    showFullInfo(JSON.parse(jsonEscape(selectedJSON)));
+    const item = JSON.parse(jsonEscape(selectedJSON));
+    showFullInfo(item);
 }

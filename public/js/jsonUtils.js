@@ -12,8 +12,15 @@ const jsonHtmlify = (str) => {
     return String(str)
         .replaceAll("&", "&amp;") // `&` sanitized before  `<,>,",'`
         .replaceAll("<", "&lt;")
-        .replaceAll(">", "&gt;")     
-        .replaceAll("\"", "&quot;")
+        .replaceAll(">", "&gt;")
+
+        .replaceAll("\\\"", "&quot;") // click on city (TEMP!!!)
+        .replaceAll("\\\'", "&apos;")
+        .replaceAll("\\\\n", "<br>")
+        .replaceAll("\\\\r", "")
+        .replaceAll("\\\\t", "&#9;") 
+
+        .replaceAll("\"", "&quot;") // hover or access city from area
         .replaceAll("\'", "&apos;")
         .replaceAll("\\n", "<br>")
         .replaceAll("\\r", "")

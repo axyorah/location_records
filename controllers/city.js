@@ -12,7 +12,7 @@ module.exports.data = async (req,res) => {
     
     const selected = await City.findOne({ _id: id });
 
-    console.log('SELECTED CITY:');
+    console.log('CITY.DATA: SELECTED CITY:');
     console.log(selected);    
     res.send(selected);
 }

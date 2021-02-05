@@ -7,6 +7,8 @@ const resolveSingleItem = (val, lvl, ignoredKeyList) => {
     const div = document.createElement('div');
 
     if (typeof(val) === 'string' || typeof(val) === 'number') {
+        console.log('RESOLVE SINGLE ITEM');
+        console.log(val);
         div.innerHTML = jsonHtmlify(val);
     } else if (Array.isArray(val)) {
         div.appendChild(showArray(val, 5, ignoredKeyList));
@@ -23,7 +25,7 @@ const makeDetails = (key, val, lvl, ignoredKeyList) => {
     const details = document.createElement('details');
     const summary = document.createElement('summary');
 
-    summary.innerHTML = key;
+    summary.innerHTML = jsonHtmlify(key);
     details.appendChild(summary);
     details.appendChild(div);
 
@@ -40,7 +42,7 @@ const makeCollapsable = (key, val, lvl, ignoredKeyList) => {
     a.setAttribute('data-bs-toggle', 'collapse');
     a.setAttribute('href', `#${uuid}`);
     a.setAttribute('aria-controls', uuid);
-    a.innerHTML = `<h${lvl}>${key}</h${lvl}>`;
+    a.innerHTML = `<h${lvl}>${jsonHtmlify(key)}</h${lvl}>`;
 
     const collapsableDiv = document.createElement('div');    
     collapsableDiv.setAttribute('class', 'collapse');

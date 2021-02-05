@@ -1,4 +1,30 @@
 const jsonEscape = (str) => {
+    // click on city:
+    // -  \" instead of " 
+    // - \n are fine,
+    // mouse hover or accessing city from area:
+    // - " are fine
+    // - \n are missing
+    // return str
+    //     .replace(/\n/g, "\\n")
+    //     .replace(/\r/g, "\\r")
+    //     .replace(/\t/g, "\\t")
+    //     .replace(/"/g, "\\\"")
+    //     .replace(/'/g, "\\\"")
+    //     ;
+    // --------------------------
+    // click on city:
+    // - \" instead of "
+    // - newlines show 2 extra \ (for \n and \r)
+    // mouse hover or accessing city from area
+    // - all good
+    // return str
+    //     .replace(/\n/g, "\\\\n")
+    //     .replace(/\r/g, "\\\\r")
+    //     .replace(/\t/g, "\\\\t")
+    //     .replace(/"/g, "\\\"")
+    //     .replace(/'/g, "\\\"")
+    //     ;
     return str
         .replace(/\n/g, "\\\\n")
         .replace(/\r/g, "\\\\r")
