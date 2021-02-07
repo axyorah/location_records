@@ -92,7 +92,6 @@ const updateIdAndNameOfUlChildren = (ul) => {
         updateIdOfAllChildren(li, pattern, i);        
         i += 1;
     }
-
 }
 
 const getTextArea = (name) => {
@@ -173,6 +172,35 @@ const insertTextAreaAtIdxToUl = (ul, idx) => {
     updateIdAndNameOfUlChildren(ul);
 }
 
+const addTitleToLastLiOfUl = (ul, name) => {
+    // add title to last li of ul
+    const lastChild = ul.children[ul.children.length-1];
+
+    const title = document.createElement('input');
+    title.setAttribute('class', 'form-control');
+    title.setAttribute('type', 'text');
+    title.setAttribute('name', `${name}[${ul.children.length-1}][key]`);
+    title.setAttribute('id', `${name}[${ul.children.length-1}][key]`);
+    title.placeholder = 'Title'
+
+    lastChild.prepend(title);    
+}
+
+const addTitleToLi = (li) => {
+    // li id/name: `...[idx]_li`
+    const name = li.id.split('_')[0];
+
+    // add title to last li of ul
+    const title = document.createElement('input');
+    title.setAttribute('class', 'form-control');
+    title.setAttribute('type', 'text');
+    title.setAttribute('name', `${name}[key]`);
+    title.setAttribute('id', `${name}[key]`);
+    title.placeholder = 'Title'
+
+    li.prepend(title);    
+}
+
 const getButton = (name, suffix) => {
     const btn = document.createElement('button');
     btn.setAttribute('class', 'btn btn-sm btn-outline-secondary');
@@ -233,6 +261,10 @@ const getDelButton = (parentName, childName) => {
 }
 
 const getTitleButton = (parentName, childName) => {
+    // both parentName and childName are only valid 
+    // at the moment button creation!
+    // insertion/deletion will modify the name,
+    // so refer to `btn.id` instead!
     const btn = getButton(childName, 'title');
     btn.innerHTML = titleButtonText.add;
 
@@ -241,23 +273,26 @@ const getTitleButton = (parentName, childName) => {
     })
 
     btn.addEventListener('click', function (evt) {
-        const name = btn.id.split('_')[0];
+        parentName = getBtnParentId(btn.id);
+        childName = getBtnChildId(btn.id);
+
         const ul = document.getElementById(`${parentName}_ul`);
+        const li = document.getElementById(`${childName}_li`);
 
         if (ul.children.length) {
             if (btn.innerHTML === titleButtonText.add) {
                 // swap button name
                 btn.innerHTML = titleButtonText.del;
                 // add title
-                addTitleToLastLiOfUl(ul, parentName);
+                addTitleToLi(li);
             } else {
                 // swap button name
                 btn.innerHTML = titleButtonText.add;
                 // remove title
-                if (lastChild.children[0].type === 'text') {
-                    lastChild.removeChild(lastChild.children[0]);
+                if (li.children[0].type === 'text') {
+                    li.removeChild(li.children[0]);
                 }
-            }            
+            }      
         } 
     });
 
@@ -282,18 +317,4 @@ const getEditButtons = (parentName, childName) => {
     divOuter.appendChild(btnTitle);
 
     return divOuter;
-}
-
-const addTitleToLastLiOfUl = (ul, name) => {
-    // add title to last li of ul
-    const lastChild = ul.children[ul.children.length-1];
-
-    const title = document.createElement('input');
-    title.setAttribute('class', 'form-control');
-    title.setAttribute('type', 'text');
-    title.setAttribute('name', `${name}[${ul.children.length-1}][key]`);
-    title.setAttribute('id', `${name}[${ul.children.length-1}][key]`);
-    title.placeholder = 'Title'
-
-    lastChild.prepend(title);    
 }
