@@ -1,8 +1,5 @@
 const genInfoRootHtml = document.getElementById('city[generalInfo]');
-const titleButtonText = {
-    'add': 'Add Title',
-    'del': 'Remove Title'
-};
+
 
 // const getButton = (name, suffix) => {
 //     const btn = document.createElement('button');

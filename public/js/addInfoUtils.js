@@ -1,3 +1,8 @@
+const titleButtonText = {
+    'add': 'Add Title',
+    'del': 'Remove Title'
+};
+
 const getButton = (name, suffix) => {
     const btn = document.createElement('button');
     btn.setAttribute('class', 'btn btn-sm btn-outline-secondary');
@@ -7,74 +12,64 @@ const getButton = (name, suffix) => {
     return btn;
 }
 
-const getAddButton = (name) => {    
-    const btn = getButton(name, 'add');
+const getAddButton = (parentName, childName) => {    
+    const btn = getButton(childName, 'add');
     btn.innerHTML = '&#65291;';//'Add New Field';
 
     btn.addEventListener('click', function (evt) {
         const name = btn.id.split('_')[0];
-        const ul = document.getElementById(name + '_ul');
+        const ul = document.getElementById(parentName + '_ul');
 
         // always add textarea without title first
-        addTextAreaToUl(ul, name);
+        addTextAreaToUl(ul, parentName);
 
         // adjust the text of the titleButton (regulates whether there is a title)
-        const titleButton = document.getElementById(`${name}_title`);
+        const titleButton = document.getElementById(`${childName}_title`);
         titleButton.innerHTML = titleButtonText.add;
     })
 
     return btn
 }
 
-const getDelButton = (name) => {
-    const btn = getButton(name, 'del');
+const getDelButton = (parentName, childName) => {
+    const btn = getButton(childName, 'del');
     btn.innerHTML = '&#65293;';//'Delete Previous Field';
 
     btn.addEventListener('mouseover', function(evt) {
-        console.log(name);
+        console.log(btn.id);
     })
     
     btn.addEventListener('click', function (evt) {
-        const name = btn.id.split('_')[0];
-        const ul = document.getElementById(`${name}_ul`);
+        //const name = btn.id.split('_')[0];
+        const ul = document.getElementById(`${parentName}_ul`);
 
         if (ul.children.length > 1) {
             const lastChild = ul.children[ul.children.length-1];
             ul.removeChild(lastChild);
-        }
-
-        // adjust titleButton text
-        const titleButton = document.getElementById(`${name}_title`);
-        if (ul.children.length) {
-            const lastChild = ul.children[ul.children.length-1];
-
-            if (lastChild.children.length == 1) {
-                titleButton.innerHTML = titleButtonText.add;
-            } else {
-                titleButton.innerHTML = titleButtonText.del;
-            }
-        } else {
-            titleButton.innerHTML = titleButtonText.add;
         }
     })
     
     return btn;
 }
 
-const getTitleButton = (name) => {
-    const btn = getButton(name, 'title');
+const getTitleButton = (parentName, childName) => {
+    const btn = getButton(childName, 'title');
     btn.innerHTML = titleButtonText.add;
+
+    btn.addEventListener('mouseover', function(evt) {
+        console.log(btn.id);
+    })
 
     btn.addEventListener('click', function (evt) {
         const name = btn.id.split('_')[0];
-        const ul = document.getElementById(`${name}_ul`);
+        const ul = document.getElementById(`${parentName}_ul`);
 
         if (ul.children.length) {
             if (btn.innerHTML === titleButtonText.add) {
                 // swap button name
                 btn.innerHTML = titleButtonText.del;
                 // add title
-                addTitleToLastLiOfUl(ul, name);
+                addTitleToLastLiOfUl(ul, parentName);
             } else {
                 // swap button name
                 btn.innerHTML = titleButtonText.add;
@@ -91,14 +86,14 @@ const getTitleButton = (name) => {
 
 const getEditButtons = (parentName, childName) => {
         
-    const btnAdd = getAddButton(parentName);
-    const btnDel = getDelButton(parentName);
-    const btnTitle = getTitleButton(parentName);
+    const btnAdd = getAddButton(parentName, childName);
+    const btnDel = getDelButton(parentName, childName);
+    const btnTitle = getTitleButton(parentName, childName);
 
     const divInner = document.createElement('div');
     divInner.setAttribute('class', 'btn-group mx-4');
     divInner.setAttribute('role', 'group');
-    divInner.setAttribute('id', `${parentName}_btns`);
+    divInner.setAttribute('id', `${childName}_btns`);
     divInner.appendChild(btnAdd);
     divInner.appendChild(btnDel);
 
