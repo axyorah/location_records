@@ -27,7 +27,22 @@ const getBtnChildId = (btnId) => {
     }
 }
 
+const getBtnIdx = (btnId) => {
+    const found = btnId.match(pattern);
+
+    if (found) {
+        return parseInt(found.groups.idx);
+    } else {
+        console.log(`CAN\'T DERIVE BUTTON\'S PARENT ID FROM ${btnId}`);
+    }
+}
+
 const updateIdOfAllChildren = (parent, pattern, newIdx) => {
+    // Note:
+    // this function only updates ids of non-text elements 
+    // that follow the pattern: `...[idx]_fun`, e.g., `city[info][11]_add`
+    //(text elements follow a different pattern: 
+    // `...[idx][key]` or `...[idx][val]` - they are updated separately)
     if (parent.children) {
         for (let child of parent.children) {
             
@@ -46,12 +61,14 @@ const updateIdOfAllChildren = (parent, pattern, newIdx) => {
     }
 }
 
-const updateIdAndNameOfUlChildren = (ul, name) => {
+const updateIdAndNameOfUlChildren = (ul) => {
     // adjust the indices of all the `li`s and  their children,
-    // so that they start from `0` and end with `ul.children.length-1`;
+    // so that the indices in their ids are arranged in order:
+    // start with `0` and end with `ul.children.length-1`;
     // - update id's (and names) of li, titles and textareas 'manually',
     // - update buttons id's via pattern matching:
     //     we're looking for a pattern: `...[idx]_fun`
+    const name = ul.id.split('_')[0];
     
     let i = 0;
     for (let li of ul.children) {
@@ -78,6 +95,84 @@ const updateIdAndNameOfUlChildren = (ul, name) => {
 
 }
 
+const getTextArea = (name) => {
+    const textArea = document.createElement('textarea');
+    textArea.setAttribute('class', 'form-control');
+    textArea.setAttribute('name', name);
+    textArea.setAttribute('id', name);
+    return textArea;
+}
+
+const insertNewChildAtIdxToParent = (parent, newChild, idx) => {
+    // temporarily remove all children at idx+
+    let lastChildren = [];
+    for (let i = parent.children.length - 1; i >= idx; i--) {
+        const child = parent.children[i];
+        lastChildren.push(child);
+        parent.removeChild(child);
+    }
+
+    // append new child at the end
+    parent.appendChild(newChild);
+
+    // reattach the removed children
+    for (let i = lastChildren.length-1; i >= 0; i--) {
+        const child = lastChildren[i];
+        parent.appendChild(child);
+    }
+}
+
+const addTextAreaToUl = (ul, parentName) => {
+    // ul{ li[i]{textArea, editButtons}}
+
+    const childName = `${parentName}[${ul.children.length}]`;
+    const liName = `${childName}_li`
+    const textName = `${childName}[val]`;
+        
+    // get textArea
+    const textArea = getTextArea(textName);
+
+    // get editButtons
+    const editBtns = getEditButtons(parentName, childName);
+    
+    // add new li to ul;
+    // by default new li only contains textarea and edtiButtons
+    const li = document.createElement('li');
+    li.setAttribute('id', liName);
+    li.appendChild(textArea);
+    li.append(editBtns);
+
+    ul.appendChild(li);
+}
+
+const insertTextAreaAtIdxToUl = (ul, idx) => {
+    // initially give new child an idx 
+    // that wouldn't conflict with existing children
+    const parentName = ul.id.split('_')[0];
+    const childName = `${parentName}[${ul.children.length}]`;
+    const liName = `${childName}_li`
+    const textName = `${childName}[val]`;
+        
+    // get textArea
+    const textArea = getTextArea(textName);
+
+    // get editButtons
+    const editBtns = getEditButtons(parentName, childName);
+    
+    // add new li to ul;
+    // by default new li only contains textarea and edtiButtons
+    const li = document.createElement('li');
+    li.setAttribute('id', liName);
+    li.appendChild(textArea);
+    li.append(editBtns);
+
+    // insert li at ul at specified location
+    insertNewChildAtIdxToParent(ul, li, idx);
+
+    // update indices of all li's
+    updateIdAndNameOfUlChildren(ul);
+}
+
 const getButton = (name, suffix) => {
     const btn = document.createElement('button');
     btn.setAttribute('class', 'btn btn-sm btn-outline-secondary');
@@ -87,20 +182,23 @@ const getButton = (name, suffix) => {
     return btn;
 }
 
-const getAddButton = (parentName, childName) => {    
+const getAddButton = (parentName, childName) => {  
+    // both parentName and childName are only valid 
+    // at the moment button creation!
+    // insertion/deletion will modify the name,
+    // so refer to `btn.id` instead!  
     const btn = getButton(childName, 'add');
     btn.innerHTML = '&#65291;';//'Add New Field';
 
     btn.addEventListener('click', function (evt) {
-        //const name = btn.id.split('_')[0];
+        parentName = getBtnParentId(btn.id);
+        let idx = getBtnIdx(btn.id);
+
         const ul = document.getElementById(parentName + '_ul');
 
         // always add textarea without title first
-        addTextAreaToUl(ul, parentName);
-
-        // adjust the text of the titleButton (regulates whether there is a title)
-        const titleButton = document.getElementById(`${childName}_title`);
-        titleButton.innerHTML = titleButtonText.add;
+        //addTextAreaToUl(ul, parentName);
+        insertTextAreaAtIdxToUl(ul, idx + 1);
     })
 
     return btn
@@ -116,7 +214,7 @@ const getDelButton = (parentName, childName) => {
     
     btn.addEventListener('click', function (evt) {
         parentName = getBtnParentId(btn.id);
-        childName = getBtnChildId(btn.id);        
+        childName = getBtnChildId(btn.id);
         
         const ul = document.getElementById(`${parentName}_ul`);
         const li = document.getElementById(`${childName}_li`);
@@ -128,7 +226,7 @@ const getDelButton = (parentName, childName) => {
         }        
 
         // adjust the names of remaining li and all their children
-        updateIdAndNameOfUlChildren(ul, parentName);
+        updateIdAndNameOfUlChildren(ul);
     })
     
     return btn;
@@ -184,32 +282,6 @@ const getEditButtons = (parentName, childName) => {
     divOuter.appendChild(btnTitle);
 
     return divOuter;
-}
-
-const addTextAreaToUl = (ul, parentName) => {
-    // ul{ li[i]{textArea, editButtons}}
-
-    const childName = `${parentName}[${ul.children.length}]`;
-    const liName = `${childName}_li`
-    const textName = `${childName}[val]`;
-        
-    // get textArea
-    const textArea = document.createElement('textarea');
-    textArea.setAttribute('class', 'form-control');
-    textArea.setAttribute('name', textName);
-    textArea.setAttribute('id', textName);
-
-    // get editButtons
-    const editBtns = getEditButtons(parentName, childName);
-    
-    // add new li to ul;
-    // by default new li only contains textarea and edtiButtons
-    const li = document.createElement('li');
-    li.setAttribute('id', liName);
-    li.appendChild(textArea);
-    li.append(editBtns);
-
-    ul.appendChild(li);
 }
 
 const addTitleToLastLiOfUl = (ul, name) => {
