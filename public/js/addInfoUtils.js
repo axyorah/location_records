@@ -1,7 +1,82 @@
+const pattern = /\[(?<idx>[0-9]*)\]_(?<fun>btns|add|del|title)$/;
 const titleButtonText = {
     'add': 'Add Title',
     'del': 'Remove Title'
 };
+
+const getBtnParentId = (btnId) => {
+    const found = btnId.match(pattern);
+
+    if (found) {
+        const parentId = btnId.replace(found[0], '');
+        return parentId;
+    } else {
+        console.log(`CAN\'T DERIVE BUTTON\'S PARENT ID FROM ${btnId}`);
+    }
+}
+
+const getBtnChildId = (btnId) => {
+    const found = btnId.match(pattern);
+
+    if (found) {
+        const parentId = btnId.replace(found[0], '');
+        const idx = found.groups.idx;
+        return `${parentId}[${idx}]`;
+    } else {
+        console.log(`CAN\'T DERIVE BUTTON\'S PARENT ID FROM ${btnId}`);
+    }
+}
+
+const updateIdOfAllChildren = (parent, pattern, newIdx) => {
+    if (parent.children) {
+        for (let child of parent.children) {
+            
+            const found = child.id.match(pattern);
+
+            if (found) {
+                const base = child.id.replace(found[0], '');
+                const fun = found.groups.fun;
+                const newId = `${base}[${newIdx}]_${fun}`;
+                
+                child.setAttribute('id', newId);                
+            }
+
+            updateIdOfAllChildren(child, pattern, newIdx);
+        }
+    }
+}
+
+const updateIdAndNameOfUlChildren = (ul, name) => {
+    // adjust the indices of all the `li`s and  their children,
+    // so that they start from `0` and end with `ul.children.length-1`;
+    // - update id's (and names) of li, titles and textareas 'manually',
+    // - update buttons id's via pattern matching:
+    //     we're looking for a pattern: `...[idx]_fun`
+    
+    let i = 0;
+    for (let li of ul.children) {
+        const newChildName = `${name}[${i}]`;
+        const newLiName = `${newChildName}_li`;
+        const newTextName = `${newChildName}[val]`;
+        const newTitleName = `${newChildName}[key]`;
+
+        // udpate li
+        li.setAttribute('id', newLiName);
+
+        // update title and textarea (they have both id and name)
+        if (li.children.length == 3) {
+            li.children[0].setAttribute('id', newTitleName);
+            li.children[0].setAttribute('name', newTitleName);
+        }
+        li.children[li.children.length-2].setAttribute('id', newTextName);
+        li.children[li.children.length-2].setAttribute('name', newTextName);
+        
+        // update other children recursively
+        updateIdOfAllChildren(li, pattern, i);        
+        i += 1;
+    }
+
+}
 
 const getButton = (name, suffix) => {
     const btn = document.createElement('button');
@@ -32,22 +107,28 @@ const getAddButton = (parentName, childName) => {
 }
 
 const getDelButton = (parentName, childName) => {
+    // both parentName and childName are only valid 
+    // at the moment button creation!
+    // insertion/deletion will modify the name,
+    // so refer to `btn.id` instead!
     const btn = getButton(childName, 'del');
     btn.innerHTML = '&#65293;';//'Delete Previous Field';
-
-    btn.addEventListener('mouseover', function(evt) {
-        const li = document.getElementById(`${childName}_li`);
-        console.log(btn.id, li);
-    })
     
     btn.addEventListener('click', function (evt) {
-        //const name = btn.id.split('_')[0];
+        parentName = getBtnParentId(btn.id);
+        childName = getBtnChildId(btn.id);        
+        
         const ul = document.getElementById(`${parentName}_ul`);
+        const li = document.getElementById(`${childName}_li`);
 
+        // remove resp. li, unless it's the last one
         if (ul.children.length > 1) {
-            const lastChild = ul.children[ul.children.length-1];
-            ul.removeChild(lastChild);
-        }
+            console.log('removing: ', li);
+            ul.removeChild(li);
+        }        
+
+        // adjust the names of remaining li and all their children
+        updateIdAndNameOfUlChildren(ul, parentName);
     })
     
     return btn;
