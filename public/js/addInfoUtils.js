@@ -89,16 +89,16 @@ const getTitleButton = (name) => {
     return btn;
 }
 
-const getEditButtons = (name) => {
+const getEditButtons = (parentName, childName) => {
         
-    const btnAdd = getAddButton(name);
-    const btnDel = getDelButton(name);
-    const btnTitle = getTitleButton(name);
+    const btnAdd = getAddButton(parentName);
+    const btnDel = getDelButton(parentName);
+    const btnTitle = getTitleButton(parentName);
 
     const divInner = document.createElement('div');
     divInner.setAttribute('class', 'btn-group mx-4');
     divInner.setAttribute('role', 'group');
-    divInner.setAttribute('id', `${name}_btns`);
+    divInner.setAttribute('id', `${parentName}_btns`);
     divInner.appendChild(btnAdd);
     divInner.appendChild(btnDel);
 
@@ -109,17 +109,18 @@ const getEditButtons = (name) => {
     return divOuter;
 }
 
-const addTextAreaToUl = (ul, name) => {
+const addTextAreaToUl = (ul, parentName) => {
+    const thisName = `${parentName}[${ul.children.length}][val]`;
     // add new li to ul;
     // by default new li only contains textarea
     const li = document.createElement('li');
 
     const textArea = document.createElement('textarea');
     textArea.setAttribute('class', 'form-control');
-    textArea.setAttribute('name', `${name}[${ul.children.length}][val]`);
-    textArea.setAttribute('id', `${name}[${ul.children.length}][val]`);
+    textArea.setAttribute('name', thisName);
+    textArea.setAttribute('id', thisName);
 
-    const editBtns = getEditButtons(name);
+    const editBtns = getEditButtons(parentName, thisName);
     
     li.appendChild(textArea);
     li.append(editBtns);
