@@ -17,7 +17,7 @@ const getAddButton = (parentName, childName) => {
     btn.innerHTML = '&#65291;';//'Add New Field';
 
     btn.addEventListener('click', function (evt) {
-        const name = btn.id.split('_')[0];
+        //const name = btn.id.split('_')[0];
         const ul = document.getElementById(parentName + '_ul');
 
         // always add textarea without title first
@@ -36,7 +36,8 @@ const getDelButton = (parentName, childName) => {
     btn.innerHTML = '&#65293;';//'Delete Previous Field';
 
     btn.addEventListener('mouseover', function(evt) {
-        console.log(btn.id);
+        const li = document.getElementById(`${childName}_li`);
+        console.log(btn.id, li);
     })
     
     btn.addEventListener('click', function (evt) {
@@ -105,18 +106,25 @@ const getEditButtons = (parentName, childName) => {
 }
 
 const addTextAreaToUl = (ul, parentName) => {
-    const thisName = `${parentName}[${ul.children.length}][val]`;
-    // add new li to ul;
-    // by default new li only contains textarea
-    const li = document.createElement('li');
+    // ul{ li[i]{textArea, editButtons}}
 
+    const childName = `${parentName}[${ul.children.length}]`;
+    const liName = `${childName}_li`
+    const textName = `${childName}[val]`;
+        
+    // get textArea
     const textArea = document.createElement('textarea');
     textArea.setAttribute('class', 'form-control');
-    textArea.setAttribute('name', thisName);
-    textArea.setAttribute('id', thisName);
+    textArea.setAttribute('name', textName);
+    textArea.setAttribute('id', textName);
 
-    const editBtns = getEditButtons(parentName, thisName);
+    // get editButtons
+    const editBtns = getEditButtons(parentName, childName);
     
+    // add new li to ul;
+    // by default new li only contains textarea and edtiButtons
+    const li = document.createElement('li');
+    li.setAttribute('id', liName);
     li.appendChild(textArea);
     li.append(editBtns);
 
