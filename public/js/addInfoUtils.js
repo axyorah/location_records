@@ -1,7 +1,11 @@
-const pattern = /\[(?<idx>[0-9]*)\]_(?<fun>btns|add|del|title)$/;
+const pattern = /\[(?<idx>[0-9]*)\]_(?<fun>btns|add|del|title|exp)$/;
 const titleButtonText = {
     'add': 'Add Title',
     'del': 'Remove Title'
+};
+const expButtonText = {
+    'exp': 'Expand',
+    'col': 'Collapse'
 };
 
 const getBtnParentId = (btnId) => {
@@ -121,9 +125,11 @@ const insertNewChildAtIdxToParent = (parent, newChild, idx) => {
     }
 }
 
-const addTextAreaToUl = (ul, parentName) => {
-    // ul{ li[i]{textArea, editButtons}}
+const addTextAreaToUl = (ul) => {
+    // append empty textarea at the end of ul;
+    // recall ul structure: ul{ li[i]{[title,] textArea, editButtons}}
 
+    const parentName = ul.id.split('_')[0];
     const childName = `${parentName}[${ul.children.length}]`;
     const liName = `${childName}_li`
     const textName = `${childName}[val]`;
@@ -145,6 +151,9 @@ const addTextAreaToUl = (ul, parentName) => {
 }
 
 const insertTextAreaAtIdxToUl = (ul, idx) => {
+    // insert textarea at a given idx location
+    // // recall ul structure: ul{ li[i]{[title,] textArea, editButtons}}
+
     // initially give new child an idx 
     // that wouldn't conflict with existing children
     const parentName = ul.id.split('_')[0];
@@ -170,20 +179,6 @@ const insertTextAreaAtIdxToUl = (ul, idx) => {
 
     // update indices of all li's
     updateIdAndNameOfUlChildren(ul);
-}
-
-const addTitleToLastLiOfUl = (ul, name) => {
-    // add title to last li of ul
-    const lastChild = ul.children[ul.children.length-1];
-
-    const title = document.createElement('input');
-    title.setAttribute('class', 'form-control');
-    title.setAttribute('type', 'text');
-    title.setAttribute('name', `${name}[${ul.children.length-1}][key]`);
-    title.setAttribute('id', `${name}[${ul.children.length-1}][key]`);
-    title.placeholder = 'Title'
-
-    lastChild.prepend(title);    
 }
 
 const addTitleToLi = (li) => {
@@ -225,7 +220,6 @@ const getAddButton = (parentName, childName) => {
         const ul = document.getElementById(parentName + '_ul');
 
         // always add textarea without title first
-        //addTextAreaToUl(ul, parentName);
         insertTextAreaAtIdxToUl(ul, idx + 1);
     })
 
