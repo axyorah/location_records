@@ -41,6 +41,22 @@ const getBtnIdx = (btnId) => {
     }
 }
 
+const getTextArea = (childName) => {
+    const textArea = document.createElement('textarea');
+    textArea.setAttribute('class', 'form-control');
+    textArea.setAttribute('name', `${childName}[val]`);
+    textArea.setAttribute('id', `${childName}[val]`);
+    return textArea;
+}
+
+const getNewUl = (name) => {
+    const ul = document.createElement('ul');
+    ul.setAttribute('id', `${name}_ul`);
+
+    addTextAreaToUl(ul);
+    return ul;
+}
+
 const updateIdOfAllChildren = (parent, pattern, newIdx) => {
     // Note:
     // this function only updates ids of non-text elements 
@@ -98,14 +114,6 @@ const updateIdAndNameOfUlChildren = (ul) => {
     }
 }
 
-const getTextArea = (name) => {
-    const textArea = document.createElement('textarea');
-    textArea.setAttribute('class', 'form-control');
-    textArea.setAttribute('name', name);
-    textArea.setAttribute('id', name);
-    return textArea;
-}
-
 const insertNewChildAtIdxToParent = (parent, newChild, idx) => {
     // temporarily remove all children at idx+
     let lastChildren = [];
@@ -131,11 +139,9 @@ const addTextAreaToUl = (ul) => {
 
     const parentName = ul.id.split('_')[0];
     const childName = `${parentName}[${ul.children.length}]`;
-    const liName = `${childName}_li`
-    const textName = `${childName}[val]`;
         
     // get textArea
-    const textArea = getTextArea(textName);
+    const textArea = getTextArea(childName);
 
     // get editButtons
     const editBtns = getEditButtons(parentName, childName);
@@ -143,7 +149,7 @@ const addTextAreaToUl = (ul) => {
     // add new li to ul;
     // by default new li only contains textarea and edtiButtons
     const li = document.createElement('li');
-    li.setAttribute('id', liName);
+    li.setAttribute('id', `${childName}_li`);
     li.appendChild(textArea);
     li.append(editBtns);
 
@@ -194,6 +200,50 @@ const addTitleToLi = (li) => {
     title.placeholder = 'Title'
 
     li.prepend(title);    
+}
+
+const getTextFromAllChildren = (parent) => {
+    if (!parent.children.length) {
+        return [parent.value];
+    }
+
+    let texts = [];
+    for (let child of parent.children) {
+        if (!child.id.match(/_btns/)) {
+            const newTexts = getTextFromAllChildren(child);
+            texts.push(...newTexts);
+        }
+    }
+    return texts;
+}
+
+const expandLi = (li) => {
+    const childName = li.id.split('_')[0];
+
+    // 1. get all texts of li's child textArea;
+    //   (ignore title if present)
+    // 2. remove all existing textArea children of li
+    //   (since li is collapsed, there should only be one such textArea)
+    let idx;
+    let oldTexts;
+    for (let i = 0; i < li.children.length; i++) {
+        const child = li.children[i];
+        if (child.id.match(/\[val\]$/)) {
+            idx = i;
+            oldTexts = getTextFromAllChildren(child);
+            li.removeChild(child);
+            break;
+        }
+    }
+
+    // 3. create new ul
+    const newUl = getNewUl(childName);
+    const newLi = newUl.children[0];    
+    const newTextArea = newLi.children[0];
+    newTextArea.value = oldTexts.join('\/n');
+
+    // 4. add newUl as a new child of li instead of removed textArea
+    insertNewChildAtIdxToParent(li, newUl, idx);
 }
 
 const getButton = (name, suffix) => {
@@ -262,10 +312,6 @@ const getTitleButton = (parentName, childName) => {
     const btn = getButton(childName, 'title');
     btn.innerHTML = titleButtonText.add;
 
-    btn.addEventListener('mouseover', function(evt) {
-        console.log(btn.id);
-    })
-
     btn.addEventListener('click', function (evt) {
         parentName = getBtnParentId(btn.id);
         childName = getBtnChildId(btn.id);
@@ -293,22 +339,68 @@ const getTitleButton = (parentName, childName) => {
     return btn;
 }
 
+const getExpButton = (parentName, childName) => {
+    // both parentName and childName are only valid 
+    // at the moment button creation!
+    // insertion/deletion will modify the name,
+    // so refer to `btn.id` instead!
+    const btn = getButton(childName, 'exp');
+    btn.innerHTML = expButtonText.exp;
+
+    btn.addEventListener('mouseover', function(evt) {
+        console.log(btn.id);
+    })
+
+    btn.addEventListener('click', function(evt) {
+        parentName = getBtnParentId(btn.id);
+        childName = getBtnChildId(btn.id);
+
+        const li = document.getElementById(`${childName}_li`);
+
+        if (btn.innerHTML === expButtonText.exp) {
+            // toggle button name
+            btn.innerHTML = expButtonText.col;          
+
+            expandLi(li);
+            
+        } else {
+            // togge button name
+            btn.innerHTML = expButtonText.exp;
+
+            // get all texts of all of li's children
+            const oldTexts = getTextFromAllChildren(li); 
+        }
+
+        
+    })
+
+    return btn;
+}
+
 const getEditButtons = (parentName, childName) => {
         
     const btnAdd = getAddButton(parentName, childName);
     const btnDel = getDelButton(parentName, childName);
     const btnTitle = getTitleButton(parentName, childName);
+    const btnExp = getExpButton(parentName, childName);
 
-    const divInner = document.createElement('div');
-    divInner.setAttribute('class', 'btn-group mx-4');
-    divInner.setAttribute('role', 'group');
-    divInner.setAttribute('id', `${childName}_btns`);
-    divInner.appendChild(btnAdd);
-    divInner.appendChild(btnDel);
+    const divInner1 = document.createElement('div');
+    divInner1.setAttribute('class', 'btn-group mx-4');
+    divInner1.setAttribute('role', 'group');
+    divInner1.setAttribute('id', `${childName}_btns1`);
+    divInner1.appendChild(btnAdd);
+    divInner1.appendChild(btnDel);
+
+    const divInner2 = document.createElement('div');
+    divInner2.setAttribute('class', 'btn-group mx-4');
+    divInner2.setAttribute('role', 'group');
+    divInner2.setAttribute('id', `${childName}_btns2`);
+    divInner2.appendChild(btnTitle);
+    divInner2.appendChild(btnExp);
 
     const divOuter = document.createElement('div');
-    divOuter.appendChild(divInner);
-    divOuter.appendChild(btnTitle);
+    divOuter.appendChild(divInner1);
+    divOuter.appendChild(divInner2);
 
     return divOuter;
 }
