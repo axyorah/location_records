@@ -218,7 +218,7 @@ const getTextFromAllChildren = (parent) => {
 }
 
 const expandLi = (li) => {
-    const childName = li.id.split('_')[0];
+    const childName = `${li.id.split('_')[0]}[val]`;
 
     // 1. get all texts of li's child textArea;
     //   (ignore title if present)
