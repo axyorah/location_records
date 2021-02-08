@@ -246,6 +246,35 @@ const expandLi = (li) => {
     insertNewChildAtIdxToParent(li, newUl, idx);
 }
 
+const collapseLi = (li) => {
+    const childName = li.id.split('_')[0];
+
+    // 1. get all texts of li's inner ul and all its children
+    // 2. remove inner ul
+    let ulChild;
+    let idx;
+    for (let i = 0; i < li.children.length; i++) {
+        const child = li.children[i];
+        if (child.id.match(/_ul$/)) {
+            ulChild = child;
+            li.removeChild(child);
+            idx = i;
+            break;
+        }
+    }
+    const oldTexts = getTextFromAllChildren(ulChild); 
+
+    // 3. paste the old texts to a single new text area
+    const textArea = getTextArea(childName);
+    textArea.value = oldTexts.join('\n');
+
+    // 4. insert the new text area to li instead of collapsed ul
+    const btns = li.lastChild;
+    li.removeChild(btns);
+    li.appendChild(textArea);
+    li.appendChild(btns);
+}
+
 const getButton = (name, suffix) => {
     const btn = document.createElement('button');
     btn.setAttribute('class', 'btn btn-sm btn-outline-secondary');
@@ -359,19 +388,15 @@ const getExpButton = (parentName, childName) => {
 
         if (btn.innerHTML === expButtonText.exp) {
             // toggle button name
-            btn.innerHTML = expButtonText.col;          
-
-            expandLi(li);
-            
+            btn.innerHTML = expButtonText.col;
+            // expand single textArea of li into an inner ul array
+            expandLi(li);            
         } else {
             // togge button name
             btn.innerHTML = expButtonText.exp;
-
-            // get all texts of all of li's children
-            const oldTexts = getTextFromAllChildren(li); 
+            // collapse inner ul array within li into a single textArea
+            collapseLi(li);
         }
-
-        
     })
 
     return btn;
