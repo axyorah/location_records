@@ -28,23 +28,10 @@
                         </select>
                         
                         <div>
-                            <a data-bs-toggle="collapse" href="#collapsable-map" aria-expanded="false">City Location</a>
-                            <div class="collapsable multi-collapse" id="collapsable-map">
-                                
-                                <div id="map-nl" class="w-100" style="height: 250px;"></div>
-
-                                <div class="row">
-                                    <div class="col-6">
-                                        <label class="muted-text" for="city[lat]">Latitude</label>
-                                        <input class="form-control muted-text" type="text" id="city[lat]" name="city[lat]" required>
-                                    </div>
-                                    <div class="col-6">
-                                        <label class="muted-text" for="city[lng]">Longitude</label>
-                                        <input class="form-control muted-text" type="text" id="city[lng]" name="city[lng]" required>
-                                    </div>
-                                </div>
-
-                            </div>
+                            <p>City Location</p>
+                            <div id="map-nl" class="w-100" style="height: 250px;"></div>
+                            <input class="form-control muted-text" type="hidden" id="city[lat]" name="city[lat]" required>
+                            <input class="form-control muted-text" type="hidden" id="city[lng]" name="city[lng]" required>
                         </div>
 
                         <label for="city[quickInfo]">Short note that will appear mouse hover</label>
