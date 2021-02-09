@@ -1,3 +1,5 @@
+const pattern = /\[(?<idx>[0-9]*)\]_(?<fun>btns|add|del|title|exp)$/;
+
 const titleButtonText = {
     'add': 'Add Title',
     'del': 'Remove Title'
@@ -56,6 +58,17 @@ const getAddButton = (parentName, childName) => {
     // so refer to `btn.id` instead!  
     const btn = getButton(childName, 'add');
     btn.innerHTML = '&#65291;';//'Add New Field';
+
+    btn.addEventListener('mouseover', function (evt) {
+        parentName = getBtnParentId(btn.id);
+        let idx = getBtnIdx(btn.id);
+
+        const ul = document.getElementById(parentName + '_ul');
+
+        console.log(`PARENT: ${parentName}`);
+        console.log(`UL:`);
+        console.log(ul);
+    })
 
     btn.addEventListener('click', function (evt) {
         parentName = getBtnParentId(btn.id);

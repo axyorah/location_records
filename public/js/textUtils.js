@@ -1,5 +1,3 @@
-const pattern = /\[(?<idx>[0-9]*)\]_(?<fun>btns|add|del|title|exp)$/;
-
 const getTextArea = (childName) => {
     const textArea = document.createElement('textarea');
     textArea.setAttribute('class', 'form-control');
@@ -41,62 +39,56 @@ const getNewUl = (name) => {
     return ul;
 }
 
-const updateIdOfAllChildren = (parent, pattern, newIdx) => {
-    //TODO: update for a case if parent base changes!!!
-    //TODO: update text elements too!
-    // Note:
-    // this function only updates ids of non-text elements 
-    // that follow the pattern: `...[idx]_fun`, e.g., `city[info][11]_add`
-    //(text elements follow a different pattern: 
-    // `...[idx][key]` or `...[idx][val]` - they are updated separately)
-    if (parent.children) {
+const updateIdAndNameOfAllChildren = (parent, oldBase, newBase) => {
+    if (parent.children.length) {
         for (let child of parent.children) {
-            
-            const found = child.id.match(pattern);
+            // child can be either 
+            // - text with suffix `[key]` or `[val]`,
+            // - ul, li or btn with suffix `_ul`, `_li` or `_<btn fun>` (e.g., `_add`)
+            // - div helper container without any id
 
-            if (found) {
-                const base = child.id.replace(found[0], '');
-                const fun = found.groups.fun;
-                const newId = `${base}[${newIdx}]_${fun}`;
-                
-                child.setAttribute('id', newId);                
+            // if it's neither of text/ul/li/btn - recurr without changes
+            if (!child.id) {
+                return updateIdAndNameOfAllChildren(child, oldBase, newBase);
             }
+            
+            // if it is - derive it's old base
+            const oldChildBase = child.id.split('_')[0];
 
-            updateIdOfAllChildren(child, pattern, newIdx);
+            // set new child's id and name
+            const newId = newBase + child.id.replace(oldBase, '');
+            child.setAttribute('id', newId);
+            child.setAttribute('name', newId);
+
+            // derive new base for deeper children:
+            // - for texts - suffix ([key], [val]) should be part of new base
+            // - for li/btn - suffix (`_li`, `_add`) should be excluded from new base
+            const newChildBase = child.id.split('_')[0];
+
+            updateIdAndNameOfAllChildren(child, oldChildBase, newChildBase);
         }
     }
 }
 
 const updateIdAndNameOfUlChildren = (ul) => {
     // adjust the indices of all the `li`s and  their children,
-    // so that the indices in their ids are arranged in order:
-    // start with `0` and end with `ul.children.length-1`;
-    // - update id's (and names) of li, titles and textareas 'manually',
-    // - update buttons id's via pattern matching:
-    //     we're looking for a pattern: `...[idx]_fun`
+    // so that the indices in their ids are arranged in order
     const name = ul.id.split('_')[0];
+    console.log('BASE NAME:');
+    console.log(name);
     
     let i = 0;
-    for (let li of ul.children) {
-        const newChildName = `${name}[${i}]`;
-        const newLiName = `${newChildName}_li`;
-        const newTextName = `${newChildName}[val]`;
-        const newTitleName = `${newChildName}[key]`;
+    for (let li of ul.children) { 
+        // get old and new li's base name (without `_li` suffix)       
+        const oldBase = li.id.split('_')[0];
+        const newBase = `${name}[${i}]`;
 
-        // udpate li
-        li.setAttribute('id', newLiName);
+        // udpate li, so that it's id reflects its serial num
+        li.setAttribute('id', `${name}[${i}]_li`);
         li.setAttribute('class', 'list-group-item');
-
-        // update title and textarea (they have both id and name)
-        if (li.children.length == 3) {
-            li.children[0].setAttribute('id', newTitleName);
-            li.children[0].setAttribute('name', newTitleName);
-        }
-        li.children[li.children.length-2].setAttribute('id', newTextName);
-        li.children[li.children.length-2].setAttribute('name', newTextName);
         
-        // update other children recursively
-        updateIdOfAllChildren(li, pattern, i);        
+        // update all li's children with new base name
+        updateIdAndNameOfAllChildren(li, oldBase, newBase);
         i += 1;
     }
 }
