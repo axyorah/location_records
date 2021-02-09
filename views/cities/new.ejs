@@ -5,40 +5,51 @@
     <div class="row">
         <div class="col-xl-8 pt-5">
 
-            <form method="POST" action="/cities/new"
-                class="needs-validation" novalidate>
+            <form method="POST" action="/cities/new" class="needs-validation" novalidate>
 
                 <div class="card w-100">
                     <div class="card-body" id="region-info">
 
-                        <label for="city[name]">City Name</label>
-                        <input class="form-control" type="text" 
-                            id="city[name]" name="city[name]" required>
-
-                        <label for="city[code]">City Code</label>
-                        <input class="form-control" type="text" 
-                            id="city[code]" name="city[code]" required>
-
-                        <label for="city[area]">Area that the city belongs to</label>
-                        <select class="form-control" id="city[area]" name="city[area]" required>
-                            <option disabled selected value="">Select Area</option>
-                            <% for (let area of areas) { %>
-                                <option value="<%= area.name %>"><%= area.name %></option>
-                            <% } %>
-                        </select>
-                        
-                        <div>
-                            <p>City Location</p>
-                            <div id="map-nl" class="w-100" style="height: 250px;"></div>
-                            <input class="form-control muted-text" type="hidden" id="city[lat]" name="city[lat]" required>
-                            <input class="form-control muted-text" type="hidden" id="city[lng]" name="city[lng]" required>
+                        <div class="form-box">
+                            <label for="city[name]">City Name</label>
+                            <input class="form-control" type="text" id="city[name]" name="city[name]" required>
                         </div>
 
-                        <label for="city[quickInfo]">Short note that will appear mouse hover</label>
-                        <textarea class="form-control" id="city[quickInfo]" name="city[quickInfo]"></textarea>
+                        <div class="form-box">
+                            <label for="city[code]">City Code</label>
+                            <input class="form-control" type="text" id="city[code]" name="city[code]" required>
+                        </div>
 
-                        <label for="city[generalInfo]">General Information</label>
-                        <div id="city[generalInfo]"></div>
+                        <div class="form-box">
+                            <label for="city[area]">Area that the city belongs to</label>
+                            <select class="form-control" id="city[area]" name="city[area]" required>
+                                <option disabled selected value="">Select Area</option>
+                                <% for (let area of areas) { %>
+                                    <option value="<%= area.name %>">
+                                        <%= area.name %>
+                                    </option>
+                                    <% } %>
+                            </select>
+                        </div>
+
+                        <div class="form-box">
+                            <p>City Location</p>
+                            <div id="map-nl" class="w-100" style="height: 250px;"></div>
+                            <input class="form-control muted-text" type="hidden" id="city[lat]" name="city[lat]"
+                                required>
+                            <input class="form-control muted-text" type="hidden" id="city[lng]" name="city[lng]"
+                                required>
+                        </div>
+
+                        <div class="form-box">
+                            <label for="city[quickInfo]">Short note that will appear on mouse hover</label>
+                            <textarea class="form-control" id="city[quickInfo]" name="city[quickInfo]"></textarea>
+                        </div>
+
+                        <div class="form-box">
+                            <label for="city[generalInfo]">General Information</label>
+                            <div id="city[generalInfo]"></div>
+                        </div>
 
                     </div>
                 </div>
@@ -52,7 +63,7 @@
     </div>
 
 
-    <script>        
+    <script>
         const mapBoxToken = '<%= process.env.MAPBOX_TOKEN %>';
         const areasJSON = '<%- JSON.stringify(areas) %>';
         const citiesJSON = '<%- JSON.stringify(cities) %>';
