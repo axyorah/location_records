@@ -52,6 +52,7 @@ const getTextArea = (childName) => {
 const getNewUl = (name) => {
     const ul = document.createElement('ul');
     ul.setAttribute('id', `${name}_ul`);
+    ul.setAttribute('class', 'list-group list-group-flush mt-2');
 
     addTextAreaToUl(ul);
     return ul;
@@ -99,6 +100,7 @@ const updateIdAndNameOfUlChildren = (ul) => {
 
         // udpate li
         li.setAttribute('id', newLiName);
+        li.setAttribute('class', 'list-group-item');
 
         // update title and textarea (they have both id and name)
         if (li.children.length == 3) {
@@ -150,6 +152,7 @@ const addTextAreaToUl = (ul) => {
     // by default new li only contains textarea and edtiButtons
     const li = document.createElement('li');
     li.setAttribute('id', `${childName}_li`);
+    li.setAttribute('class', 'list-group-item');
     li.appendChild(textArea);
     li.append(editBtns);
 
@@ -164,11 +167,9 @@ const insertTextAreaAtIdxToUl = (ul, idx) => {
     // that wouldn't conflict with existing children
     const parentName = ul.id.split('_')[0];
     const childName = `${parentName}[${ul.children.length}]`;
-    const liName = `${childName}_li`
-    const textName = `${childName}[val]`;
         
     // get textArea
-    const textArea = getTextArea(textName);
+    const textArea = getTextArea(childName);
 
     // get editButtons
     const editBtns = getEditButtons(parentName, childName);
@@ -176,7 +177,8 @@ const insertTextAreaAtIdxToUl = (ul, idx) => {
     // add new li to ul;
     // by default new li only contains textarea and edtiButtons
     const li = document.createElement('li');
-    li.setAttribute('id', liName);
+    li.setAttribute('id', `${childName}_li`);
+    li.setAttribute('class', 'list-group-item my-2');
     li.appendChild(textArea);
     li.append(editBtns);
 
@@ -410,20 +412,21 @@ const getEditButtons = (parentName, childName) => {
     const btnExp = getExpButton(parentName, childName);
 
     const divInner1 = document.createElement('div');
-    divInner1.setAttribute('class', 'btn-group mx-4');
+    divInner1.setAttribute('class', 'btn-group');
     divInner1.setAttribute('role', 'group');
     divInner1.setAttribute('id', `${childName}_btns1`);
     divInner1.appendChild(btnAdd);
     divInner1.appendChild(btnDel);
 
     const divInner2 = document.createElement('div');
-    divInner2.setAttribute('class', 'btn-group mx-4');
+    divInner2.setAttribute('class', 'btn-group');
     divInner2.setAttribute('role', 'group');
     divInner2.setAttribute('id', `${childName}_btns2`);
     divInner2.appendChild(btnTitle);
     divInner2.appendChild(btnExp);
 
     const divOuter = document.createElement('div');
+    divOuter.setAttribute('class', 'd-flex justify-content-between');
     divOuter.appendChild(divInner1);
     divOuter.appendChild(divInner2);
 

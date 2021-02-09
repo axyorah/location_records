@@ -5,6 +5,7 @@ const showGenInfoInit = () => {
 
     const ul = document.createElement('ul');
     ul.setAttribute('id', `${name}_ul`);
+    ul.setAttribute('class', 'list-group list-group-flush my-2')
 
     insertTextAreaAtIdxToUl(ul, 0);
 
