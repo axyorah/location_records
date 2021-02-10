@@ -180,6 +180,19 @@ const getExpButton = (parentName, childName) => {
     return btn;
 }
 
+const getButtonGroup = (btns, groupName) => {
+    const div = document.createElement('div');
+    div.setAttribute('class', 'btn-group');
+    div.setAttribute('role', 'group');
+    div.setAttribute('id', groupName);
+    
+    for (let btn of btns) {
+        div.appendChild(btn);
+    }
+    
+    return div;
+}
+
 const getEditButtons = (parentName, childName) => {
         
     const btnAdd = getAddButton(parentName, childName);
@@ -187,19 +200,8 @@ const getEditButtons = (parentName, childName) => {
     const btnTitle = getTitleButton(parentName, childName);
     const btnExp = getExpButton(parentName, childName);
 
-    const divInner1 = document.createElement('div');
-    divInner1.setAttribute('class', 'btn-group');
-    divInner1.setAttribute('role', 'group');
-    divInner1.setAttribute('id', `${childName}_btns1`);
-    divInner1.appendChild(btnAdd);
-    divInner1.appendChild(btnDel);
-
-    const divInner2 = document.createElement('div');
-    divInner2.setAttribute('class', 'btn-group');
-    divInner2.setAttribute('role', 'group');
-    divInner2.setAttribute('id', `${childName}_btns2`);
-    divInner2.appendChild(btnTitle);
-    divInner2.appendChild(btnExp);
+    divInner1 = getButtonGroup([btnAdd, btnDel], `${childName}_btns1`);
+    divInner2 = getButtonGroup([btnTitle, btnExp], `${childName}_btns2`);
 
     const divOuter = document.createElement('div');
     divOuter.setAttribute('class', 'd-flex justify-content-between');
