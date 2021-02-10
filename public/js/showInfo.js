@@ -10,11 +10,6 @@ const ingoredKeyList = [
     '__v'
 ]
 
-// const showQuickInfo = (el, code) => {
-//     // show quick info on map
-//     el.html(el.html() + '<br>' + jsonHtmlify(data[code].quickInfo));
-// }
-
 const showFullInfo = (item) => {
     // show detailed info in right col
     // set region name
@@ -31,7 +26,9 @@ const showFullInfo = (item) => {
 
     // add data of currently selected region
     const lvl = 2;    
-    regionInfoHtml.appendChild(showObject(item, lvl, ingoredKeyList));
+    regionInfoHtml.appendChild(
+        showObject(item, 'selected', lvl, ingoredKeyList)
+    );
 }
 
 if (selectedJSON) {
