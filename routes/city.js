@@ -10,6 +10,10 @@ router.route('/cities/new')
     .get(city.renderNew)
     .post(validateCity, city.addNew);
 
+router.route('/cities/edit/:id')
+    .get(city.renderEdit)
+    .post(city.updateEdited);
+
 router.route('/cities/:id')
     .get(city.show)
     .post(city.data);

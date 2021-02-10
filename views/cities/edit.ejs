@@ -1,0 +1,88 @@
+<% layout('layout/boilerplate.ejs') %>
+
+    <h1>Edit City</h1>
+
+    <div class="row">
+        <div class="col-xl-8 pt-5">
+
+            <form method="POST" action="/cities/edit" class="needs-validation" novalidate>
+
+                <div class="card w-100">
+                    <div class="card-body" id="region-info">
+
+                        <div class="form-box">
+                            <label for="city[name]">City Name</label>
+                            <input class="form-control" type="text" 
+                                id="city[name]" name="city[name]" value="<%= selected.name %>" required>
+                        </div>
+
+                        <div class="form-box">
+                            <label for="city[code]">City Code</label>
+                            <input class="form-control" type="text" 
+                                id="city[code]" name="city[code]" value="<%= selected.code %>" required>
+                        </div>
+
+                        <div class="form-box">
+                            <label for="city[area]">Area that the city belongs to</label>
+                            <select class="form-control" id="city[area]" name="city[area]" required>
+                                <option disabled value="">Select Area</option>
+                                <% for (let area of areas) { %>
+                                    <% if (area.code === selected.area) { %>
+                                        <option selected value="<%= area.name %>">
+                                            <%= area.name %>
+                                        </option>
+                                    <% } else { %>
+                                        <option value="<%= area.name %>">
+                                            <%= area.name %>
+                                        </option>
+                                    <% } %>                                    
+                                <% } %>
+                            </select>
+                        </div>
+
+                        <div class="form-box">
+                            <p>City Location</p>
+                            <div id="map-nl" class="w-100" style="height: 250px;"></div>
+                            <input class="form-control muted-text" type="hidden" 
+                                id="city[lat]" name="city[lat]" value="<%= selected.geometry.coordinates[1]%>"
+                                required>
+                            <input class="form-control muted-text" type="hidden" 
+                                id="city[lng]" name="city[lng]" value="<%= selected.geometry.coordinates[0]%>"
+                                required>
+                        </div>
+
+                        <div class="form-box">
+                            <label for="city[quickInfo]">Short note that will appear on mouse hover</label>
+                            <textarea class="form-control" id="city[quickInfo]" name="city[quickInfo]"
+                            ><%= selected.quickInfo.trim() %></textarea>
+                        </div>
+
+                        <div class="form-box">
+                            <label for="city[generalInfo]">General Information</label>
+                            <div id="city[generalInfo]"></div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="mt-3">
+                    <button type="submit" class="btn btn-outline-secondary">Submit</button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+
+
+    <script>
+        const mapBoxToken = '<%= process.env.MAPBOX_TOKEN %>';
+        const selectedJSON = '<%- JSON.stringify(selected) %>';  
+        const citiesJSON = '<%- JSON.stringify(cities) %>';      
+        const areasJSON = '<%- JSON.stringify(areas) %>';
+    </script>
+    <script src="/js/jsonUtils.js"></script>
+    <script src="/js/mapSetup.js"></script>
+    <script src="/js/mapEditCity.js"></script>
+    <script src="/js/textUtils.js"></script>
+    <script src="/js/btnUtils.js"></script>
+    <script src="/js/addInfo.js"></script>

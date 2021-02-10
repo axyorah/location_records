@@ -19,35 +19,5 @@ module.exports.home = async (req,res) => {
     console.log('ROV.HOME: SELECTED');
     console.log(selected);
 
-    res.render('./rov/home.ejs', { selected, areas, cities });
+    res.render('./rov/home.ejs', { selected, cities, areas });
 }
-
-// module.exports.index = async (req,res) => {
-//     // initial...
-//     const code = 'AML';
-
-//     const areas = await Area.find({}).populate('cities');
-//     const cities = await City.find({});
-
-//     const area = await Area.findOne({ code: code }).populate('cities');
-//     const city = await City.findOne({ code: code });
-//     const selected = area || city;
-
-//     console.log(selected);
-
-//     res.render('./rov/index.ejs', { selected, areas, cities });
-// }
-
-// module.exports.selected = async (req,res) => {
-
-//     const { id } = req.params;
-    
-//     const area = await Area.findOne({ _id: id }).populate('cities');
-//     const city = await City.findOne({ _id: id });
-//     const selected = area || city;
-
-//     console.log('SELECTED:');
-//     console.log(selected);
-
-//     res.send(selected);
-// }

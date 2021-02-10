@@ -20,10 +20,10 @@ module.exports.data = async (req,res) => {
 module.exports.show = async (req,res) => {
 
     const { id } = req.params;
-    const selected = await City.findOne({ _id: id });
 
-    const areas = await Area.find({}).populate('cities');
+    const selected = await City.findOne({ _id: id });
     const cities = await City.find({});
+    const areas = await Area.find({}).populate('cities');    
 
     console.log('SELECTED CITY:');
     console.log(selected);
@@ -62,7 +62,53 @@ module.exports.addNew = async (req,res) => {
     //city['City-Specific'] = parseMixedSchema(citySpecific);
 
     city.markModified('General Information'); // mixed schema fields require explicit update
-    //city.marlModified('City-Specific');    
+    //city.markModified('City-Specific');    
+
+    await city.save();
+
+    // add city to resp. area and save
+    areaObj.cities.push(city);
+    await areaObj.save();
+
+    res.redirect('/');
+}
+
+module.exports.renderEdit = async (req,res) => {
+    const { id } = req.params;
+
+    const selected = await City.findOne({ _id: id });
+    const cities = await City.find({});
+    const areas = await Area.find({}).populate('cities');
+
+    res.render('./cities/edit.ejs', { selected, cities, areas });
+}
+
+module.exports.updateEdited = async (req,res) => {
+    console.log('REQ.BODY.CITY:');
+    console.log(req.body.city);
+    const { name, code, lat, lng, quickInfo, area } = await req.body.city;
+    const generalInfo = await req.body.city['General Information'];
+    //const citySpecific = req.body.city['City-Specific'];
+
+    const areaObj = await Area.findOne({ name: area });
+
+    let city = new City({
+        name: name,
+        geometry: {
+            type: 'Point',        
+            coordinates: [parseFloat(lng), parseFloat(lat)]
+        },
+        code: code,
+        quickInfo: jsonEscape(quickInfo),
+        area: areaObj
+    });
+
+    // add mixed schema fields separately
+    city['General Information'] = parseMixedSchema(generalInfo);
+    //city['City-Specific'] = parseMixedSchema(citySpecific);
+
+    city.markModified('General Information'); // mixed schema fields require explicit update
+    //city.markModified('City-Specific');    
 
     await city.save();
 
