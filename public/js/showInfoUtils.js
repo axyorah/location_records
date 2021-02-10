@@ -122,12 +122,14 @@ const showArray = (arr, name, lvl, ignoredKeyList) => {
     lvl = (lvl === undefined) ? 5 : Math.min(lvl, 5);
 
     const ul = document.createElement('ul');
+    ul.setAttribute('class', 'list-group list-group-flush');
     ul.setAttribute('id', `${name}_ul`);
 
     for (let i = 0; i < arr.length; i++) {
 
         const val = arr[i];
         const li = document.createElement('li');
+        li.setAttribute('class', 'list-group-item');
         li.setAttribute('id', `${name}[${i}]_li`);
 
         const div = resolveSingleItem(val, `${name}[${i}]`, lvl, ignoredKeyList);
