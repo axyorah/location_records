@@ -11,13 +11,24 @@ const ingoredKeyList = [
 ]
 
 const showFullInfo = (item) => {
-    // show detailed info in right col
-    // set region name
-    if (item.name !== item.code) {
+    // show detailed info on City or Area next to the map
+
+    // set City/Area name
+    if ( item.area ) {
+        // cities have ref to parent area
+        const btns = getCityButtons(item, ['back', 'edit', 'del']);
+        
         regionNameHtml.innerHTML =  `${item.name} (${item.code})`;
-    } else {
+        regionNameHtml.appendChild(btns);
+    } else if ( item.cities ) {
+        // areas have ref to child cities
+        const btns = getAreaButtons(item, ['edit', 'del']);
+        
         regionNameHtml.innerHTML =  `${item.name}`;
-    }    
+        regionNameHtml.appendChild(btns);
+    } else {
+        return;
+    }
 
     // remove data from previously clicked region
     while (regionInfoHtml.firstChild) {

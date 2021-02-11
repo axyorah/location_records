@@ -27,12 +27,13 @@ const makeDetails = (key, val, name, lvl, ignoredKeyList) => {
 
     const details = document.createElement('details');
     const summary = document.createElement('summary');
-    const h = document.createElement(`h${lvl}`);
-    
+    const h = document.createElement(`h${lvl}`);   
+        
+    summary.setAttribute('class', 'd-flex align-items-center');
     h.setAttribute('class', 'd-inline');
     h.innerHTML = jsonHtmlify(key);    
     
-    summary.appendChild(h);    
+    summary.appendChild(h); 
     details.appendChild(summary);
     details.appendChild(div);
 
@@ -106,10 +107,18 @@ const addCitiesToUL = (ul, obj, lvl, ignoredKeyList) => {
             li.setAttribute('class', 'list-group-item');
             li.setAttribute('id', `${baseName}[${i}]_li`);
 
+            // get collapsable city info
             const collapsable = makeDetails(
                 `${city.name} (${city.code})`, city, `${baseName}[${i}]`, lvl, ignoredKeyList
             );
 
+            // add city buttons next to city name
+            //(since several cities area added - we must be on Area page,
+            // so there's no need to add link that redirects back to parent area)
+            const summary = collapsable.firstChild;
+            const btns = getCityButtons(city, ['edit', 'del']);
+            summary.appendChild(btns);
+            
             li.appendChild(collapsable);
 
             ul.appendChild(li);

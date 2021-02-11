@@ -9,6 +9,86 @@ const expButtonText = {
     'col': 'Collapse'
 };
 
+const getABtn = (name, href) => {
+    const btn = document.createElement('a');
+    btn.innerHTML = name;
+    btn.setAttribute('class', 'btn btn-sm btn-outline-secondary');
+    btn.setAttribute('href', href);
+
+    return btn;
+}
+
+const getSubmitBtn = (name) => {
+    const btn = document.createElement('button');
+    btn.innerHTML = name;
+    btn.setAttribute('class', 'btn btn-sm btn-outline-secondary');
+    btn.setAttribute('type', 'submit');
+
+    return btn;
+}
+
+const getCityButtons = (item, names) => {
+    // names should be an array of any combination of:
+    // ['back', 'edit', 'del']
+    if ( item.area ) {
+        const form = document.createElement('form');
+        form.setAttribute('action', `/cities/delete/${item._id}`); // TODO: add: `?_DELETE`
+        form.setAttribute('method', 'POST');
+        form.setAttribute('class', 'd-inline ms-auto'); //d-inline 
+
+        const btnGroup = document.createElement('div');
+        btnGroup.setAttribute('class', 'btn-group');
+        btnGroup.setAttribute('role', 'group');
+
+        const backBtn = getABtn('Back to Area', `/?areaId=${item.area}`);
+        const editBtn = getABtn('Edit', `/cities/edit/${item._id}`);
+        const delBtn = getSubmitBtn('Del');
+
+        if (names.includes('back')) {
+            btnGroup.appendChild(backBtn);
+        }
+        if (names.includes('edit')) {
+            btnGroup.appendChild(editBtn);
+        }
+        if (names.includes('del')) {
+            btnGroup.appendChild(delBtn);
+        }
+
+        form.append(btnGroup);
+
+        return form;
+    }
+}
+
+const getAreaButtons = (item, names) => {
+    // names should be an array of any combination of:
+    // ['edit', 'del']
+    if ( item.cities ) {
+        const form = document.createElement('form');
+        form.setAttribute('action', `/areas/delete/${item._id}`); // TODO: add: `?_DELETE`
+        form.setAttribute('method', 'POST');
+        form.setAttribute('class', 'd-inline mr-auto');
+
+        const btnGroup = document.createElement('div');
+        btnGroup.setAttribute('class', 'btn-group');
+        btnGroup.setAttribute('role', 'group');
+
+        const editBtn = getABtn('Edit', `/areas/edit/${item._id}`);
+        const delBtn = getSubmitBtn('Del');
+
+        if (names.includes('edit')) {
+            btnGroup.appendChild(editBtn);
+        }
+        if (names.includes('del')) {
+            btnGroup.appendChild(delBtn);
+        }
+
+        form.append(btnGroup);
+
+        return form;
+    }
+}
+
 const getBtnParentId = (btnId) => {
     const found = btnId.match(pattern);
 
