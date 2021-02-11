@@ -3,21 +3,21 @@ const getUuid = (num) => {
     return uuid = 'collapsable-'+[...Array(num)].map(() => Math.floor(Math.random()*10)).join('');
 }
 
-const resolveSingleItem = (val, name, lvl, ignoredKeyList) => {
-    ignoredKeyList = (ignoredKeyList === undefined) ? [] : ignoredKeyList;
-    lvl = (lvl === undefined) ? 5 : Math.min(lvl, 5);
-    const div = document.createElement('div');
+// const resolveSingleItem = (val, name, lvl, ignoredKeyList) => {
+//     ignoredKeyList = (ignoredKeyList === undefined) ? [] : ignoredKeyList;
+//     lvl = (lvl === undefined) ? 5 : Math.min(lvl, 5);
+//     const div = document.createElement('div');
 
-    if (typeof(val) === 'string' || typeof(val) === 'number') {
-        div.innerHTML = jsonHtmlify(val);
-    } else if (Array.isArray(val)) {
-        div.appendChild(showArray(val, `${name}[val]`, lvl, ignoredKeyList));
-    } else {
-        div.appendChild(showObject(val, `${name}[val]`, lvl, ignoredKeyList));
-    }
+//     if (typeof(val) === 'string' || typeof(val) === 'number') {
+//         div.innerHTML = jsonHtmlify(val);
+//     } else if (Array.isArray(val)) {
+//         div.appendChild(showArray(val, `${name}[val]`, lvl, ignoredKeyList));
+//     } else {
+//         div.appendChild(showObject(val, `${name}[val]`, lvl, ignoredKeyList));
+//     }
 
-    return div;
-}
+//     return div;
+// }
 
 const makeDetails = (key, val, name, lvl, ignoredKeyList) => {
     ignoredKeyList = (ignoredKeyList === undefined) ? [] : ignoredKeyList;

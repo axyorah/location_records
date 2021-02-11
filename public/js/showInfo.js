@@ -1,5 +1,5 @@
 // resp fields will not be displayed in the browser
-const ingoredKeyList = [
+const ignoredKeyList = [
     'name', 
     'quickInfo', 
     'geometry', 
@@ -9,6 +9,22 @@ const ingoredKeyList = [
     '_id', 
     '__v'
 ]
+
+const resolveSingleItem = (val, name, lvl, ignoredKeyList) => {
+    ignoredKeyList = (ignoredKeyList === undefined) ? [] : ignoredKeyList;
+    lvl = (lvl === undefined) ? 5 : Math.min(lvl, 5);
+    const div = document.createElement('div');
+
+    if (typeof(val) === 'string' || typeof(val) === 'number') {
+        div.innerHTML = jsonHtmlify(val);
+    } else if (Array.isArray(val)) {
+        div.appendChild(showArray(val, `${name}[val]`, lvl, ignoredKeyList));
+    } else {
+        div.appendChild(showObject(val, `${name}[val]`, lvl, ignoredKeyList));
+    }
+
+    return div;
+}
 
 const showFullInfo = (item) => {
     // show detailed info on City or Area next to the map
@@ -38,7 +54,7 @@ const showFullInfo = (item) => {
     // add data of currently selected region
     const lvl = 2;    
     regionInfoHtml.appendChild(
-        showObject(item, 'selected', lvl, ingoredKeyList)
+        showObject(item, 'selected', lvl, ignoredKeyList)
     );
 }
 
