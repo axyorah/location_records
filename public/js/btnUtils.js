@@ -196,8 +196,16 @@ const getTitleButton = (parentName, childName) => {
     // at the moment button creation!
     // insertion/deletion will modify the name,
     // so refer to `btn.id` instead!
-    const btn = getButton(childName, 'title');
-    btn.innerHTML = titleButtonText.add;
+    const btn = getButton(childName, 'title');    
+    if (document.getElementById(`${childName}[key]`)) {
+        btn.innerHTML = titleButtonText.del;
+    } else {
+        btn.innerHTML = titleButtonText.add;
+    }
+
+    btn.addEventListener('mouseover', function (evt) {
+        console.log(childName);
+    })
 
     btn.addEventListener('click', function (evt) {
         parentName = getBtnParentId(btn.id);
@@ -231,7 +239,7 @@ const getExpButton = (parentName, childName) => {
     // at the moment button creation!
     // insertion/deletion will modify the name,
     // so refer to `btn.id` instead!
-    const btn = getButton(childName, 'exp');
+    const btn = getButton(childName, 'exp');    
     btn.innerHTML = expButtonText.exp;
 
     btn.addEventListener('mouseover', function(evt) {

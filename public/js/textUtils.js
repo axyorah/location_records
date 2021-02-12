@@ -6,6 +6,15 @@ const getTextArea = (childName) => {
     return textArea;
 }
 
+const getTitleArea = (childName) => {
+    const title = document.createElement('input');
+    title.setAttribute('type', 'text');
+    title.setAttribute('class', 'form-control');
+    title.setAttribute('name', `${childName}[key]`);
+    title.setAttribute('id', `${childName}[key]`);
+    return title;
+}
+
 const addTextAreaToUl = (ul) => {
     // append empty textarea at the end of ul;
     // recall ul structure: ul{ li[i]{[title,] textArea, editButtons}}
@@ -28,7 +37,7 @@ const addTextAreaToUl = (ul) => {
     li.append(editBtns);
 
     ul.appendChild(li);
-}
+}   
 
 const getNewUl = (name) => {
     const ul = document.createElement('ul');

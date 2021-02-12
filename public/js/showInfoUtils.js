@@ -141,6 +141,10 @@ const showArray = (arr, name, lvl, ignoredKeyList) => {
         li.setAttribute('class', 'list-group-item');
         li.setAttribute('id', `${name}[${i}]_li`);
 
+        // let childName;
+        // if ( typeof(val))
+
+
         const div = resolveSingleItem(val, `${name}[${i}]`, lvl, ignoredKeyList);
 
         li.appendChild(div);
