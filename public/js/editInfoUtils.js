@@ -1,14 +1,51 @@
 /*
-only array initiates ul
-strings, numbers and objects (single key-val pairs) are attached to li of ul;
-objects only exists as a single key-val pair;
-if object has several key-val pairs - convert it into an array, 
-with each ele being a single key-val pair
-(this way adding removing a title is as simple as 
-adding and removing key from key-val pair)
+Naming Conventions (id's and names of HTML elements):
+
+Element's id/name is composed of:
+    root
+  + **alternating** [<idx>] and [val] 
+  + suffix indicating the type of element, e.g.:
+
+  - root: any, e.g., `city[General Information]`
+  - ul: 
+        `<root>[<idx>][val]...[<idx>][val]_ul`
+  - li (direct child of ul): 
+        `<root>[<idx>][val]...[<idx>][val][<idx>]_li`
+  - title (direct child of li): 
+        `<root>[<idx>][val]...[<idx>][val][<idx>][key]`
+  - text (direct child of li): 
+        `<root>[<idx>][val]...[<idx>][val][<idx>][val]`
+  - buttons (grandchild of li via helper div):
+        `<root>[<idx>][val]...[<idx>][val][<idx>]_<btn>`
+
+Form elements can be either:
+  - strings/nums (info without a title)
+  - key-value pairs (info with title [key]) [not fullfledged objects, see below]
+  - arrays  
+
+Keys in key-value pairs can only be of type string/number; however elements
+of the arrays and values in key-value pairs can be either of the above three 'types'.
+
+Objects with multiple key-value pairs are forbidden. If an object with mutiple
+key-value pairs has to be used, it is converted into an array, where each element
+is a key-value pair.
+
+This way it's possible to have a mix of key-value pairs, arrays and strings/numbers
+in a single form; and switching from text to titled text (key-val) is quite painless
+(aside from the part where all child/sibling indices need to be updated).
+
+UL elements are created ONLY when array is encountered in a form. 
+Key-val pairs, child arrays and texts/nums are appended  
+to LI elements of parent UL.
+
+If there's a titled info, elements with suffices `[key]` and `[val]` are added
+to LI. If no title is added orr title is removed, only `[val]`-suffixed element 
+is present. Every child in a form that carries some information (not just html
+helper container) is always given `[val]` suffix. For this reason elements' names
+always have **alternating** `[<idx>]` and `[val]`.
 */
 
-const showText = (parent, txt, name) => {
+const addTextForEdit = (parent, txt) => {
     const parentName = parent.id.split('_')[0]; // should be 'li'
     const grandParent = parent.parentNode;
     const grandParentName = grandParent.id.split('_')[0]; // should be 'ul'
@@ -21,18 +58,18 @@ const showText = (parent, txt, name) => {
     parent.appendChild(editBtns);
 }
 
-const showArray = (parent, arr, name, lvl, ignoredKeyList) => {
+const addArrayForEdit = (parent, arr, ignoredKeyList, lvl) => {
     ignoredKeyList = (ignoredKeyList === undefined) ? [] : ignoredKeyList;
     lvl = (lvl === undefined) ? 5 : Math.min(lvl, 5);
 
     // add [val] to name unless we're at a root of `General Information`
-    const baseName = (parent.id === 'city[generalInfo]') ? name : `${name}[val]`;
+    const baseName = (FORMFIELDROOTS[parent.id]) ? 
+        FORMFIELDROOTS[parent.id] : `${parent.id.split('_')[0]}[val]`;
     
     // create the new ul for array
     const ul = document.createElement('ul');
     ul.setAttribute('class', 'list-group list-group-flush');
-    //ul.setAttribute('id', `${name}_ul`);
-    ul.setAttribute('id', `${baseName}_ul`); // <-- TEST
+    ul.setAttribute('id', `${baseName}_ul`);
     
     for (let i = 0; i < arr.length; i++) {
 
@@ -40,22 +77,15 @@ const showArray = (parent, arr, name, lvl, ignoredKeyList) => {
         const item = arr[i];
         const li = document.createElement('li');
         li.setAttribute('class', 'list-group-item');
-        //li.setAttribute('id', `${name}[${i}]_li`);
-        li.setAttribute('id', `${baseName}[${i}]_li`); // <-- TEST
+        li.setAttribute('id', `${baseName}[${i}]_li`); 
         ul.appendChild(li); // set parent-child before `resolveSingleItem()`!
-
-        // append [val] to name unless val is a 'leaf' (text/num)
-        //const childName = (typeof(item) === 'string' || typeof(item) === 'number') ? 
-        //    `${name}[${i}]` : `${name}[${i}][val]`;
-        const childName = `${baseName}${i}]`; // <-- TEST
-
-        resolveSingleItem(li, item, childName, lvl, ignoredKeyList);
-
+        
+        resolveSingleItem(li, item, ignoredKeyList, lvl);
     }
     parent.appendChild(ul);
 
     // add edit buttons unless we're at a root of `General Information`
-    if (parent.id !== 'city[generalInfo]') {
+    if (!FORMFIELDROOTS[parent.id]) {
         const parentName = parent.id.split('_')[0];
         const grandParentName = parent.parentNode.id.split('_')[0];
         const editBtns = getEditButtons(grandParentName, parentName);
@@ -63,54 +93,33 @@ const showArray = (parent, arr, name, lvl, ignoredKeyList) => {
     }    
 }
 
-const addKeyValPairToLi = (parent, key, val, lvl, ignoredKeyList) => {
+const addKeyValPairToLi = (parent, key, val, ignoredKeyList, lvl) => {
     ignoredKeyList = (ignoredKeyList === undefined) ? [] : ignoredKeyList;
     lvl = (lvl === undefined) ? 5 : Math.min(lvl, 5);
     
     const parentName = parent.id.split('_')[0];
-    //const childName = (typeof(val) === 'string' || typeof(val) === 'number') ? 
-    //    parent.id.split('_')[0] : `${parent.id.split('_')[0]}[val]`;
-    const childName = parent.id.split('_')[0]; // <-- TEST
 
     if (!ignoredKeyList.includes(key)) {
-
-        // const collapsable = makeDetails(
-        //     key, val, `${name}`, lvl, ignoredKeyList
-        // );
-        // parent.appendChild(collapsable);
-
         // add key - title
         const titleArea = getTitleArea(parentName);
         titleArea.value = key;//jsonHtmlify(key);
         parent.appendChild(titleArea)
 
         // add val - info
-        resolveSingleItem(parent, val, childName, lvl+1, ignoredKeyList);
+        resolveSingleItem(parent, val, ignoredKeyList, lvl+1);
     }
 }
 
-const addCitiesToUL = (ul, obj, lvl, ignoredKeyList) => {
+const addCitiesToUL = (ul, obj, ignoredKeyList, lvl) => {
     if (obj.cities) {
         const baseName = 'cities';
         for (let i = 0; i < obj.cities.length; i++) {
 
             const city = obj.cities[i];
             const li = document.createElement('li');
-            li.setAttribute('class', 'BY-ADD-CITIES-TO-UL list-group-item');
+            li.setAttribute('class', 'list-group-item');
             li.setAttribute('id', `${baseName}[${i}]_li`);
             ul.appendChild(li); // set parent - child before `resolveSingleItem()`
-
-            // // get collapsable city info
-            // const collapsable = makeDetails(
-            //     `${city.name} (${city.code})`, city, `${baseName}[${i}]`, lvl, ignoredKeyList
-            // );
-            // // add city buttons next to city name
-            // //(since several cities area added - we must be on Area page,
-            // // so there's no need to add link that redirects back to parent area)
-            // const summary = collapsable.firstChild;
-            // const btns = getCityButtons(city, ['edit', 'del']);
-            // summary.appendChild(btns);            
-            // li.appendChild(collapsable);
 
             // add key - title
             const titleArea = getTitleArea(parentName);
@@ -118,15 +127,15 @@ const addCitiesToUL = (ul, obj, lvl, ignoredKeyList) => {
             li.appendChild(titleArea)
 
             // add val - info
-            resolveSingleItem(li, city, childName, lvl+1, ignoredKeyList);
+            resolveSingleItem(li, city, ignoredKeyList, lvl+1);
         }
     }
 }
 
-const showKeyValPair = (parent, obj, name, lvl, ignoredKeyList) => {
-    //const suffix = parent.id.match(/\[[0-9]\]_(.*)$/);
-    //const grandParentUlName = `${parent.id.replace(suffix, '')}_ul`;
-    //const grandParent = document.getElementById(grandParentUlName);
+const addObjectForEdit = (parent, obj, ignoredKeyList, lvl) => {
+    ignoredKeyList = (ignoredKeyList === undefined) ? [] : ignoredKeyList;
+    lvl = (lvl === undefined) ? 5 : Math.min(lvl, 5);
+
     const parentName = parent.id.split('_')[0]; // should be `li`
     const grandParent = parent.parentNode;
     const grandParentName = grandParent.id.split('_')[0]; // should be `ul`
@@ -135,24 +144,22 @@ const showKeyValPair = (parent, obj, name, lvl, ignoredKeyList) => {
     
     if ( !keys.length ) {
         // if there are no valid keys - make blank field
-        //console.log('key-val is void...');
         getNewUl(parentName);
+
     } else if ( keys.length > 1 ) {
         // if there are several keys - the format is wrong
         // we need to convert it to a list of key-val pairs and append to grandparent ul
-        //console.log('multiple key-vals!!! converting to array!!!')
         const arr = keys.map(key => ({key: obj[key]}));
-        resolveSingleItem(grandParent, arr, grandParentName, lvl, ignoredKeyList);
+        resolveSingleItem(grandParent, arr, ignoredKeyList, lvl);
+
     } else if ( keys[0] === 'cities' ) {
         // if the key is 'cities' - append them to grandParent
-        //resolveSingleItem(grandParent, obj.cities, grandParentUlName, lvl, ignoredKeyList);
-        //console.log('key-val ok! (cities)');
-        addCitiesToUL(grandParent, obj.cities, lvl, ignoredKeyList);
+        addCitiesToUL(grandParent, obj.cities, ignoredKeyList, lvl);
+
     } else {
         // if there is exactly one valid key - treat it normally
-        //console.log('key-val ok!');
         const val = obj[keys[0]];
-        addKeyValPairToLi(parent, keys[0], val, lvl, ignoredKeyList);
+        addKeyValPairToLi(parent, keys[0], val, ignoredKeyList, lvl);
 
         // only add buttons if val is not string/num
         // to avoid adding btns for the same info in `showText()`
