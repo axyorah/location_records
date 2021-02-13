@@ -27,7 +27,7 @@
                             <select class="form-control" id="city[area]" name="city[area]" required>
                                 <option disabled value="">Select Area</option>
                                 <% for (let area of areas) { %>
-                                    <% if (area.code === selected.area) { %>
+                                    <% if (area._id.toString() === selected.area.toString()) { %>
                                         <option selected value="<%= area.name %>">
                                             <%= area.name %>
                                         </option>
@@ -35,7 +35,7 @@
                                         <option value="<%= area.name %>">
                                             <%= area.name %>
                                         </option>
-                                    <% } %>                                    
+                                    <% } %>
                                 <% } %>
                             </select>
                         </div>
