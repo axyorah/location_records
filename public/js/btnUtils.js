@@ -195,8 +195,11 @@ const getTitleButton = (parentName, childName) => {
     // both parentName and childName are only valid 
     // at the moment button creation!
     // insertion/deletion will modify the name,
-    // so refer to `btn.id` instead!
-    const btn = getButton(childName, 'title');    
+    // so refer to `btn.id` during click-event instead!
+    const btn = getButton(childName, 'title');
+
+    // if child li already has a title (...[key]) set btn name to `Remove Title`,
+    // otherwise, set btn name to `Add Title`
     if (document.getElementById(`${childName}[key]`)) {
         btn.innerHTML = titleButtonText.del;
     } else {
@@ -215,7 +218,7 @@ const getTitleButton = (parentName, childName) => {
         const li = document.getElementById(`${childName}_li`);
 
         if (ul.children.length) {
-            if (btn.innerHTML === titleButtonText.add) {
+            if (!li.firstChild.id.match(/\[key\]$/)) {
                 // swap button name
                 btn.innerHTML = titleButtonText.del;
                 // add title
@@ -224,9 +227,7 @@ const getTitleButton = (parentName, childName) => {
                 // swap button name
                 btn.innerHTML = titleButtonText.add;
                 // remove title
-                if (li.children[0].type === 'text') {
-                    li.removeChild(li.children[0]);
-                }
+                li.removeChild(li.children[0]);
             }      
         } 
     });

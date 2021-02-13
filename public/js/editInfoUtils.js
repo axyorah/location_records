@@ -74,6 +74,7 @@ const addArrayForEdit = (parent, arr, ignoredKeyList, lvl) => {
     const ul = document.createElement('ul');
     ul.setAttribute('class', 'list-group list-group-flush');
     ul.setAttribute('id', `${baseName}_ul`);
+    parent.appendChild(ul);
     
     for (let i = 0; i < arr.length; i++) {
 
@@ -86,7 +87,6 @@ const addArrayForEdit = (parent, arr, ignoredKeyList, lvl) => {
         
         resolveSingleItem(li, item, ignoredKeyList, lvl);
     }
-    parent.appendChild(ul);
 
     // add edit buttons unless we're at a root of `General Information`
     if (!FORMFIELDROOTS[parent.id]) {
