@@ -26,9 +26,10 @@ Form elements can be either:
 Keys in key-value pairs can only be of type string/number; however elements
 of the arrays and values in key-value pairs can be either of the above three 'types'.
 
-Objects with multiple key-value pairs are forbidden. If an object with mutiple
+Objects with multiple key-value pairs are forbidden. This is different to `show.ejs` 
+where proper objects with multiple key-val pairs are allowed. If an object with mutiple
 key-value pairs has to be used, it is converted into an array, where each element
-is a key-value pair.
+is a key-value pair. 
 
 This way it's possible to have a mix of key-value pairs, arrays and strings/numbers
 in a single form; and switching from text to titled text (key-val) is quite painless
@@ -36,13 +37,16 @@ in a single form; and switching from text to titled text (key-val) is quite pain
 
 UL elements are created ONLY when array is encountered in a form. 
 Key-val pairs, child arrays and texts/nums are appended  
-to LI elements of parent UL.
+to LI elements of parent UL. This is different to `home.ejs`/`show.ejs` 
+where UL elements can be created for both arrays and objects.
 
 If there's a titled info, elements with suffices `[key]` and `[val]` are added
 to LI. If no title is added orr title is removed, only `[val]`-suffixed element 
 is present. Every child in a form that carries some information (not just html
 helper container) is always given `[val]` suffix. For this reason elements' names
-always have **alternating** `[<idx>]` and `[val]`.
+always have **alternating** `[<idx>]` and `[val]`. This is similar to `home.ejs`/
+`home.ejs` where html <details><summary> play the role of titles and are given
+id's with suffix `[key]`.
 */
 
 const addTextForEdit = (parent, txt) => {
@@ -167,5 +171,29 @@ const addObjectForEdit = (parent, obj, ignoredKeyList, lvl) => {
             const editBtns = getEditButtons(grandParentName, parentName);
             parent.appendChild(editBtns);
         }
+    }
+}
+
+const resolveSingleItem = (parent, item, ignoredKeyList, lvl) => {
+    ignoredKeyList = (ignoredKeyList === undefined) ? [] : ignoredKeyList;
+    lvl = (lvl === undefined) ? 5 : Math.min(lvl, 5);    
+
+    if ( item === undefined ) {
+        const ul = getNewUl(parent.id.split('_')[0]);
+        parent.appendChild(ul); 
+        // always add btns
+
+    } else if ( typeof(item) === 'string' || typeof(item) === 'number' ) {
+        addTextForEdit(parent, item); 
+        // always adds btns
+
+    } else if ( Array.isArray(item) ) {
+        addArrayForEdit(parent, item, ignoredKeyList, lvl); 
+        // adds buttons unless parent is a root of `General Information`
+
+    } else {
+        addObjectForEdit(parent, item, ignoredKeyList, lvl); 
+        // adds buttons only for nested objs to avoid adding btns twice 
+        // for the same val in case of key-val pair where val is string/num
     }
 }
