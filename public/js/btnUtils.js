@@ -240,11 +240,18 @@ const getExpButton = (parentName, childName) => {
     // at the moment button creation!
     // insertion/deletion will modify the name,
     // so refer to `btn.id` instead!
-    const btn = getButton(childName, 'exp');    
-    btn.innerHTML = expButtonText.exp;
+    const btn = getButton(childName, 'exp');
+
+    // if child li already expanded - set btn name to col
+    // otherwise, set btn name to exp
+    if (document.getElementById(`${childName}[val]_ul`)) {
+        btn.innerHTML = expButtonText.col;
+    } else {
+        btn.innerHTML = expButtonText.exp;
+    }
 
     btn.addEventListener('mouseover', function(evt) {
-        console.log(btn.id);
+        console.log(childName);
     })
 
     btn.addEventListener('click', function(evt) {
