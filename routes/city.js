@@ -10,7 +10,7 @@ router.route('/cities/new')
     .get(city.renderNew)
     .post(validateCity, city.addNew);
 
-router.route('/cities/edit/:id')
+router.route('/cities/:id/edit')
     .get(city.renderEdit)
     .post(city.updateEdited);
 

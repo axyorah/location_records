@@ -136,3 +136,23 @@ module.exports.updateEdited = async (req,res) => {
 
     res.redirect('/');
 }
+
+module.exports.delete = async (req,res) => {
+    const { id } = req.params;
+
+    // delete city from City collection
+    await City.findByIdAndDelete(id);
+
+    // delete city from its parent Area
+    const area = await Area.findOneAndUpdate(
+        { cities: id },
+        { $pull: { cities: id } }
+    );
+    area.save();
+
+    // redirect to home
+    const cities = await City.find({});
+    const areas = await Area.find({}).populate('cities');
+
+    res.redirect('/', { cities, areas });
+}

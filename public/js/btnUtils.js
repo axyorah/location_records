@@ -32,7 +32,7 @@ const getCityButtons = (item, names) => {
     // ['back', 'edit', 'del']
     if ( item.area ) {
         const form = document.createElement('form');
-        form.setAttribute('action', `/cities/delete/${item._id}`); // TODO: add: `?_DELETE`
+        form.setAttribute('action', `/cities/${item._id}/delete?_method=DELETE`); // TODO: add: `?_DELETE`
         form.setAttribute('method', 'POST');
         form.setAttribute('class', 'd-inline ms-auto'); //d-inline 
 
@@ -41,7 +41,7 @@ const getCityButtons = (item, names) => {
         btnGroup.setAttribute('role', 'group');
 
         const backBtn = getABtn('Back to Area', `/?areaId=${item.area}`);
-        const editBtn = getABtn('Edit', `/cities/edit/${item._id}`);
+        const editBtn = getABtn('Edit', `/cities/${item._id}/edit`);
         const delBtn = getSubmitBtn('Del');
 
         if (names.includes('back')) {
@@ -65,7 +65,7 @@ const getAreaButtons = (item, names) => {
     // ['edit', 'del']
     if ( item.cities ) {
         const form = document.createElement('form');
-        form.setAttribute('action', `/areas/delete/${item._id}`); // TODO: add: `?_DELETE`
+        form.setAttribute('action', `/areas/${item._id}/delete?_method=DELETE`); // TODO: add: `?_DELETE`
         form.setAttribute('method', 'POST');
         form.setAttribute('class', 'd-inline mr-auto');
 
@@ -73,7 +73,7 @@ const getAreaButtons = (item, names) => {
         btnGroup.setAttribute('class', 'btn-group');
         btnGroup.setAttribute('role', 'group');
 
-        const editBtn = getABtn('Edit', `/areas/edit/${item._id}`);
+        const editBtn = getABtn('Edit', `/areas/${item._id}/edit`);
         const delBtn = getSubmitBtn('Del');
 
         if (names.includes('edit')) {
