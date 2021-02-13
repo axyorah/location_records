@@ -86,35 +86,53 @@ module.exports.renderEdit = async (req,res) => {
 module.exports.updateEdited = async (req,res) => {
     console.log('REQ.BODY.CITY:');
     console.log(req.body.city);
+    const { id } = req.params;
     const { name, code, lat, lng, quickInfo, area } = await req.body.city;
     const generalInfo = await req.body.city['General Information'];
     //const citySpecific = req.body.city['City-Specific'];
 
-    const areaObj = await Area.findOne({ name: area });
+    const cityOld = await City.findById( id );
 
-    let city = new City({
-        name: name,
-        geometry: {
-            type: 'Point',        
-            coordinates: [parseFloat(lng), parseFloat(lat)]
+    const areaOld = await Area.findById( cityOld.area );
+    const areaNew = await Area.findOne({ name: area });
+
+    const city = await City.findByIdAndUpdate(
+        id, 
+        {
+            name: name,
+            geometry: {
+                type: 'Point',        
+                coordinates: [parseFloat(lng), parseFloat(lat)]
+            },
+            code: code,
+            quickInfo: jsonEscape(quickInfo),
+            area: areaNew,
+            'General Information': parseMixedSchema(generalInfo),
         },
-        code: code,
-        quickInfo: jsonEscape(quickInfo),
-        area: areaObj
-    });
+        {
+            new: true,
+            runValidators: true
+        }
+    )
 
-    // add mixed schema fields separately
-    city['General Information'] = parseMixedSchema(generalInfo);
-    //city['City-Specific'] = parseMixedSchema(citySpecific);
-
-    city.markModified('General Information'); // mixed schema fields require explicit update
+    // mixed schema fields require explicit update
+    city.markModified('General Information'); 
     //city.markModified('City-Specific');    
 
     await city.save();
 
-    // add city to resp. area and save
-    areaObj.cities.push(city);
-    await areaObj.save();
+    // if area was changed:
+    if (areaOld._id !== areaNew._id ) {
+        // delete city from old area
+        await areaOld.updateOne({
+            $pull: { cities: city._id }
+        });
+        await areaOld.save();
+
+        // add city to new area
+        areaNew.cities.push(city);
+        await areaNew.save();
+    }    
 
     res.redirect('/');
 }
