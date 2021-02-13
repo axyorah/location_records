@@ -1,104 +1,148 @@
-const getUuid = (num) => {
-    num = (num === undefined) ? 16 : num;
-    return uuid = 'collapsable-'+[...Array(num)].map(() => Math.floor(Math.random()*10)).join('');
+/*
+Naming Conventions (id's and names of HTML elements):
+
+Element's id/name is composed of:
+    root
+  + **alternating** [<idx>] and [val] 
+  + suffix indicating the type of element, e.g.:
+
+  - root: any, e.g., `city[General Information]`
+  - ul: 
+        `<root>[<idx>][val]...[<idx>][val]_ul`
+  - li (direct child of ul): 
+        `<root>[<idx>][val]...[<idx>][val][<idx>]_li`
+  - details (direct child of li)
+        `<root>[<idx>][val]...[<idx>][val][<idx>]_details`
+  - summary = title = key in key-val pair (direct child of details): 
+        `<root>[<idx>][val]...[<idx>][val][<idx>][key]`
+  - text (direct child of li for arrays, or direct child of details for obj): 
+        `<root>[<idx>][val]...[<idx>][val][<idx>][val]`
+  - buttons (grandchild of li via helper div):
+        `<root>[<idx>][val]...[<idx>][val][<idx>]_<btn>`
+
+Form elements can be either:
+  - strings/nums (info without a title)
+  - arrays  
+  - objects 
+    [unlike `edit.ejs`, objects with multiple key-val pairs are **allowed** in `show.ejs`]
+
+Object keys can only be of type string/number; however elements
+of the arrays and object values can be either of the above three 'types'.
+
+Objects with multiple key-value pairs are **allowed** in `show.ejs`, 
+as here we  get data directly from db as valid json objects.
+
+This way it's possible to have a mix of key-value pairs, arrays and strings/numbers
+in a single form; and switching from text to titled text (key-val) is quite painless
+(aside from the part where all child/sibling indices need to be updated).
+
+UL elements are created when either array of object is encountered in
+json object (db entry on selected area/city). This is different to `edit.ejs`
+where UL elements can only be created when array is encountered in a form.
+Child objects, child arrays and texts/nums are appended to LI elements 
+of parent UL.
+
+Only objects are displayed using collapsable html <details>. Object keys are
+set to <detail><summary> and object values are added as `innerHTML` to <details>.
+In case of arrays, all elements of the arrays are displayed as is, no collapsable
+elements are added.
+
+Similarly, as in `edit.ejs` object keys (<details><summary>) are given id's 
+with suffices `[key]` and object values, as well as array elements as given
+id's with sufficies `[val]`.
+
+Similarly as in `edit.ejs` html elements' names always have **alternating** 
+`[<idx>]` and `[val]`.
+*/
+
+const addText = (parent, txt) => {
+    const parentName = parent.id.split('_')[0]; // should be 'li'
+    
+    const textArea = document.createElement('div');
+    textArea.setAttribute('id', `${parentName}[val]`);
+        
+    textArea.innerHTML = txt;//jsonHtmlify(txt);
+    parent.appendChild(textArea);
 }
 
-// const resolveSingleItem = (val, name, lvl, ignoredKeyList) => {
-//     ignoredKeyList = (ignoredKeyList === undefined) ? [] : ignoredKeyList;
-//     lvl = (lvl === undefined) ? 5 : Math.min(lvl, 5);
-//     const div = document.createElement('div');
-
-//     if (typeof(val) === 'string' || typeof(val) === 'number') {
-//         div.innerHTML = jsonHtmlify(val);
-//     } else if (Array.isArray(val)) {
-//         div.appendChild(showArray(val, `${name}[val]`, lvl, ignoredKeyList));
-//     } else {
-//         div.appendChild(showObject(val, `${name}[val]`, lvl, ignoredKeyList));
-//     }
-
-//     return div;
-// }
-
-// const makeDetails = (key, val, name, lvl, ignoredKeyList) => {
-//     ignoredKeyList = (ignoredKeyList === undefined) ? [] : ignoredKeyList;
-//     lvl = (lvl === undefined) ? 5 : Math.min(lvl, 5);
-    
-//     const div = resolveSingleItem(val, name, lvl+1, ignoredKeyList);
-
-//     const details = document.createElement('details');
-//     const summary = document.createElement('summary');
-//     const h = document.createElement(`h${lvl}`);   
-        
-//     summary.setAttribute('class', 'd-flex align-items-center');
-//     h.setAttribute('class', 'd-inline');
-//     h.innerHTML = jsonHtmlify(key);    
-    
-//     summary.appendChild(h); 
-//     details.appendChild(summary);
-//     details.appendChild(div);
-
-//     return details;
-// }
-
-// const makeCollapsable = (key, val, name, lvl, ignoredKeyList) => {
-//     // this only works if `id`s don't contain square brackets...
-//     // we can use `getUuid()` to generate random id's,
-//     // but this would inconsistent with `new` and `edit`
-//     ignoredKeyList = (ignoredKeyList === undefined) ? [] : ignoredKeyList;
-//     lvl = (lvl === undefined) ? 5 : Math.min(lvl, 5);
-//     const uuid = getUuid(); // `name` doesn't work because of `[...]`
-
-//     const outerDiv = document.createElement('div');
-
-//     const a = document.createElement('a');
-//     a.setAttribute('data-bs-toggle', 'collapse');
-//     a.setAttribute('href', `#${uuid}`); //`#div[id=\"${uuid}\"]`); // nope x.x
-//     a.setAttribute('aria-controls', uuid);
-//     a.innerHTML = `<h${lvl}>${jsonHtmlify(key)}</h${lvl}>`;
-
-//     const collapsableDiv = document.createElement('div');    
-//     collapsableDiv.setAttribute('class', 'collapse');
-//     collapsableDiv.setAttribute('id', uuid);//`div[id=\"${uuid}\"]`); //
-//     collapsableDiv.appendChild(
-//         resolveSingleItem(val, name, lvl+1, ignoredKeyList)
-//     );
-
-//     outerDiv.appendChild(a);
-//     outerDiv.appendChild(collapsableDiv);
-
-//     return outerDiv;
-// }
-
-const addSubsetOfObjectKeysToUL = (ul, obj, lvl, keyList, ignoredKeyList) => {
+const addArray = (parent, arr, ignoredKeyList, lvl) => {
     ignoredKeyList = (ignoredKeyList === undefined) ? [] : ignoredKeyList;
     lvl = (lvl === undefined) ? 5 : Math.min(lvl, 5);
+
+    // add [val] to name unless we're at a root of `General Information`
+    const baseName = `${parent.id.split('_')[0]}[val]`;
     
-    let idx = 0;
-    const baseName = ul.id.split('_')[0];
+    // create the new ul for array
+    const ul = document.createElement('ul');
+    ul.setAttribute('class', 'list-group list-group-flush');
+    ul.setAttribute('id', `${baseName}_ul`);
+    
+    for (let i = 0; i < arr.length; i++) {
 
-    for (let key of keyList) {
-        if (!ignoredKeyList.includes(key)) {
-            const val = obj[key];
+        // create new li for array element
+        const item = arr[i];
+        const li = document.createElement('li');
+        li.setAttribute('class', 'list-group-item');
+        li.setAttribute('id', `${baseName}[${i}]_li`); 
+        ul.appendChild(li); // set parent-child before `resolveSingleItem()`!
+        
+        resolveSingleItem(li, item, ignoredKeyList, lvl);
+    }
+    parent.appendChild(ul);  
+}
 
-            const li = document.createElement('li');
-            li.setAttribute('class', 'list-group-item');
-            li.setAttribute('id', `${baseName}[${idx}]_li`);
+const makeDetails = (parent, key, val, ignoredKeyList, lvl) => {
+    ignoredKeyList = (ignoredKeyList === undefined) ? [] : ignoredKeyList;
+    lvl = (lvl === undefined) ? 5 : Math.min(lvl, 5);    
 
-            const collapsable = makeDetails(
-                key, val, `${baseName}[${idx}]`, lvl, ignoredKeyList
-            );
+    const details = document.createElement('details');
+    const summary = document.createElement('summary');
+    const h = document.createElement(`h${lvl}`);   
 
-            li.appendChild(collapsable);
+    details.setAttribute('id', `${parent.id.split('_')[0]}_details`);  
+    summary.setAttribute('id', `${parent.id.split('_')[0]}[key]`);      
+    summary.setAttribute('class', 'd-flex align-items-center');
+    h.setAttribute('class', 'd-inline');
+    h.innerHTML = jsonHtmlify(key);    
+    
+    summary.appendChild(h); 
+    details.appendChild(summary);
+    parent.appendChild(details);
 
-            ul.appendChild(li);
-            
-            idx += 1;
-        }
+    resolveSingleItem(details, val, ignoredKeyList, lvl+1);
+}
+
+const addObject = (parent, obj, ignoredKeyList, lvl) => {
+    ignoredKeyList = (ignoredKeyList === undefined) ? [] : ignoredKeyList;
+    lvl = (lvl === undefined) ? 5 : Math.min(lvl, 5);
+
+    const baseName = `${parent.id.split('_')[0]}[val]`;
+    
+    // get valid keys
+    const keys = Object.keys(obj)
+        .filter(key => !ignoredKeyList.includes(key));    
+    
+    // create new ul and add valid key-val pairs to it
+    const ul = document.createElement('ul');
+    ul.setAttribute('class', 'list-group list-group-flush');
+    ul.setAttribute('id', `${baseName}_ul`);
+    parent.appendChild(ul);
+
+    for (let i = 0; i < keys.length; i++) {
+        const key = keys[i];
+        const val  = obj[key];
+
+        const li = document.createElement('li');
+        li.setAttribute('class', 'list-group-item');
+        li.setAttribute('id', `${baseName}[${i}]_li`);
+        ul.appendChild(li);
+
+        makeDetails(li, key, val, ignoredKeyList, lvl);
     }
 }
 
-const addCitiesToUL = (ul, obj, lvl, ignoredKeyList) => {
-    if (obj.cities) {
+const addCitiesToUL = (ul, obj, ignoredKeyList, lvl) => {    
+    if (obj.cities) {        
         const baseName = 'cities';
         for (let i = 0; i < obj.cities.length; i++) {
 
@@ -106,66 +150,59 @@ const addCitiesToUL = (ul, obj, lvl, ignoredKeyList) => {
             const li = document.createElement('li');
             li.setAttribute('class', 'list-group-item');
             li.setAttribute('id', `${baseName}[${i}]_li`);
+            ul.appendChild(li); // set parent - child before `resolveSingleItem()`
 
-            // get collapsable city info
-            const collapsable = makeDetails(
-                `${city.name} (${city.code})`, city, `${baseName}[${i}]`, lvl, ignoredKeyList
-            );
+            makeDetails(li, `${city.name} (${city.code})`, city, ignoredKeyList, lvl);
 
-            // add city buttons next to city name
+            //add city buttons next to city name
             //(since several cities area added - we must be on Area page,
             // so there's no need to add link that redirects back to parent area)
-            const summary = collapsable.firstChild;
+            const summary = li.firstChild.firstChild; // li -> details -> summary
             const btns = getCityButtons(city, ['edit', 'del']);
             summary.appendChild(btns);
-            
-            li.appendChild(collapsable);
-
-            ul.appendChild(li);
         }
     }
 }
 
-const showArray = (arr, name, lvl, ignoredKeyList) => {
+const addRootObject = (parent, obj, ignoredKeyList, lvl) => {
     ignoredKeyList = (ignoredKeyList === undefined) ? [] : ignoredKeyList;
     lvl = (lvl === undefined) ? 5 : Math.min(lvl, 5);
 
-    const ul = document.createElement('ul');
-    ul.setAttribute('class', 'list-group list-group-flush');
-    ul.setAttribute('id', `${name}_ul`);
-
-    for (let i = 0; i < arr.length; i++) {
-
-        const val = arr[i];
-        const li = document.createElement('li');
-        li.setAttribute('class', 'list-group-item');
-        li.setAttribute('id', `${name}[${i}]_li`);
-
-        // let childName;
-        // if ( typeof(val))
-
-
-        const div = resolveSingleItem(val, `${name}[${i}]`, lvl, ignoredKeyList);
-
-        li.appendChild(div);
-        ul.appendChild(li);
-    }
-    return ul;
-}
-
-const showObject = (obj, name, lvl, ignoredKeyList) => {
-    ignoredKeyList = (ignoredKeyList === undefined) ? [] : ignoredKeyList;
-    lvl = (lvl === undefined) ? 5 : Math.min(lvl, 5);
+    const baseName = 'selected';
 
     const specialKeyList = ['cities'];
-    const regularKeyList = Object.keys(obj).filter(key => !specialKeyList.includes(key));
+    const regularKeyList = Object.keys(obj)
+        .filter(key => !ignoredKeyList.includes(key))
+        .filter(key => !specialKeyList.includes(key));
 
     const ul = document.createElement('ul');
     ul.setAttribute('class', 'list-group list-group-flush');
-    ul.setAttribute('id', `${name}_ul`);
+    ul.setAttribute('id', `${baseName}_ul`);
+    parent.appendChild(ul);
 
-    addSubsetOfObjectKeysToUL(ul, obj, lvl, regularKeyList, ignoredKeyList);
-    addCitiesToUL(ul, obj, lvl, ignoredKeyList);
+    // add valid non-city keys
+    for (let i = 0; i < regularKeyList.length; i++ ) {
+        const key = regularKeyList[i];
+        const li = document.createElement('li');
+        li.setAttribute('id', `${baseName}[${i}]_li`);
+        li.setAttribute('class', 'list-group-item');
+        ul.appendChild(li);
 
-    return ul;
+        makeDetails(li, key, obj[key], ignoredKeyList, lvl);
+    }
+    // add cities to ul
+    addCitiesToUL(ul, obj, ignoredKeyList, lvl);
+}
+
+const resolveSingleItem = (parent, item, ignoredKeyList, lvl) => {
+    ignoredKeyList = (ignoredKeyList === undefined) ? [] : ignoredKeyList;
+    lvl = (lvl === undefined) ? 5 : Math.min(lvl, 5);
+
+    if (typeof(item) === 'string' || typeof(item) === 'number') {
+        addText(parent, jsonHtmlify(item));
+    } else if (Array.isArray(item)) {
+        addArray(parent, item, ignoredKeyList, lvl);
+    } else {
+        addObject(parent, item, ignoredKeyList, lvl);
+    }
 }
