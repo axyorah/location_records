@@ -14,6 +14,9 @@ router.route('/cities/:id/edit')
     .get(city.renderEdit)
     .post(city.updateEdited);
 
+router.route('/cities/:id/delete')
+    .delete(city.delete);
+
 router.route('/cities/:id')
     .get(city.show)
     .post(city.data);

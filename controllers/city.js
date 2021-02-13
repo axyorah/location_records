@@ -140,6 +140,8 @@ module.exports.updateEdited = async (req,res) => {
 module.exports.delete = async (req,res) => {
     const { id } = req.params;
 
+    console.log(`DELETING ${id}`);
+
     // delete city from City collection
     await City.findByIdAndDelete(id);
 
@@ -150,9 +152,5 @@ module.exports.delete = async (req,res) => {
     );
     area.save();
 
-    // redirect to home
-    const cities = await City.find({});
-    const areas = await Area.find({}).populate('cities');
-
-    res.redirect('/', { cities, areas });
+    res.redirect('/');
 }
