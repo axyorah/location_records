@@ -152,9 +152,13 @@ const addObjectForEdit = (parent, obj, ignoredKeyList, lvl) => {
 
     } else if ( keys.length > 1 ) {
         // if there are several keys - the format is wrong
-        // we need to convert it to a list of key-val pairs and append to grandparent ul
-        const arr = keys.map(key => ({key: obj[key]}));
-        resolveSingleItem(grandParent, arr, ignoredKeyList, lvl);
+        // we need to convert it to a list of key-val pairs and append to parent li
+        const arr = keys.map(key => {
+            const kv = new Map();
+            kv[key] = obj[key];
+            return kv;
+        });
+        resolveSingleItem(parent, arr, ignoredKeyList, lvl);
 
     } else if ( keys[0] === 'cities' ) {
         // if the key is 'cities' - append them to grandParent
