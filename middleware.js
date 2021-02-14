@@ -3,6 +3,12 @@ const ExpressError = require('./utils/ExpressError.js');
 const City = require('./models/city.js');
 const Area = require('./models/area.js');
 
+module.exports.setLocals = (req,res,next) => {
+    res.locals.success = req.flash('success');
+    res.locals.error = req.flash('error');
+    next();
+}
+
 module.exports.validateCity = (req,res,next) => {
 
     console.log('REQ.BODY:');

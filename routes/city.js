@@ -3,22 +3,22 @@ const express = require('express');
 const router = express.Router({ mergeParams: true });
 
 const city = require('../controllers/city.js');
-const { validateCity } = require('../middleware.js');
+const { setLocals, validateCity } = require('../middleware.js');
 
 
 router.route('/cities/new')
-    .get(city.renderNew)
-    .post(validateCity, city.addNew);
+    .get(setLocals, city.renderNew)
+    .post(setLocals, validateCity, city.addNew);
 
 router.route('/cities/:id/edit')
-    .get(city.renderEdit)
-    .post(city.updateEdited);
+    .get(setLocals, city.renderEdit)
+    .post(setLocals, city.updateEdited);
 
 router.route('/cities/:id/delete')
-    .delete(city.delete);
+    .delete(setLocals, city.delete);
 
 router.route('/cities/:id')
-    .get(city.show)
-    .post(city.data);
+    .get(setLocals, city.show)
+    .post(setLocals, city.data);
 
 module.exports = router;
