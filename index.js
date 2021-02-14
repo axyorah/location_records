@@ -12,7 +12,6 @@ const methodOverride = require('method-override');
 const rovRoutes = require('./routes/rov.js');
 const cityRoutes = require('./routes/city.js');
 const areaRoutes = require('./routes/area.js');
-const Area = require('./models/area.js');
 
 // --- MONGOOSE SETUP --- 
 mongoose.connect('mongodb://localhost:27017/rov', {
@@ -35,9 +34,9 @@ app.engine('ejs', ejsMate);
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
-app.use(express.urlencoded({ extended: true })); // for parsing post requests
-app.use(methodOverride('_method'));
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.urlencoded({ extended: true }));         // for parsing POST requests
+app.use(methodOverride('_method'));                      // enable DELETE method
+app.use(express.static(path.join(__dirname, 'public'))); // add `./public/` to PATH
 
 // --- ROUTE HANDLERS ---
 app.use('/', rovRoutes);
