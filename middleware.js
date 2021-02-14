@@ -11,7 +11,7 @@ module.exports.setLocals = (req,res,next) => {
 
 module.exports.validateCity = (req,res,next) => {
 
-    console.log('REQ.BODY:');
+    console.log('VALIDATECITY: REQ.BODY:');
     console.log(req.body);
 
     // validate with Joi
