@@ -13,7 +13,7 @@ module.exports.show = async (req,res) => {
     const areas = await Area.find({}).populate('cities');
     const cities = await City.find({});
 
-    res.render('./rov/show.ejs', { selected, areas, cities });
+    res.render('./rov/show.ejs', { selected, areas, cities, messages: req.flash('success') });
 }
 
 module.exports.renderNew = async (req,res) => {
@@ -44,5 +44,6 @@ module.exports.addNew = async (req,res) => {
     // areaObj.cities.push(city);
     // await areaObj.save();
 
+    req.flash('success', `New area "..." has been added!`);
     res.redirect('/');
 }

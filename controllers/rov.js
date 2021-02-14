@@ -19,5 +19,7 @@ module.exports.home = async (req,res) => {
     console.log('ROV.HOME: SELECTED');
     console.log(selected);
 
+    console.log('FLASH:');
+    console.log(req.flash('success'));
     res.render('./rov/home.ejs', { selected, cities, areas });
 }

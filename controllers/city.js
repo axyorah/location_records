@@ -27,7 +27,7 @@ module.exports.show = async (req,res) => {
 
     console.log('SELECTED CITY:');
     console.log(selected);
-    res.render('./rov/show.ejs', { selected, areas, cities});
+    res.render('./rov/show.ejs', { selected, areas, cities });
 }
 
 module.exports.renderNew = async (req,res) => {
@@ -70,6 +70,7 @@ module.exports.addNew = async (req,res) => {
     areaObj.cities.push(city);
     await areaObj.save();
 
+    req.flash('success', `New City "${city.name}" has been added!`);
     res.redirect('/');
 }
 
@@ -134,6 +135,7 @@ module.exports.updateEdited = async (req,res) => {
         await areaNew.save();
     }    
 
+    req.flash('success', `"${city.name}" has been succesfully updated!`);
     res.redirect('/');
 }
 
@@ -143,7 +145,7 @@ module.exports.delete = async (req,res) => {
     console.log(`DELETING ${id}`);
 
     // delete city from City collection
-    await City.findByIdAndDelete(id);
+    const city = await City.findByIdAndDelete(id);
 
     // delete city from its parent Area
     const area = await Area.findOneAndUpdate(
@@ -152,5 +154,6 @@ module.exports.delete = async (req,res) => {
     );
     area.save();
 
+    req.flash('success', `"${city.name}" has been succesfully deleted!`);
     res.redirect('/');
 }
