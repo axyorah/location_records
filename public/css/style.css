@@ -1,3 +1,11 @@
+html, body {
+    height: 100%;
+}
+
+.footer {
+    bottom: 0;
+}
+
 .form-box {
     margin-top: 15px;
 }
