@@ -61,7 +61,7 @@ const addText = (parent, txt) => {
     const textArea = document.createElement('div');
     textArea.setAttribute('id', `${parentName}[val]`);
         
-    textArea.innerHTML = txt;//jsonHtmlify(txt);
+    textArea.innerHTML = jsonHtmlify(txt);
     parent.appendChild(textArea);
 }
 
@@ -199,7 +199,7 @@ const resolveSingleItem = (parent, item, ignoredKeyList, lvl) => {
     lvl = (lvl === undefined) ? 5 : Math.min(lvl, 5);
 
     if (typeof(item) === 'string' || typeof(item) === 'number') {
-        addText(parent, jsonHtmlify(item));
+        addText(parent, item);
     } else if (Array.isArray(item)) {
         addArray(parent, item, ignoredKeyList, lvl);
     } else {

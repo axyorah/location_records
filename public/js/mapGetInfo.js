@@ -11,7 +11,7 @@ async function postData(url, data) {
         },
         redirect: 'follow', // manual, *follow, error
         referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
-        body: data //JSON.stringify(data) // body data type must match "Content-Type" header
+        body: data, //JSON.stringify(data) // body data type must match "Content-Type" header
     });
     return response.json(); // parses JSON response into native JavaScript objects
 }
@@ -22,9 +22,9 @@ map.on('load', function () {
         map.on('click', `cities-${area.name}`, function (e) {
             const id = e.features[0].properties._id;
             postData(`/cities/${id}`, { id })
-                .then((data) => JSON.stringify(data))
-                .then((data) => jsonEscape(data))
-                .then((data) => JSON.parse(data))
+                // .then((data) => JSON.stringify(data))
+                // .then((data) => jsonEscape(data))
+                // .then((data) => JSON.parse(data))
                 .then((data) => showFullInfo(data))
                 .catch((err) => console.log(err));
         });

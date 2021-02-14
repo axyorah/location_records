@@ -53,7 +53,7 @@ module.exports.addNew = async (req,res) => {
             coordinates: [parseFloat(lng), parseFloat(lat)]
         },
         code: code,
-        quickInfo: jsonEscape(quickInfo),
+        quickInfo: parseMixedSchema(quickInfo),
         area: areaObj
     });
 
@@ -106,7 +106,7 @@ module.exports.updateEdited = async (req,res) => {
                 coordinates: [parseFloat(lng), parseFloat(lat)]
             },
             code: code,
-            quickInfo: jsonEscape(quickInfo),
+            quickInfo: parseMixedSchema(quickInfo),
             area: areaNew,
             'General Information': parseMixedSchema(generalInfo),
         },

@@ -9,21 +9,29 @@ const jsonEscape = (str) => {
 }
 
 const jsonHtmlify = (str) => {
+    console.log('HTMLIFIED!');
+    console.log(str)
     return String(str)
         .replaceAll("&", "&amp;") // `&` sanitized before  `<,>,",'`
         .replaceAll("<", "&lt;")
         .replaceAll(">", "&gt;")
 
-        .replaceAll("\\\"", "&quot;") // click on city (TEMP!!!)
+        .replaceAll("\\\"", "&quot;") // click on city 
         .replaceAll("\\\'", "&apos;")
-        .replaceAll("\\\\n", "<br>")
-        .replaceAll("\\\\r", "")
-        .replaceAll("\\\\t", "&#9;") 
 
         .replaceAll("\"", "&quot;") // hover or access city from area
         .replaceAll("\'", "&apos;")
-        .replaceAll("\\n", "<br>")
+
+        // .replaceAll("\\\\n", "<br>")
+        // .replaceAll("\\\\r", "")
+        // .replaceAll("\\\\t", "&#9;") 
+
+        .replaceAll("\\n", "<br>") // click on city
         .replaceAll("\\r", "")
         .replaceAll("\\t", "&#9;")
+
+        .replaceAll("\n", "<br>") // hover or access city from area
+        .replaceAll("\r", "")
+        .replaceAll("\t", "&#9;")
         ;
 }
