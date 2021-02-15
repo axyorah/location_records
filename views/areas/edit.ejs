@@ -1,0 +1,66 @@
+<% layout('layout/boilerplate.ejs') %>
+
+    <h1>Edit Area</h1>
+
+    <div class="row">
+        <div class="col-xl-8 pt-5">
+
+            <form method="POST" action="/areas/<%= selected._id %>/edit" class="needs-validation" novalidate>
+
+                <div class="card w-100">
+                    <div class="card-body" id="region-info">
+
+                        <div class="form-box">
+                            <label for="area[name]">Area Name</label>
+                            <input class="form-control" type="text" 
+                                id="area[name]" name="area[name]" value="<%= selected.name %>" required>
+                        </div>
+
+                        <div class="form-box">
+                            <label for="area[code]">Area Code</label>
+                            <input class="form-control" type="text" 
+                                id="area[code]" name="area[code]" value="<%= selected.code %>" required>
+                        </div>
+
+                        <div class="form-box">
+                            <label for="area[color]">Area Color</label> 
+                            <input type="color" class="form-control"
+                                id="area[color]" name="area[color]" value="<%= selected.color %>" required>
+                        </div>
+
+                        <div class="form-box">
+                            <label for="area[quickInfo]">Short note</label>
+                            <textarea class="form-control" id="area[quickInfo]" name="area[quickInfo]"
+                                ><%= selected.quickInfo %></textarea>
+                        </div>
+
+                        <div class="form-box">
+                            <label for="area[generalInfo]">General Information</label>
+                            <div id="area[generalInfo]"></div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="mt-3">
+                    <button type="submit" class="btn btn-outline-secondary">Submit</button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+
+
+    <script>
+        const genInfoRootHtml = document.getElementById('area[generalInfo]');
+
+        const mapBoxToken = '<%= process.env.MAPBOX_TOKEN %>';
+        const selectedJSON = '<%- JSON.stringify(selected) %>';  
+        const citiesJSON = '<%- JSON.stringify(cities) %>';      
+        const areasJSON = '<%- JSON.stringify(areas) %>';
+    </script>
+    <script src="/js/jsonUtils.js"></script>
+    <script src="/js/textUtils.js"></script>
+    <script src="/js/btnUtils.js"></script>
+    <script src="/js/editInfoUtils.js"></script>
+    <script src="/js/editInfo.js"></script>
