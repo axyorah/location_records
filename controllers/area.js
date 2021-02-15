@@ -1,5 +1,4 @@
 const mbxClient = require('@mapbox/mapbox-sdk');
-const { SSL_OP_TLS_ROLLBACK_BUG } = require('constants');
 
 const mbxToken = process.env.MAPBOX_TOKEN;
 const baseClient = mbxClient({ accessToken: mbxToken });

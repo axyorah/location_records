@@ -6,6 +6,10 @@ html, body {
     bottom: 0;
 }
 
+.row {
+    display: flex;
+}
+
 .form-box {
     margin-top: 15px;
 }

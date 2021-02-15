@@ -35,6 +35,7 @@ const getCityButtons = (item, names) => {
         form.setAttribute('action', `/cities/${item._id}/delete?_method=DELETE`); // TODO: add: `?_DELETE`
         form.setAttribute('method', 'POST');
         form.setAttribute('class', 'd-inline ms-auto'); //d-inline 
+        form.style.display = 'inline-block';
 
         const btnGroup = document.createElement('div');
         btnGroup.setAttribute('class', 'btn-group');

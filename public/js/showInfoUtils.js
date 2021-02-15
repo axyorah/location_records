@@ -103,6 +103,7 @@ const makeDetails = (parent, key, val, ignoredKeyList, lvl) => {
     summary.setAttribute('id', `${parent.id.split('_')[0]}[key]`);      
     summary.setAttribute('class', 'd-flex align-items-center');
     h.setAttribute('class', 'd-inline');
+    h.style.display = 'inline-block';
     h.innerHTML = jsonHtmlify(key);    
     
     summary.appendChild(h); 
