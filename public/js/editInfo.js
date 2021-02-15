@@ -1,6 +1,6 @@
-const genInfoRootHtml = document.getElementById('city[generalInfo]');
 const FORMFIELDROOTS = {
-    'city[generalInfo]': 'city[General Information]'
+    'city[generalInfo]': 'city[General Information]',
+    'area[generalInfo]': 'area[General Information]'
 };
 
 // resp fields will not be displayed in the browser

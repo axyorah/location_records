@@ -75,6 +75,8 @@
 
 
     <script>
+        const genInfoRootHtml = document.getElementById('city[generalInfo]');
+        
         const mapBoxToken = '<%= process.env.MAPBOX_TOKEN %>';
         const selectedJSON = '<%- JSON.stringify(selected) %>';  
         const citiesJSON = '<%- JSON.stringify(cities) %>';      
