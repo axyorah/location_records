@@ -64,6 +64,8 @@
 
 
     <script>
+        const genInfoRootHtml = document.getElementById('city[generalInfo]');
+
         const mapBoxToken = '<%= process.env.MAPBOX_TOKEN %>';
         const areasJSON = '<%- JSON.stringify(areas) %>';
         const citiesJSON = '<%- JSON.stringify(cities) %>';

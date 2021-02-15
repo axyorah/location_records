@@ -1,7 +1,6 @@
-const genInfoRootHtml = document.getElementById('city[generalInfo]');
-
 const showGenInfoInit = () => {
-    const name = 'city[General Information]';
+    const found = genInfoRootHtml.id.match(/^(?<region>.*)\[generalInfo\]$/);
+    const name = `${found.groups.region}[General Information]`;
 
     const ul = document.createElement('ul');
     ul.setAttribute('id', `${name}_ul`);
