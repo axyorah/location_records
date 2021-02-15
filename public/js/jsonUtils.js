@@ -9,8 +9,6 @@ const jsonEscape = (str) => {
 }
 
 const jsonHtmlify = (str) => {
-    console.log('HTMLIFIED!');
-    console.log(str)
     return String(str)
         .replaceAll("&", "&amp;") // `&` sanitized before  `<,>,",'`
         .replaceAll("<", "&lt;")

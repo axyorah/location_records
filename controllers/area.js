@@ -1,9 +1,11 @@
 const mbxClient = require('@mapbox/mapbox-sdk');
 
-const Area = require('../models/area.js');
-const City = require('../models/city.js');
 const mbxToken = process.env.MAPBOX_TOKEN;
 const baseClient = mbxClient({ accessToken: mbxToken });
+
+const Area = require('../models/area.js');
+const City = require('../models/city.js');
+const { jsonEscape, parseMixedSchema } = require('../utils/formUtils.js');
 
 module.exports.show = async (req,res) => {
 
@@ -17,33 +19,25 @@ module.exports.show = async (req,res) => {
 }
 
 module.exports.renderNew = async (req,res) => {
-    const areas = await Area.find({}).populate('cities');
-    const cities = await City.find({});
-
-    res.render('./areas/new.ejs', { areas, cities });
+    res.render('./areas/new.ejs');
 }
 
 module.exports.addNew = async (req,res) => {
-    // console.log(req.body.city);
-    // const { name, code, lat, lng, quickInfo, area } = req.body.city;
+    console.log(req.body.area);
+    const { name, code, color, quickInfo } = req.body.area;
+    const generalInfo = req.body.area['General Information'];
 
-    // const areaObj = await Area.findOne({ name: area });
+    let area = new Area({
+        name: name,
+        code: code,
+        color: color,
+        quickInfo: quickInfo,
+        'General Information': parseMixedSchema(generalInfo),
+    });
+    area.markModified('General Information');
 
-    // let city = new City({
-    //     name: name,
-    //     geometry: {
-    //         type: 'Point',        
-    //         coordinates: [parseFloat(lng), parseFloat(lat)]
-    //     },
-    //     code: code,
-    //     quickInfo: quickInfo,
-    //     area: areaObj
-    // });
-    // await city.save();
+    await area.save();
 
-    // areaObj.cities.push(city);
-    // await areaObj.save();
-
-    req.flash('success', `New area "..." has been added!`);
+    req.flash('success', `New area "${area.name}" has been added!`);
     res.redirect('/');
 }
