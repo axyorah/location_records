@@ -43,7 +43,8 @@ map.on('load', function () {
         'source': `cities-${area.name}`,
         'paint': { 
             'circle-color': area.color,
-            'circle-radius': 8
+            'circle-radius': 8,
+            'circle-opacity': 0.7,
         }
     });
 
