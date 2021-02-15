@@ -1,11 +1,12 @@
 const mbxClient = require('@mapbox/mapbox-sdk');
+const { SSL_OP_TLS_ROLLBACK_BUG } = require('constants');
 
 const mbxToken = process.env.MAPBOX_TOKEN;
 const baseClient = mbxClient({ accessToken: mbxToken });
 
 const Area = require('../models/area.js');
 const City = require('../models/city.js');
-const { jsonEscape, parseMixedSchema } = require('../utils/formUtils.js');
+const { jsonEscape, parseMixedSchema, getOrCreateDefaultArea } = require('../utils/formUtils.js');
 
 module.exports.show = async (req,res) => {
 
@@ -87,19 +88,41 @@ module.exports.updateEdited = async (req,res) => {
 
 module.exports.delete = async (req,res) => {
     const { id } = req.params;
-    console.log(`DELETING ${id}`);
+
+    // if current area is DEFAULT AREA and it has children - ignore
+    const area = await Area.findById(id);
+    console.log(`DELETING area ${area.name} (${id})`);
+    if ( area.name === 'DEFAULT AREA' && area.cities.length ) {
+        req.flash(
+            'error', 
+            `Can't delete the "DEFAULT AREA" while there are cities ` + 
+            `that are assigned to it.\n` + 
+            `If you want to delete the "DEFAULT AREA", reassign all the ` +
+            `cities that belong to it to different areas and try again.`);
+        res.redirect('/');
+        return;
+    }
 
     // delete area from Area collection
     await Area.findByIdAndDelete(id);
 
-    // set orphaned cities to be children on default area
-    const defaultAreaId = '123'; // MAKE ACTUAL DEFAULT AREA
-    const cities = await City.updateMany(
-        { area: id },
-        { area: defaultAreaId }
-    );
-    cities.save();
+    // if there are any cities that belong to deleted area
+    // they need to be reassigned to DEFAULT AREA;
+    // if DEFAULT AREA doesn't yet exist - create it!
+    if ( area.cities.length ) {
+        // get/create default area
+        let defaultArea;
+        getOrCreateDefaultArea().then(area => { defaultArea = area });
 
+        // set orphaned cities to be children of default area        
+        const cities = await City.find({ area: area });
+        for (let city of cities ) {
+            defaultArea.cities.push(city);
+            city.area = defaultArea;
+            city.save();
+        }
+        defaultArea.save();
+    }
 
     req.flash('success', `"${area.name}" has been succesfully deleted!`);
     res.redirect('/');
