@@ -9,6 +9,23 @@ const expButtonText = {
     'col': 'Collapse'
 };
 
+const setChildrenBackgroundColor = ( childName, color ) => {
+    const title = document.getElementById(`${childName}[key]`);
+    const textArea = document.getElementById(`${childName}[val]`);
+    const textAreaUl = document.getElementById(`${childName}[val]_ul`);
+
+    if ( title ) {
+        title.style.background = color;
+    }
+    if ( textArea ) {
+        textArea.style.background = color;
+    } else if ( textAreaUl ) {
+        for (let child of textAreaUl.children) {
+            setChildrenBackgroundColor( child.id.split('_')[0], color );
+        }
+    }
+}
+
 const getABtn = (name, href) => {
     const btn = document.createElement('a');
     btn.innerHTML = name;
@@ -171,6 +188,18 @@ const getDelButton = (parentName, childName) => {
     // so refer to `btn.id` instead!
     const btn = getButton(childName, 'del');
     btn.innerHTML = '&#65293;';//'Delete Previous Field';
+
+    btn.addEventListener('mouseenter', function (evt) {
+        // set background to red to indicate to-be-deleted areas
+        childName = getBtnChildId(btn.id);
+        setChildrenBackgroundColor(childName, 'rgba(255,0,0,0.1)');
+    })
+
+    btn.addEventListener('mouseleave', function (evt) {
+        // set background to back to white
+        childName = getBtnChildId(btn.id);
+        setChildrenBackgroundColor(childName, 'rgba(255,255,255,1)');
+    })
     
     btn.addEventListener('click', function (evt) {
         parentName = getBtnParentId(btn.id);
