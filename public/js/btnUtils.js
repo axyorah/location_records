@@ -9,6 +9,13 @@ const expButtonText = {
     'col': 'Collapse'
 };
 
+const setTitleBackgroundColor = ( childName, color ) => {
+    const title = document.getElementById(`${childName}[key]`);
+    if ( title ) {
+        title.style.background = color;
+    }
+}
+
 const setChildrenBackgroundColor = ( childName, color ) => {
     const title = document.getElementById(`${childName}[key]`);
     const textArea = document.getElementById(`${childName}[val]`);
@@ -230,14 +237,18 @@ const getTitleButton = (parentName, childName) => {
 
     // if child li already has a title (...[key]) set btn name to `Remove Title`,
     // otherwise, set btn name to `Add Title`
-    if (document.getElementById(`${childName}[key]`)) {
+    if ( document.getElementById(`${childName}[key]`) ) {
         btn.innerHTML = titleButtonText.del;
     } else {
         btn.innerHTML = titleButtonText.add;
     }
 
-    btn.addEventListener('mouseover', function (evt) {
-        console.log(childName);
+    btn.addEventListener('mouseenter', function (evt) {
+        setTitleBackgroundColor( childName, 'rgba(255,0,0,0.1)');        
+    })
+
+    btn.addEventListener('mouseleave', function (evt) {
+        setTitleBackgroundColor( childName, 'rgba(255,255,255,1');
     })
 
     btn.addEventListener('click', function (evt) {
