@@ -1,14 +1,9 @@
 const Area = require('../models/area.js');
 
 const jsonEscape = (str) => {
-    // return str
-    //     .replace(/\n/g, "\\\\n")
-    //     .replace(/\r/g, "\\\\r")
-    //     .replace(/\t/g, "\\\\t")
-    //     .replace(/"/g, "\\\"")
-    //     .replace(/'/g, "\\\"")
-    //     ;
+    // can't handle backslashes...
     return str
+        //.replace(/\\/g, "\\\\")
         .replace(/\n/g, "\\n")
         .replace(/\r/g, "\\r")
         .replace(/\t/g, "\\t")

@@ -1,8 +1,10 @@
 const jsonEscape = (str) => {
+    // can't handle backslashes...
     return str
-        .replace(/\n/g, "\\\\n")
-        .replace(/\r/g, "\\\\r")
-        .replace(/\t/g, "\\\\t")
+        //.replace(/\\/g, "\\\\")
+        .replace(/\n/g, "\\n")
+        .replace(/\r/g, "\\r")
+        .replace(/\t/g, "\\t")
         .replace(/"/g, "\"")
         .replace(/'/g, "\"")
         ;
@@ -14,15 +16,13 @@ const jsonHtmlify = (str) => {
         .replaceAll("<", "&lt;")
         .replaceAll(">", "&gt;")
 
+        //.replaceAll("\\\\", "&#92;")
+
         .replaceAll("\\\"", "&quot;") // click on city 
         .replaceAll("\\\'", "&apos;")
 
         .replaceAll("\"", "&quot;") // hover or access city from area
         .replaceAll("\'", "&apos;")
-
-        // .replaceAll("\\\\n", "<br>")
-        // .replaceAll("\\\\r", "")
-        // .replaceAll("\\\\t", "&#9;") 
 
         .replaceAll("\\n", "<br>") // click on city
         .replaceAll("\\r", "")
