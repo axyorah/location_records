@@ -245,7 +245,7 @@ const getTitleButton = (parentName, childName) => {
 
     btn.addEventListener('mouseenter', function (evt) {
         // if title exists: set it's color to red to indicate that it's about to be deleted
-        setTitleBackgroundColor( childName, 'rgba(255,0,0,0.1)');        
+        setTitleBackgroundColor( childName, 'rgba(255,0,0,0.1)');     
     })
 
     btn.addEventListener('mouseleave', function (evt) {
@@ -294,6 +294,7 @@ const getExpButton = (parentName, childName) => {
     }
 
     btn.addEventListener('mouseenter', function(evt) {
+        childName = getBtnChildId(btn.id);
         if ( document.getElementById(`${childName}[val]_ul` )) {
             setChildrenBackgroundColor( childName, 'rgba(255,255,0,0.1)');
         } else {
@@ -302,6 +303,7 @@ const getExpButton = (parentName, childName) => {
     })
 
     btn.addEventListener('mouseleave', function (evt) {
+        childName = getBtnChildId(btn.id);
         setChildrenBackgroundColor( childName, 'rgba(255,255,255,1)');
     })
 
