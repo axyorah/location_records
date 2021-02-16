@@ -4,10 +4,9 @@ const router = express.Router({ mergeParams: true });
 const { setLocals } = require('../middleware.js');
 const rov = require('../controllers/rov.js');
 
-router.route('/')
-    .get(setLocals, rov.home) 
+const catchAsync = require('../utils/catchAsync.js');
 
-// router.route('/:id')
-//     .post(rov.selected);
+router.route('/')
+    .get(setLocals, catchAsync(rov.home))
 
 module.exports = router;

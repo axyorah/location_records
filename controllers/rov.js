@@ -3,7 +3,9 @@ const mbxClient = require('@mapbox/mapbox-sdk');
 const Area = require('../models/area.js');
 const City = require('../models/city.js');
 const mbxToken = process.env.MAPBOX_TOKEN;
+
 const baseClient = mbxClient({ accessToken: mbxToken });
+const ExpressError = require('../utils/ExpressError.js');
 
 module.exports.home = async (req,res) => {  
     // by default `/` shows the list of all areas as links;
@@ -15,7 +17,7 @@ module.exports.home = async (req,res) => {
 
     const { areaId } = req.query;
     const selected = areaId ? await Area.findById(areaId).populate('cities') : undefined;
-
+    
     console.log('ROV.HOME: SELECTED');
     console.log(selected);
 
