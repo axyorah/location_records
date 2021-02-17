@@ -18,7 +18,7 @@ router.route('/users/login')
         passport.authenticate('local', { failureFlash: true, failureRedirect: '/users/login' }),
         user.login);
 
-router.route('/user/logout')
-    .post(setLocals, catchAsync(user.logout));
+router.route('/users/logout')
+    .get(setLocals, catchAsync(user.logout));
 
 module.exports = router;
