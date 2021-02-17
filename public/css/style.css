@@ -32,3 +32,9 @@ summary {
     0%    {opacity: 0; margin-left: -1px}
     100%  {opacity: 1; margin-left: 0px}
 }
+
+#misplaced-delete-form {
+    position: relative;
+    top: -38px;
+    float: right;
+}
