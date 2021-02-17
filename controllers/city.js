@@ -31,7 +31,7 @@ module.exports.show = async (req,res) => {
     
     console.log('CITY.SHOW: SELECTED CITY:');
     console.log(selected);
-    res.render('./rov/show.ejs', { selected, areas, cities });
+    res.render('./general/show.ejs', { selected, areas, cities });
 }
 
 module.exports.renderNew = async (req,res) => {

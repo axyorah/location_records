@@ -18,7 +18,7 @@ module.exports.show = async (req,res) => {
     const areas = await Area.find({}).populate('cities');
     const cities = await City.find({});
 
-    res.render('./rov/show.ejs', { selected, areas, cities });
+    res.render('./general/show.ejs', { selected, areas, cities });
 }
 
 module.exports.renderNew = async (req,res) => {

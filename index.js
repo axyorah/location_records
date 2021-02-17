@@ -12,7 +12,7 @@ const methodOverride = require('method-override');
 const session = require('express-session');
 const flash = require('connect-flash');
 
-const rovRoutes = require('./routes/rov.js');
+const generalRoutes = require('./routes/general.js');
 const cityRoutes = require('./routes/city.js');
 const areaRoutes = require('./routes/area.js');
 
@@ -59,7 +59,7 @@ app.use(session(sessionOptions));
 app.use(flash());
 
 // --- ROUTE HANDLERS ---
-app.use('/', rovRoutes);
+app.use('/', generalRoutes);
 app.use('/', cityRoutes);
 app.use('/', areaRoutes);
 
