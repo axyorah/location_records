@@ -3,20 +3,20 @@ const express = require('express');
 const router = express.Router({ mergeParams: true });
 
 const city = require('../controllers/city.js');
-const { setLocals, validateCity } = require('../middleware.js');
+const { setLocals, validateCity, isLoggedIn } = require('../middleware.js');
 
 const catchAsync = require('../utils/catchAsync.js');
 
 router.route('/cities/new')
-    .get(setLocals, catchAsync(city.renderNew))
-    .post(setLocals, validateCity, catchAsync(city.addNew));
+    .get(setLocals, isLoggedIn, city.renderNew)
+    .post(setLocals, isLoggedIn, validateCity, catchAsync(city.addNew));
 
 router.route('/cities/:id/edit')
-    .get(setLocals, catchAsync(city.renderEdit))
-    .post(setLocals, catchAsync(city.updateEdited));
+    .get(setLocals, isLoggedIn, city.renderEdit)
+    .post(setLocals, isLoggedIn, catchAsync(city.updateEdited));
 
 router.route('/cities/:id/delete')
-    .delete(setLocals, catchAsync(city.delete));
+    .delete(setLocals, isLoggedIn, catchAsync(city.delete));
 
 router.route('/cities/:id')
     .get(setLocals, catchAsync(city.show))
