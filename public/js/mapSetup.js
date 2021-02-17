@@ -4,7 +4,7 @@ const cities = JSON.parse(jsonEscape(citiesJSON));
 
 const map = new mapboxgl.Map({
     container: 'map-nl',
-    style: 'mapbox://styles/mapbox/dark-v10',
+    style: 'mapbox://styles/mapbox/streets-v10',
     center: [5.58, 52.25],
     zoom: 6
 });
@@ -26,7 +26,9 @@ map.on('load', function () {
                         'description': 
                             `<strong>${jsonHtmlify(city.name)} `+
                             `(${jsonHtmlify(city.code)})</strong><br>`+
-                            `${jsonHtmlify(city.quickInfo)}`
+                            `${jsonHtmlify(city.quickInfo)}`+
+                            '<hr>'+
+                            `${jsonHtmlify(area.quickInfo)}`
                     }
                 })),
             }
