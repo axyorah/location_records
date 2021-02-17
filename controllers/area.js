@@ -99,7 +99,6 @@ module.exports.updateEdited = async (req,res) => {
 
 module.exports.delete = async (req,res) => {
     const { id } = req.params;
-    console.log(`DELETING area ${area.name} (${id})`);
 
     // if current area is DEFAULT AREA and it has children - ignore
     const area = await Area.findById(id);
@@ -117,6 +116,7 @@ module.exports.delete = async (req,res) => {
     }
 
     // delete area from Area collection
+    console.log(`DELETING area ${area.name} (${id})`);
     await Area.findByIdAndDelete(id);
 
     // if there are any cities that belong to deleted area
