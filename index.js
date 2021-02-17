@@ -71,7 +71,7 @@ app.all('*', setLocals, (req,res,next) => {
 app.use(setLocals, (err,req,res,next) => {
     const { status = 500 } = err;
     err.message = err.message ? err.message : 'Something Went Wrong...';
-    res.status(status).render('./rov/error.ejs', { err });
+    res.status(status).render('./general/error.ejs', { err });
 })
 
 
