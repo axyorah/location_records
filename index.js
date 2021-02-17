@@ -12,12 +12,17 @@ const methodOverride = require('method-override');
 const session = require('express-session');
 const flash = require('connect-flash');
 
+const passport = require('passport');
+const LocalStrategy = require('passport-local');
+
 const generalRoutes = require('./routes/general.js');
 const cityRoutes = require('./routes/city.js');
 const areaRoutes = require('./routes/area.js');
 
 const ExpressError = require('./utils/ExpressError.js');
 const { setLocals } = require('./middleware.js');
+
+const User = require('./models/user.js');
 
 // --- MONGOOSE SETUP --- 
 mongoose.connect('mongodb://localhost:27017/rov', {
@@ -58,12 +63,21 @@ const sessionOptions = {
 app.use(session(sessionOptions));
 app.use(flash());
 
+// --- PASSPORT SETUP ---
+// (should come after app.use(session(.)))
+app.use(passport.initialize());
+app.use(passport.session());
+passport.use(new LocalStrategy(User.authenticate()));
+
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
+
 // --- ROUTE HANDLERS ---
 app.use('/', generalRoutes);
 app.use('/', cityRoutes);
 app.use('/', areaRoutes);
 
-// error handler
+// error handlers
 app.all('*', setLocals, (req,res,next) => {
     next(new ExpressError('Page Not Found!', 404));
 });
