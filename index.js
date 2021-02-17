@@ -18,6 +18,7 @@ const LocalStrategy = require('passport-local');
 const generalRoutes = require('./routes/general.js');
 const cityRoutes = require('./routes/city.js');
 const areaRoutes = require('./routes/area.js');
+const userRoutes = require('./routes/user.js');
 
 const ExpressError = require('./utils/ExpressError.js');
 const { setLocals } = require('./middleware.js');
@@ -76,6 +77,7 @@ passport.deserializeUser(User.deserializeUser());
 app.use('/', generalRoutes);
 app.use('/', cityRoutes);
 app.use('/', areaRoutes);
+app.use('/', userRoutes);
 
 // error handlers
 app.all('*', setLocals, (req,res,next) => {
