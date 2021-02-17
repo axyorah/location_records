@@ -48,15 +48,15 @@ map.on('load', function () {
         
         // add a popup
         let popup = new mapboxgl.Popup();
-        map.on('mouseenter', `cities-${area.name}`, function (e) {
-            let coordinates = e.features[0].geometry.coordinates.slice();
-            const description = e.features[0].properties.description;
+        map.on('mouseenter', `cities-${area.name}`, function (evt) {
+            let coordinates = evt.features[0].geometry.coordinates.slice();
+            const description = evt.features[0].properties.description;
              
             // Ensure that if the map is zoomed out such that multiple
             // copies of the feature are visible, the popup appears
             // over the copy being pointed to.
-            while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
-                coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+            while (Math.abs(evt.lngLat.lng - coordinates[0]) > 180) {
+                coordinates[0] += evt.lngLat.lng > coordinates[0] ? 360 : -360;
             }
              
             popup

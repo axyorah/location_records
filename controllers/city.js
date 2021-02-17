@@ -29,7 +29,7 @@ module.exports.show = async (req,res) => {
     const cities = await City.find({});
     const areas = await Area.find({}).populate('cities');     
     
-    console.log('SELECTED CITY:');
+    console.log('CITY.SHOW: SELECTED CITY:');
     console.log(selected);
     res.render('./rov/show.ejs', { selected, areas, cities });
 }
@@ -153,8 +153,7 @@ module.exports.updateEdited = async (req,res) => {
 
 module.exports.delete = async (req,res) => {
     const { id } = req.params;
-
-    console.log(`DELETING ${id}`);
+    console.log(`DELETING CITY ${id}`);
 
     // delete city from City collection
     const city = await City.findByIdAndDelete(id);

@@ -83,8 +83,6 @@ const updateIdAndNameOfUlChildren = (ul) => {
     // adjust the indices of all the `li`s and  their children,
     // so that the indices in their ids are arranged in order
     const name = ul.id.split('_')[0];
-    console.log('BASE NAME:');
-    console.log(name);
     
     let i = 0;
     for (let li of ul.children) { 

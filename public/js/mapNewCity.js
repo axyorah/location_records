@@ -5,8 +5,8 @@ let markers = [];
 
 map.on('load', function () {
     // add new marker
-    map.on('click', function (e) {
-        const lngLat = [e.lngLat.lng, e.lngLat.lat];
+    map.on('click', function (evt) {
+        const lngLat = [evt.lngLat.lng, evt.lngLat.lat];
         
         // remove previous marker
         if (markers.length) {
@@ -22,16 +22,15 @@ map.on('load', function () {
         markers.push(marker);
 
         // set lat and lng vals in form inputs
-        latInpt.value = e.lngLat.lat;
-        lngInpt.value = e.lngLat.lng;
+        latInpt.value = evt.lngLat.lat;
+        lngInpt.value = evt.lngLat.lng;
     })
 });
 
 // remove marker
-document.addEventListener('keydown', (e) => {
-    if (e.key === "Escape" && markers.length) {
+document.addEventListener('keydown', (evt) => {
+    if (evt.key === "Escape" && markers.length) {
         marker = markers.pop();
         marker.remove();
-        console.log(e);
     }
 })

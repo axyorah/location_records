@@ -164,17 +164,6 @@ const getAddButton = (parentName, childName) => {
     const btn = getButton(childName, 'add');
     btn.innerHTML = '&#65291;';//'Add New Field';
 
-    btn.addEventListener('mouseover', function (evt) {
-        parentName = getBtnParentId(btn.id);
-        let idx = getBtnIdx(btn.id);
-
-        const ul = document.getElementById(parentName + '_ul');
-
-        console.log(`PARENT: ${parentName}`);
-        console.log(`UL:`);
-        console.log(ul);
-    })
-
     btn.addEventListener('click', function (evt) {
         parentName = getBtnParentId(btn.id);
         let idx = getBtnIdx(btn.id);
@@ -197,13 +186,13 @@ const getDelButton = (parentName, childName) => {
     btn.innerHTML = '&#65293;';//'Delete Previous Field';
 
     btn.addEventListener('mouseenter', function (evt) {
-        // set background to red to indicate to-be-deleted areas
+        // set background to red to indicate to-be-deleted fields
         childName = getBtnChildId(btn.id);
         setChildrenBackgroundColor(childName, 'rgba(255,0,0,0.1)');
     })
 
     btn.addEventListener('mouseleave', function (evt) {
-        // set background to back to white
+        // set background of no-longer-to-be-deleted fields back to white
         childName = getBtnChildId(btn.id);
         setChildrenBackgroundColor(childName, 'rgba(255,255,255,1)');
     })
@@ -217,7 +206,6 @@ const getDelButton = (parentName, childName) => {
 
         // remove resp. li, unless it's the last one
         if (ul.children.length > 1) {
-            console.log('removing: ', li);
             ul.removeChild(li);
         }        
 

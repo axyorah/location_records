@@ -42,6 +42,5 @@ const showFullInfo = (item) => {
 
 if (selectedJSON) {
     const item = JSON.parse(jsonEscape(selectedJSON)); // area
-    console.log(item.cities);
     showFullInfo(item);
 }
