@@ -1,11 +1,11 @@
 const User = require('../models/user.js');
 const ExpressError = require('../utils/ExpressError.js');
 
-module.exports.renderRegistrationForm = (req,res) => {
+module.exports.renderRegister = (req,res) => {
     res.render('./users/new.ejs');
 }
 
-module.exports.addRegistered = async (req,res) => {
+module.exports.register = async (req,res) => {
 
     try {
         const { username, password, email } = req.body.user;
@@ -22,4 +22,18 @@ module.exports.addRegistered = async (req,res) => {
         req.flash('error', err.message);
         res.redirect('/users/new');
     }
+}
+
+module.exports.renderLogin = (req,res) => {
+    res.render('./users/login.ejs');
+}
+
+module.exports.login = (req,res) => {
+    const { username } = req.body;
+    req.flash('success', `Welcome back, ${username}!`);
+    res.redirect('/');
+}
+
+module.exports.logout = (req,res) => {
+    res.redirect('/');
 }

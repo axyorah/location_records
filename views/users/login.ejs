@@ -1,0 +1,32 @@
+<% layout('layout/boilerplate.ejs') %>
+
+    <h1>Login</h1>
+
+    <div class="row">
+        <div class="col-xl-8 pt-5">
+
+            <form method="POST" action="/users/login" class="needs-validation" novalidate>
+
+                <div class="card w-100">
+                    <div class="card-body" id="region-info">
+
+                        <div class="form-box">
+                            <label for="username">Username</label>
+                            <input class="form-control" type="text" id="username" name="username" required>
+                        </div>
+
+                        <div class="form-box">
+                            <label for="password">Password</label>
+                            <input class="form-control" type="password" id="password" name="password" required>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="mt-3">
+                    <button type="submit" class="btn btn-outline-secondary w-100">Login</button>
+                </div>
+            </form>
+
+        </div>
+    </div>
