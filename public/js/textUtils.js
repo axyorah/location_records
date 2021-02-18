@@ -18,7 +18,7 @@ const getTitleArea = (childName) => {
 const addTextAreaToUl = (ul) => {
     // append empty textarea at the end of ul;
     // recall ul structure: ul{ li[i]{[title,] textArea, editButtons}}
-
+    
     const parentName = ul.id.split('_')[0];
     const childName = `${parentName}[${ul.children.length}]`;
         
@@ -43,7 +43,7 @@ const getNewUl = (name) => {
     const ul = document.createElement('ul');
     ul.setAttribute('id', `${name}_ul`);
     ul.setAttribute('class', 'list-group list-group-flush mt-2');
-
+    
     addTextAreaToUl(ul);
     return ul;
 }

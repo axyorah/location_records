@@ -182,11 +182,11 @@ const resolveSingleItem = (parent, item, ignoredKeyList, lvl) => {
     ignoredKeyList = (ignoredKeyList === undefined) ? [] : ignoredKeyList;
     lvl = (lvl === undefined) ? 5 : Math.min(lvl, 5);    
 
-    if ( item === undefined ) {
+    if ( !item ) {
         const ul = getNewUl(parent.id.split('_')[0]);
         parent.appendChild(ul); 
         // always add btns
-
+        
     } else if ( typeof(item) === 'string' || typeof(item) === 'number' ) {
         addTextForEdit(parent, item); 
         // always adds btns

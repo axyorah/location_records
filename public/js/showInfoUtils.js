@@ -202,9 +202,11 @@ const resolveSingleItem = (parent, item, ignoredKeyList, lvl) => {
     ignoredKeyList = (ignoredKeyList === undefined) ? [] : ignoredKeyList;
     lvl = (lvl === undefined) ? 5 : Math.min(lvl, 5);
 
-    if (typeof(item) === 'string' || typeof(item) === 'number') {
+    if ( !item ) {
+        addText(parent, '');
+    } else if ( typeof(item) === 'string' || typeof(item) === 'number' ) {
         addText(parent, item);
-    } else if (Array.isArray(item)) {
+    } else if ( Array.isArray(item) ) {
         addArray(parent, item, ignoredKeyList, lvl);
     } else {
         addObject(parent, item, ignoredKeyList, lvl);
