@@ -53,7 +53,9 @@
     const mapBoxToken = '<%= process.env.MAPBOX_TOKEN %>';
     const selectedJSON = '<%- JSON.stringify(selected) %>';
     const areasJSON = '<%- JSON.stringify(areas) %>';
-    const citiesJSON = '<%- JSON.stringify(cities) %>';    
+    const citiesJSON = '<%- JSON.stringify(cities) %>'; 
+    
+    const username = '<%= username %>';
 </script>
 <script src="/js/jsonUtils.js"></script>
 <script src="/js/mapSetup.js"></script>

@@ -155,12 +155,15 @@ const addCitiesToUL = (ul, obj, ignoredKeyList, lvl) => {
 
             makeDetails(li, `${city.name} (${city.code})`, city, ignoredKeyList, lvl);
 
+            // if user is logged in:
             //add city buttons next to city name
             //(since several cities area added - we must be on Area page,
             // so there's no need to add link that redirects back to parent area)
-            const summary = li.firstChild.firstChild; // li -> details -> summary
-            const btns = getCityButtons(city, ['edit', 'del']);
-            summary.appendChild(btns);
+            if ( username !== "anonymous" ) {
+                const summary = li.firstChild.firstChild; // li -> details -> summary
+                const btns = getCityButtons(city, ['edit', 'del']);
+                summary.appendChild(btns);
+            }            
         }
     }
 }
