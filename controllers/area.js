@@ -73,7 +73,7 @@ module.exports.updateEdited = async (req,res) => {
     const generalInfo = await req.body.area['General Information'];
     //const areaSpecific = req.body.area['Area-Specific'];
 
-    await Area.findByIdAndUpdate(
+    const areaNew = await Area.findByIdAndUpdate(
         id, 
         {
             name: name,
@@ -89,10 +89,10 @@ module.exports.updateEdited = async (req,res) => {
     )
 
     // mixed schema fields require explicit update
-    area.markModified('General Information'); 
+    areaNew.markModified('General Information'); 
     //city.markModified('City-Specific');    
 
-    await area.save();  
+    await areaNew.save();  
 
     req.flash('success', `"${area.name}" has been succesfully updated!`);
     res.redirect('/');
