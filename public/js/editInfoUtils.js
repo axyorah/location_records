@@ -89,7 +89,7 @@ const addArrayForEdit = (parent, arr, ignoredKeyList, lvl) => {
     }
 
     // add edit buttons unless we're at a root of `General Information`
-    if (!FORMFIELDROOTS[parent.id]) {
+    if ( !FORMFIELDROOTS.includes(parent.id) ) {
         const parentName = parent.id.split('_')[0];
         const grandParentName = parent.parentNode.id.split('_')[0];
         const editBtns = getEditButtons(grandParentName, parentName);
@@ -186,18 +186,25 @@ const resolveSingleItem = (parent, item, ignoredKeyList, lvl) => {
         const ul = getNewUl(parent.id.split('_')[0]);
         parent.appendChild(ul); 
         // always add btns
-        
+        console.log('UNDEFINED');
+        console.log(parent)
     } else if ( typeof(item) === 'string' || typeof(item) === 'number' ) {
         addTextForEdit(parent, item); 
         // always adds btns
+        console.log('STRING/NUM');
+        console.log(parent);
 
     } else if ( Array.isArray(item) ) {
         addArrayForEdit(parent, item, ignoredKeyList, lvl); 
         // adds buttons unless parent is a root of `General Information`
+        console.log('ARRAY')
+        console.log(parent)
 
     } else {
         addObjectForEdit(parent, item, ignoredKeyList, lvl); 
         // adds buttons only for nested objs to avoid adding btns twice 
         // for the same val in case of key-val pair where val is string/num
+        console.log('OBJECT')
+        console.log(parent)
     }
 }
