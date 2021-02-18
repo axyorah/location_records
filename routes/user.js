@@ -14,9 +14,10 @@ router.route('/users/new')
 router.route('/users/login')
     .get(setLocals, user.renderLogin)
     .post(
-        //setLocals, 
+        setLocals, 
         passport.authenticate('local', { failureFlash: true, failureRedirect: '/users/login' }),
-        user.login);
+        user.login
+    );
 
 router.route('/users/logout')
     .get(setLocals, catchAsync(user.logout));
