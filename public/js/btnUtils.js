@@ -59,6 +59,7 @@ const getCityButtons = (item, names) => {
         form.setAttribute('action', `/cities/${item._id}/delete?_method=DELETE`); // TODO: add: `?_DELETE`
         form.setAttribute('method', 'POST');
         form.setAttribute('class', 'd-inline ms-auto'); //d-inline 
+        form.setAttribute('onsubmit', `return confirm("Are you sure you want to delete ${item.name}?")`);
         form.style.display = 'inline-block';
 
         const btnGroup = document.createElement('div');
@@ -93,6 +94,7 @@ const getAreaButtons = (item, names) => {
         form.setAttribute('action', `/areas/${item._id}/delete?_method=DELETE`); // TODO: add: `?_DELETE`
         form.setAttribute('method', 'POST');
         form.setAttribute('class', 'd-inline mr-auto');
+        form.setAttribute('onsubmit', `return confirm("Are you sure you want to delete ${item.name}?")`);
 
         const btnGroup = document.createElement('div');
         btnGroup.setAttribute('class', 'btn-group');
