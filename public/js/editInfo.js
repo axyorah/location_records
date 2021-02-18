@@ -1,17 +1,17 @@
-const FORMFIELDROOTS = {
-    'city[generalInfo]': 'city[General Information]',
-    'area[generalInfo]': 'area[General Information]'
-};
+const FORMFIELDROOTS = [
+    'city[General Information]',
+    'area[General Information]'
+]
 
 // resp fields will not be displayed in the browser
 const ignoredKeyList = [
-    'name', 
-    'quickInfo', 
-    'geometry', 
-    'code', 
-    'area', 
+    'name',
+    'quickInfo',
+    'geometry',
+    'code',
+    'area',
     'color',
-    '_id', 
+    '_id',
     '__v'
 ]
 

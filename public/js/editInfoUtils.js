@@ -67,8 +67,8 @@ const addArrayForEdit = (parent, arr, ignoredKeyList, lvl) => {
     lvl = (lvl === undefined) ? 5 : Math.min(lvl, 5);
 
     // add [val] to name unless we're at a root of `General Information`
-    const baseName = (FORMFIELDROOTS[parent.id]) ? 
-        FORMFIELDROOTS[parent.id] : `${parent.id.split('_')[0]}[val]`;
+    const baseName = ( FORMFIELDROOTS.includes(parent.id) ) ? 
+        parent.id : `${parent.id.split('_')[0]}[val]`;
     
     // create the new ul for array
     const ul = document.createElement('ul');

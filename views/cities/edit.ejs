@@ -62,8 +62,8 @@
                         </div>
 
                         <div class="form-box">
-                            <label for="city[generalInfo]">General Information</label>
-                            <div id="city[generalInfo]"></div>
+                            <label for="city[General Information]">General Information</label>
+                            <div id="city[General Information]"></div>
                         </div>
 
                     </div>
@@ -90,7 +90,7 @@
 
 
     <script>
-        const genInfoRootHtml = document.getElementById('city[generalInfo]');
+        const genInfoRootHtml = document.getElementById('city[General Information]');
         
         const mapBoxToken = '<%= process.env.MAPBOX_TOKEN %>';
         const selectedJSON = '<%- JSON.stringify(selected) %>';  
