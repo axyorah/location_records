@@ -8,6 +8,7 @@ const ejsMate = require('ejs-mate');
 const path = require('path');
 const mongoose = require('mongoose');
 const methodOverride = require('method-override');
+const mongoSanitize = require('express-mongo-sanitize');
 
 const session = require('express-session');
 const flash = require('connect-flash');
@@ -49,6 +50,7 @@ app.set('views', path.join(__dirname, 'views'));
 app.use(express.urlencoded({ extended: true }));         // for parsing POST requests
 app.use(methodOverride('_method'));                      // enable DELETE method
 app.use(express.static(path.join(__dirname, 'public'))); // add `./public/` to PATH
+app.use(mongoSanitize({replaceWith: '_'}));
 
 // --- EXPRESS SESSION /FLASH SETUP ---
 const sessionOptions = {
