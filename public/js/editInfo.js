@@ -15,8 +15,12 @@ const ignoredKeyList = [
     '__v'
 ]
 
-const showGenInfoInit = (item) => {    
-    resolveSingleItem(genInfoRootHtml, item, ignoredKeyList);    
+const showGenInfoInit = (item) => {
+    if ( typeof(item) === "string" || typeof(item) === "number" ) {
+        resolveSingleItem(genInfoRootHtml, [item], ignoredKeyList);
+    } else {
+        resolveSingleItem(genInfoRootHtml, item, ignoredKeyList);
+    }    
 }
 
 if (selectedJSON) {
