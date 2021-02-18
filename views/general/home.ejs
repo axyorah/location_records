@@ -39,10 +39,20 @@
                     <% } %>
                 </ul>
             </div>
-
         </div>
     </div>
+</div>
 
+<div class="row">
+    <% if ( username === 'anonymous' ) { %>
+        <div class="col-12">
+            <p class="text-muted mt-5 mx-3">
+                You can add new and edit existing information 
+                after <a href="/users/login">logging in</a>. 
+                Don't have an account? <a href="/users/new">Register!</a>
+            </p>
+        </div>
+    <% } %> 
 </div>
 
 
