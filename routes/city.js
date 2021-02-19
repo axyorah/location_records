@@ -13,7 +13,7 @@ router.route('/cities/new')
 
 router.route('/cities/:id/edit')
     .get(setLocals, isLoggedIn, city.renderEdit)
-    .post(setLocals, isLoggedIn, catchAsync(city.updateEdited));
+    .post(setLocals, isLoggedIn, validateCity, catchAsync(city.updateEdited));
 
 router.route('/cities/:id/delete')
     .delete(setLocals, isLoggedIn, catchAsync(city.delete));
