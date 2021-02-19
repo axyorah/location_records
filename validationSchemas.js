@@ -12,3 +12,14 @@ module.exports.citySchema = Joi.object({
         'City-Specific': Joi.array()
     }).required()
 });
+
+module.exports.areaSchema = Joi.object({
+    area: Joi.object({
+        name: Joi.string().required(),
+        code: Joi.string().required(),
+        color: Joi.string().required(),
+        quickInfo: Joi.string(),
+        'General Information': Joi.array(),
+        'Area-Specific': Joi.array()
+    }).required()
+});
