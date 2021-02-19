@@ -3,6 +3,8 @@ const mbxClient = require('@mapbox/mapbox-sdk');
 const mbxToken = process.env.MAPBOX_TOKEN;
 const baseClient = mbxClient({ accessToken: mbxToken });
 
+const sanitizeHtml = require('sanitize-html');
+
 const Area = require('../models/area.js');
 const City = require('../models/city.js');
 const { jsonEscape, parseMixedSchema, getOrCreateDefaultArea } = require('../utils/formUtils.js');
@@ -34,10 +36,10 @@ module.exports.addNew = async (req,res) => {
     const generalInfo = req.body.area['General Information'];
 
     let area = new Area({
-        name: jsonEscape(name),
-        code: jsonEscape(code),
-        color: jsonEscape(color),
-        quickInfo: jsonEscape(quickInfo),
+        name: sanitizeHtml(name),
+        code: sanitizeHtml(code),
+        color: sanitizeHtml(color),
+        quickInfo: sanitizeHtml(quickInfo),
         'General Information': parseMixedSchema(generalInfo),
     });
     area.markModified('General Information');
@@ -76,10 +78,10 @@ module.exports.updateEdited = async (req,res) => {
     const areaNew = await Area.findByIdAndUpdate(
         id, 
         {
-            name: jsonEscape(name),
-            code: jsonEscape(code),
-            color: jsonEscape(color),
-            quickInfo: jsonEscape(quickInfo),
+            name: sanitizeHtml(name),
+            code: sanitizeHtml(code),
+            color: sanitizeHtml(color),
+            quickInfo: sanitizeHtml(quickInfo),
             'General Information': parseMixedSchema(generalInfo),
         },
         {

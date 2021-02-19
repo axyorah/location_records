@@ -1,3 +1,5 @@
+
+const sanitizeHtml = require('sanitize-html');
 const Area = require('../models/area.js');
 
 const jsonEscape = (str) => {
@@ -16,10 +18,33 @@ const jsonEscape = (str) => {
 
 module.exports.jsonEscape = jsonEscape;
 
+// const parseMixedSchema = ( inArray ) => {
+//     // input should be either of type string (escape and return)...    
+//     if (typeof(inArray) === 'string') {
+//         return jsonEscape(inArray);
+//     }
+
+//     // ...or array (parse recursively)
+//     let outArray = [];
+//     for (let inEle of inArray) {
+//         let outEle;
+//         if (inEle.val) {
+//             let val = parseMixedSchema(inEle.val);
+//             if (inEle.key) {
+//                 outEle = new Object();
+//                 outEle[jsonEscape(inEle.key)] = val;
+//             } else {
+//                 outEle = val;
+//             }
+//         }
+//         outArray.push(outEle);        
+//     }
+//     return outArray;
+// }
 const parseMixedSchema = ( inArray ) => {
     // input should be either of type string (escape and return)...    
     if (typeof(inArray) === 'string') {
-        return jsonEscape(inArray);
+        return sanitizeHtml(inArray);
     }
 
     // ...or array (parse recursively)
@@ -30,7 +55,7 @@ const parseMixedSchema = ( inArray ) => {
             let val = parseMixedSchema(inEle.val);
             if (inEle.key) {
                 outEle = new Object();
-                outEle[jsonEscape(inEle.key)] = val;
+                outEle[sanitizeHtml(inEle.key)] = val;
             } else {
                 outEle = val;
             }

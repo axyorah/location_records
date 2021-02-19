@@ -3,6 +3,8 @@ const mbxClient = require('@mapbox/mapbox-sdk');
 const mbxToken = process.env.MAPBOX_TOKEN;
 const baseClient = mbxClient({ accessToken: mbxToken });
 
+const sanitizeHtml = require('sanitize-html');
+
 const Area = require('../models/area.js');
 const City = require('../models/city.js');
 const ExpressError = require('../utils/ExpressError.js');
@@ -54,13 +56,13 @@ module.exports.addNew = async (req,res) => {
     if ( !areaObj ) throw new ExpressError('Specified Area Does Not Exist', 400);
 
     let city = new City({
-        name: jsonEscape(name),
+        name: sanitizeHtml(name),
         geometry: {
             type: 'Point',        
             coordinates: [parseFloat(lng), parseFloat(lat)]
         },
-        code: jsonEscape(code),
-        quickInfo: jsonEscape(quickInfo),
+        code: sanitizeHtml(code),
+        quickInfo: sanitizeHtml(quickInfo),
         area: areaObj
     });
 
@@ -112,13 +114,13 @@ module.exports.updateEdited = async (req,res) => {
     const city = await City.findByIdAndUpdate(
         id, 
         {
-            name: jsonEscape(name),
+            name: sanitizeHtml(name),
             geometry: {
                 type: 'Point',        
                 coordinates: [parseFloat(lng), parseFloat(lat)]
             },
-            code: jsonEscape(code),
-            quickInfo: jsonEscape(quickInfo),
+            code: sanitizeHtml(code),
+            quickInfo: sanitizeHtml(quickInfo),
             area: areaNew,
             'General Information': parseMixedSchema(generalInfo),
         },
