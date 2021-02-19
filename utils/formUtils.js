@@ -9,6 +9,8 @@ const jsonEscape = (str) => {
         .replace(/\t/g, "\\t")
         .replace(/"/g, "\\\"")
         .replace(/'/g, "\\\"")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
     ;
 }
 
@@ -28,7 +30,7 @@ const parseMixedSchema = ( inArray ) => {
             let val = parseMixedSchema(inEle.val);
             if (inEle.key) {
                 outEle = new Object();
-                outEle[inEle.key] = val;
+                outEle[jsonEscape(inEle.key)] = val;
             } else {
                 outEle = val;
             }

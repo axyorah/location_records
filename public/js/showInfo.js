@@ -16,7 +16,8 @@ const showFullInfo = (item) => {
     // set City/Area name
     if ( item.area ) {
         // cities have ref to parent area        
-        regionNameHtml.innerHTML =  `${item.name} (${item.code})`;
+        regionNameHtml.innerHTML =  
+            `${jsonHtmlify(item.name)} (${jsonHtmlify(item.code)})`;
 
         // if user is loggen in - add edit buttons
         if ( username !== 'anonymous' ) {
@@ -25,7 +26,7 @@ const showFullInfo = (item) => {
         }        
     } else if ( item.cities ) {
         // areas have ref to child cities        
-        regionNameHtml.innerHTML =  `${item.name}`;
+        regionNameHtml.innerHTML =  `${jsonHtmlify(item.name)}`;
 
         // if user is loggen in - add edit buttons
         if ( username !== 'anonymous' ) {

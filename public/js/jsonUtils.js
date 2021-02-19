@@ -7,12 +7,14 @@ const jsonEscape = (str) => {
         .replace(/\t/g, "\\t")
         .replace(/"/g, "\"")
         .replace(/'/g, "\"")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
         ;
 }
 
 const jsonHtmlify = (str) => {
     return String(str)
-        .replaceAll("&", "&amp;") // `&` sanitized before  `<,>,",'`
+        //.replaceAll("&", "&amp;") // `&` sanitized before  `<,>,",'`
         .replaceAll("<", "&lt;")
         .replaceAll(">", "&gt;")
 

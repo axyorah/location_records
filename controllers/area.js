@@ -5,7 +5,7 @@ const baseClient = mbxClient({ accessToken: mbxToken });
 
 const Area = require('../models/area.js');
 const City = require('../models/city.js');
-const { parseMixedSchema, getOrCreateDefaultArea } = require('../utils/formUtils.js');
+const { jsonEscape, parseMixedSchema, getOrCreateDefaultArea } = require('../utils/formUtils.js');
 
 const ExpressError = require('../utils/ExpressError.js');
 
@@ -34,10 +34,10 @@ module.exports.addNew = async (req,res) => {
     const generalInfo = req.body.area['General Information'];
 
     let area = new Area({
-        name: name,
-        code: code,
-        color: color,
-        quickInfo: quickInfo,
+        name: jsonEscape(name),
+        code: jsonEscape(code),
+        color: jsonEscape(color),
+        quickInfo: jsonEscape(quickInfo),
         'General Information': parseMixedSchema(generalInfo),
     });
     area.markModified('General Information');
@@ -76,10 +76,10 @@ module.exports.updateEdited = async (req,res) => {
     const areaNew = await Area.findByIdAndUpdate(
         id, 
         {
-            name: name,
-            code: code,
-            color: color,
-            quickInfo: parseMixedSchema(quickInfo),
+            name: jsonEscape(name),
+            code: jsonEscape(code),
+            color: jsonEscape(color),
+            quickInfo: jsonEscape(quickInfo),
             'General Information': parseMixedSchema(generalInfo),
         },
         {
