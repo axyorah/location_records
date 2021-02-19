@@ -2,45 +2,6 @@
 const sanitizeHtml = require('sanitize-html');
 const Area = require('../models/area.js');
 
-const jsonEscape = (str) => {
-    // can't handle backslashes...
-    return str
-        //.replace(/\\/g, "\\\\")
-        .replace(/\n/g, "\\n")
-        .replace(/\r/g, "\\r")
-        .replace(/\t/g, "\\t")
-        .replace(/"/g, "\\\"")
-        .replace(/'/g, "\\\"")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-    ;
-}
-
-module.exports.jsonEscape = jsonEscape;
-
-// const parseMixedSchema = ( inArray ) => {
-//     // input should be either of type string (escape and return)...    
-//     if (typeof(inArray) === 'string') {
-//         return jsonEscape(inArray);
-//     }
-
-//     // ...or array (parse recursively)
-//     let outArray = [];
-//     for (let inEle of inArray) {
-//         let outEle;
-//         if (inEle.val) {
-//             let val = parseMixedSchema(inEle.val);
-//             if (inEle.key) {
-//                 outEle = new Object();
-//                 outEle[jsonEscape(inEle.key)] = val;
-//             } else {
-//                 outEle = val;
-//             }
-//         }
-//         outArray.push(outEle);        
-//     }
-//     return outArray;
-// }
 const parseMixedSchema = ( inArray ) => {
     // input should be either of type string (escape and return)...    
     if (typeof(inArray) === 'string') {
