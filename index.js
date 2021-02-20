@@ -28,7 +28,7 @@ const { setLocals } = require('./middleware.js');
 const User = require('./models/user.js');
 
 // --- MONGOOSE SETUP --- 
-const dbUrl = 'mongodb://localhost:27017/rov';//process.env.DB_URL;
+const dbUrl = process.env.DB_URL || 'mongodb://localhost:27017/rov';
 
 mongoose.connect(dbUrl, {
     useNewUrlParser: true,
@@ -56,9 +56,10 @@ app.use(express.static(path.join(__dirname, 'public'))); // add `./public/` to P
 app.use(mongoSanitize({replaceWith: '_'}));
 
 // --- EXPRESS SESSION /FLASH SETUP ---
+const secret = process.env.SECRET || 'this-is-not-a-good-secret';
 const store = new MongoStore({
     url: dbUrl,
-    secret: 'this-is-not-a-good-secret',
+    secret: secret,
     touchAfter: 24 * 3600
 });
 
@@ -69,7 +70,7 @@ store.on('error', (err) => {
 
 const sessionOptions = {
     store: store,
-    secret: 'this-is-not-a-good-secret',
+    secret: secret,
     resave: false,
     saveUninitialized: false,
     cookie: { 
