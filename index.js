@@ -108,7 +108,7 @@ app.use(setLocals, (err,req,res,next) => {
     res.status(status).render('./general/error.ejs', { err });
 })
 
-
-app.listen(3000, () => {
-    console.log('LISTENING ON PORT 3000');
+const port = process.env.PORT || 3000;
+app.listen(port, () => {
+    console.log(`LISTENING ON PORT ${port}`);
 })
