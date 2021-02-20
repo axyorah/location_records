@@ -1,17 +1,3 @@
-// const jsonEscape = (str) => {
-//     // can't handle backslashes...
-//     return str
-//         //.replace(/\\/g, "\\\\")
-//         .replace(/\n/g, "\\n")
-//         .replace(/\r/g, "\\r")
-//         .replace(/\t/g, "\\t")
-//         .replace(/"/g, "\"")
-//         .replace(/'/g, "\"")
-//         // .replace(/</g, "&lt;")
-//         // .replace(/>/g, "&gt;")
-//         ;
-// }
-
 // for html elements that don't have .innerHTML attr (<input>)
 const jsonTextify = (str) => {
     return String(str)
@@ -21,7 +7,8 @@ const jsonTextify = (str) => {
         .replaceAll("\\r", "")
         .replaceAll("\\t", "\t")
         .replaceAll("&quot;", "\"")
-        .replaceAll("&apos;", "\"");        
+        .replaceAll("&apos;", "\u02c8")
+        ;        
 }
 
 // for html elements that do have .innerHTML attr (<p>, <textarea>)
