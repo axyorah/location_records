@@ -25,9 +25,11 @@ const ExpressError = require('./utils/ExpressError.js');
 const { setLocals } = require('./middleware.js');
 
 const User = require('./models/user.js');
+const dbUrl = process.env.DB_URL;
+const dbLocal = 'mongodb://localhost:27017/rov';
 
 // --- MONGOOSE SETUP --- 
-mongoose.connect('mongodb://localhost:27017/rov', {
+mongoose.connect(dbLocal, {
     useNewUrlParser: true,
     useCreateIndex: true,
     useUnifiedTopology: true,
