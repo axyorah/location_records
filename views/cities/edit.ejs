@@ -13,13 +13,15 @@
                         <div class="form-box">
                             <label for="city[name]">City Name</label>
                             <input class="form-control" type="text" 
-                                id="city[name]" name="city[name]" value="<%= selected.name %>" required>
+                                id="city[name]" name="city[name]" 
+                                value="<%= selected.name %>" required>
                         </div>
 
                         <div class="form-box">
                             <label for="city[code]">City Code</label>
                             <input class="form-control" type="text" 
-                                id="city[code]" name="city[code]" value="<%= selected.code %>" required>
+                                id="city[code]" name="city[code]" 
+                                value="<%= selected.code %>" required>
                         </div>
 
                         <div class="form-box">
@@ -54,11 +56,7 @@
                         <div class="form-box">
                             <label for="city[quickInfo]">Short note that will appear on mouse hover</label>
                             <textarea class="form-control" id="city[quickInfo]" name="city[quickInfo]"
-                                ><%= selected.quickInfo
-                                    .replaceAll('\\n', '\n')
-                                    .replaceAll('\\r', '')
-                                    .replaceAll('\\t', '\t')
-                                    .replaceAll('\\"', '\"') %></textarea>
+                                ><%= selected.quickInfo %></textarea>
                         </div>
 
                         <div class="form-box">
@@ -97,7 +95,7 @@
         const citiesJSON = '<%- JSON.stringify(cities) %>';      
         const areasJSON = '<%- JSON.stringify(areas) %>';
     </script>
-    <script src="/js/jsonUtils.js"></script>
+    <!-- <script src="/js/jsonUtils.js"></script> -->
     <script src="/js/mapSetup.js"></script>
     <script src="/js/mapEditCity.js"></script>
     <script src="/js/textUtils.js"></script>
