@@ -1,4 +1,5 @@
-const selected = JSON.parse(jsonEscape(selectedJSON));
+// const selected = JSON.parse(jsonEscape(selectedJSON));
+// const selected = JSON.parse(selectedJSON);
 
 const latInpt = document.getElementById('city[lat]');
 const lngInpt = document.getElementById('city[lng]');

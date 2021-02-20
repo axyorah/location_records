@@ -48,6 +48,7 @@ const showFullInfo = (item) => {
 }
 
 if (selectedJSON) {
-    const item = JSON.parse(jsonEscape(selectedJSON)); // area
+    // const item = JSON.parse(jsonEscape(selectedJSON)); // area
+    const item = JSON.parse(selectedJSON); // area
     showFullInfo(item);
 }

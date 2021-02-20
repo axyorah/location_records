@@ -1,6 +1,8 @@
 mapboxgl.accessToken = mapBoxToken;
-const areas = JSON.parse(jsonEscape(areasJSON));
-const cities = JSON.parse(jsonEscape(citiesJSON));
+// const areas = JSON.parse(jsonEscape(areasJSON));
+// const cities = JSON.parse(jsonEscape(citiesJSON));
+// const areas = JSON.parse(areasJSON);
+// const cities = JSON.parse(citiesJSON);
 
 const map = new mapboxgl.Map({
     container: 'map-nl',
