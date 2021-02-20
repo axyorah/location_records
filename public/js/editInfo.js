@@ -24,6 +24,7 @@ const showGenInfoInit = (item) => {
 }
 
 if (selectedJSON) {
-    const item = JSON.parse(jsonEscape(selectedJSON));
+    //const item = JSON.parse(jsonEscape(selectedJSON));
+    const item = JSON.parse(selectedJSON);
     showGenInfoInit(item['General Information']);
 }

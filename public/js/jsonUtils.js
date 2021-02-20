@@ -1,24 +1,34 @@
-const jsonEscape = (str) => {
-    // can't handle backslashes...
-    return str
-        //.replace(/\\/g, "\\\\")
-        .replace(/\n/g, "\\n")
-        .replace(/\r/g, "\\r")
-        .replace(/\t/g, "\\t")
-        .replace(/"/g, "\"")
-        .replace(/'/g, "\"")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        ;
+// const jsonEscape = (str) => {
+//     // can't handle backslashes...
+//     return str
+//         //.replace(/\\/g, "\\\\")
+//         .replace(/\n/g, "\\n")
+//         .replace(/\r/g, "\\r")
+//         .replace(/\t/g, "\\t")
+//         .replace(/"/g, "\"")
+//         .replace(/'/g, "\"")
+//         // .replace(/</g, "&lt;")
+//         // .replace(/>/g, "&gt;")
+//         ;
+// }
+
+// for html elements that don't have .innerHTML attr (<input>)
+const jsonTextify = (str) => {
+    return String(str)
+        .replaceAll("&lt;", "\u1438")
+        .replaceAll("&gt;", "\u1433")
+        .replaceAll("\\n", "\n")
+        .replaceAll("\\r", "")
+        .replaceAll("\\t", "\t")
+        .replaceAll("&quot;", "\"")
+        .replaceAll("&apos;", "\"");        
 }
 
+// for html elements that do have .innerHTML attr (<p>, <textarea>)
 const jsonHtmlify = (str) => {
     return String(str)
-        //.replaceAll("&", "&amp;") // `&` sanitized before  `<,>,",'`
         .replaceAll("<", "&lt;")
         .replaceAll(">", "&gt;")
-
-        //.replaceAll("\\\\", "&#92;")
 
         .replaceAll("\\\"", "&quot;") // click on city 
         .replaceAll("\\\'", "&apos;")

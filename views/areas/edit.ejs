@@ -73,12 +73,26 @@
 
 
     <script>
+        // get DOM
+        const nameHtml = document.getElementById('area[name]');
+        const codeHtml = document.getElementById('area[code]');
+        const quickInfoHtml = document.getElementById('area[quickInfo]');
         const genInfoRootHtml = document.getElementById('area[General Information]');
 
+        // get db entries
         const mapBoxToken = '<%= process.env.MAPBOX_TOKEN %>';
         const selectedJSON = '<%- JSON.stringify(selected) %>';  
         const citiesJSON = '<%- JSON.stringify(cities) %>';      
         const areasJSON = '<%- JSON.stringify(areas) %>';
+
+        const selected = JSON.parse(selectedJSON);
+
+        // unescape (textify) db entry for <input type="text"> elements;
+        nameHtml.value = jsonTextify(selected.name);
+        codeHtml.value = jsonTextify(selected.code);
+        // set db entries as .innerHTML for <textarea> elements;
+        quickInfoHtml.innerHTML = selected.quickInfo;
+        // 'General Information' is handled separately in `editInfo*.js`
     </script>
     <!-- <script src="/js/jsonUtils.js"></script> -->
     <script src="/js/textUtils.js"></script>

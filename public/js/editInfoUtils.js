@@ -106,7 +106,7 @@ const addKeyValPairToLi = (parent, key, val, ignoredKeyList, lvl) => {
     if (!ignoredKeyList.includes(key)) {
         // add key - title
         const titleArea = getTitleArea(parentName);
-        titleArea.value = key;//jsonHtmlify(key);
+        titleArea.value = jsonTextify(key);//jsonHtmlify(key);
         parent.appendChild(titleArea)
 
         // add val - info
