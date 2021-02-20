@@ -2,10 +2,19 @@
 const sanitizeHtml = require('sanitize-html');
 const Area = require('../models/area.js');
 
+const jsonEscape = (str) => {
+    return str.toString()
+        .replace(/\n/g, "\\n")
+        .replace(/\r/g, "\\r")
+        .replace(/\t/g, "\\t")
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&apos;');
+}
+
 const parseMixedSchema = ( inArray ) => {
     // input should be either of type string (escape and return)...    
     if (typeof(inArray) === 'string') {
-        return sanitizeHtml(inArray);
+        return jsonEscape(sanitizeHtml(inArray));
     }
 
     // ...or array (parse recursively)
@@ -16,7 +25,7 @@ const parseMixedSchema = ( inArray ) => {
             let val = parseMixedSchema(inEle.val);
             if (inEle.key) {
                 outEle = new Object();
-                outEle[sanitizeHtml(inEle.key)] = val;
+                outEle[jsonEscape(sanitizeHtml(inEle.key))] = val;
             } else {
                 outEle = val;
             }

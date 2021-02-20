@@ -8,7 +8,7 @@ const sanitizeHtml = require('sanitize-html');
 const Area = require('../models/area.js');
 const City = require('../models/city.js');
 const ExpressError = require('../utils/ExpressError.js');
-const { jsonEscape, parseMixedSchema } = require('../utils/formUtils.js');
+const { parseMixedSchema } = require('../utils/formUtils.js');
 
 module.exports.data = async (req,res) => {
     const { id } = req.params;
@@ -56,13 +56,13 @@ module.exports.addNew = async (req,res) => {
     if ( !areaObj ) throw new ExpressError('Specified Area Does Not Exist', 400);
 
     let city = new City({
-        name: sanitizeHtml(name),
+        name: parseMixedSchema(name),
         geometry: {
             type: 'Point',        
             coordinates: [parseFloat(lng), parseFloat(lat)]
         },
-        code: sanitizeHtml(code),
-        quickInfo: sanitizeHtml(quickInfo),
+        code: parseMixedSchema(code),
+        quickInfo: parseMixedSchema(quickInfo),
         area: areaObj
     });
 
@@ -114,13 +114,13 @@ module.exports.updateEdited = async (req,res) => {
     const city = await City.findByIdAndUpdate(
         id, 
         {
-            name: sanitizeHtml(name),
+            name: parseMixedSchema(name),
             geometry: {
                 type: 'Point',        
                 coordinates: [parseFloat(lng), parseFloat(lat)]
             },
-            code: sanitizeHtml(code),
-            quickInfo: sanitizeHtml(quickInfo),
+            code: parseMixedSchema(code),
+            quickInfo: parseMixedSchema(quickInfo),
             area: areaNew,
             'General Information': parseMixedSchema(generalInfo),
         },

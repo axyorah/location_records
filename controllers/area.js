@@ -7,7 +7,7 @@ const sanitizeHtml = require('sanitize-html');
 
 const Area = require('../models/area.js');
 const City = require('../models/city.js');
-const { jsonEscape, parseMixedSchema, getOrCreateDefaultArea } = require('../utils/formUtils.js');
+const { parseMixedSchema, getOrCreateDefaultArea } = require('../utils/formUtils.js');
 
 const ExpressError = require('../utils/ExpressError.js');
 
@@ -36,10 +36,10 @@ module.exports.addNew = async (req,res) => {
     const generalInfo = req.body.area['General Information'];
 
     let area = new Area({
-        name: sanitizeHtml(name),
-        code: sanitizeHtml(code),
-        color: sanitizeHtml(color),
-        quickInfo: sanitizeHtml(quickInfo),
+        name: parseMixedSchema(name),
+        code: parseMixedSchema(code),
+        color: parseMixedSchema(color),
+        quickInfo: parseMixedSchema(quickInfo),
         'General Information': parseMixedSchema(generalInfo),
     });
     area.markModified('General Information');
@@ -78,10 +78,10 @@ module.exports.updateEdited = async (req,res) => {
     const areaNew = await Area.findByIdAndUpdate(
         id, 
         {
-            name: sanitizeHtml(name),
-            code: sanitizeHtml(code),
-            color: sanitizeHtml(color),
-            quickInfo: sanitizeHtml(quickInfo),
+            name: parseMixedSchema(name),
+            code: parseMixedSchema(code),
+            color: parseMixedSchema(color),
+            quickInfo: parseMixedSchema(quickInfo),
             'General Information': parseMixedSchema(generalInfo),
         },
         {
