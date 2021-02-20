@@ -12,6 +12,7 @@ const mongoSanitize = require('express-mongo-sanitize');
 
 const session = require('express-session');
 const flash = require('connect-flash');
+const MongoStore = require('connect-mongo')(session);
 
 const passport = require('passport');
 const LocalStrategy = require('passport-local');
@@ -25,11 +26,11 @@ const ExpressError = require('./utils/ExpressError.js');
 const { setLocals } = require('./middleware.js');
 
 const User = require('./models/user.js');
-const dbUrl = process.env.DB_URL;
-const dbLocal = 'mongodb://localhost:27017/rov';
 
 // --- MONGOOSE SETUP --- 
-mongoose.connect(dbLocal, {
+const dbUrl = 'mongodb://localhost:27017/rov';//process.env.DB_URL;
+
+mongoose.connect(dbUrl, {
     useNewUrlParser: true,
     useCreateIndex: true,
     useUnifiedTopology: true,
@@ -55,7 +56,19 @@ app.use(express.static(path.join(__dirname, 'public'))); // add `./public/` to P
 app.use(mongoSanitize({replaceWith: '_'}));
 
 // --- EXPRESS SESSION /FLASH SETUP ---
+const store = new MongoStore({
+    url: dbUrl,
+    secret: 'this-is-not-a-good-secret',
+    touchAfter: 24 * 3600
+});
+
+store.on('error', (err) => {
+    console.log('Session Store Error!');
+    console.log(err);
+});
+
 const sessionOptions = {
+    store: store,
     secret: 'this-is-not-a-good-secret',
     resave: false,
     saveUninitialized: false,
