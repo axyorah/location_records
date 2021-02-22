@@ -21,6 +21,7 @@ const generalRoutes = require('./routes/general.js');
 const cityRoutes = require('./routes/city.js');
 const areaRoutes = require('./routes/area.js');
 const userRoutes = require('./routes/user.js');
+const projectRoutes = require('./routes/projects.js');
 
 const ExpressError = require('./utils/ExpressError.js');
 const { setLocals } = require('./middleware.js');
@@ -97,6 +98,7 @@ app.use('/', generalRoutes);
 app.use('/', cityRoutes);
 app.use('/', areaRoutes);
 app.use('/', userRoutes);
+app.use('/', projectRoutes);
 
 // error handlers
 app.all('*', setLocals, (req,res,next) => {
