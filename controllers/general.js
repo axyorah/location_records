@@ -8,6 +8,8 @@ const mbxToken = process.env.MAPBOX_TOKEN;
 
 const baseClient = mbxClient({ accessToken: mbxToken });
 const ExpressError = require('../utils/ExpressError.js');
+const { resolve } = require('url');
+const { request } = require('http');
 
 module.exports.home = async (req,res) => {  
     // by default `/` shows the list of all areas as links;
@@ -30,7 +32,9 @@ module.exports.home = async (req,res) => {
     
     // 2. get logged in user's project (if none specified - get first project)
     const project = projectId ? await Project.findById(projectId) : user.projects[0];
-    res.locals.projectId = project._id;
+    res.cookie('projectId', project._id);
+    console.log('GENERAL.HOME: PROJECT');
+    console.log(project);
 
     // 3. get areas and cities associated with the project
     const areas = await Area.find({}).populate('cities');

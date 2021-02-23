@@ -7,6 +7,9 @@ module.exports.setLocals = (req,res,next) => {
     res.locals.username = req.user ? req.user.username : 'anonymous';
     res.locals.success = req.flash('success');
     res.locals.error = req.flash('error');
+
+    const { projectId } = req.cookies;
+    res.locals.projectId = projectId;
     next();
 }
 
