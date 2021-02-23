@@ -24,6 +24,11 @@ const areaSchema = new Schema({
             ref: 'City'
         } ],
     },
+    project: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Project',
+        required: true
+    },
     'General Information': {},
     'Area-Specific': {}
 });

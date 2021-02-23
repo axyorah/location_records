@@ -10,14 +10,16 @@
         
         <div class="collapse navbar-collapse " id="navbarSupportedContent">
 
+            <% if (username !== 'anonymous') { %>
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item">
-                    <a class="nav-link active" href="/areas/new">Add New Area</a>
+                    <a class="nav-link active" href="/projects/<%= projectId %>/areas/new">Add New Area</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link active" href="/cities/new">Add New City</a>
                 </li>
             </ul>
+            <% } %>
 
             <ul class="navbar-nav mr-auto mb-2 mb-lg-0">
 

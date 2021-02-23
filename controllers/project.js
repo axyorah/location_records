@@ -12,10 +12,12 @@ module.exports.show = async (req,res) => {
 
     const user = await User.findOne({ username: username }).populate('projects');
     const project = await Project.findById(projectId);
+    res.cookie('projectId', project._id);
 
-    const areas = await Area.find({}).populate('cities');
-    const cities = await City.find({});
+    const areas = await Area.find({ project }).populate('cities');
+    const cities = await City.find({ project });
 
+    // TODO: check if selected area belongs to project
     const selected = areaId ? await Area.findById(areaId).populate('cities') : undefined;
 
     res.render('./projects/show.ejs', { selected, areas, cities, project, projects: user.projects });
@@ -46,5 +48,4 @@ module.exports.addNew = async (req,res) => {
     res.cookie('projectId', project._id);
     req.flash('success', `New Project "${project.name}" was added!`);
     res.redirect(`/projects/${project._id}`);
-    //res.send(req.body.project);
 }

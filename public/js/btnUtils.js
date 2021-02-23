@@ -95,7 +95,7 @@ const getAreaButtons = (item, names) => {
     // ['edit', 'del']
     if ( item.cities ) {
         const form = document.createElement('form');
-        form.setAttribute('action', `/areas/${item._id}/delete?_method=DELETE`);
+        form.setAttribute('action', `/projects/${projectId}/areas/${item._id}/delete?_method=DELETE`);
         form.setAttribute('method', 'POST');
         form.setAttribute('class', 'd-inline mr-auto');
         form.setAttribute(
@@ -108,7 +108,7 @@ const getAreaButtons = (item, names) => {
         btnGroup.setAttribute('class', 'btn-group');
         btnGroup.setAttribute('role', 'group');
 
-        const editBtn = getABtn('Edit', `/areas/${item._id}/edit`);
+        const editBtn = getABtn('Edit', `/projects/${projectId}/areas/${item._id}/edit`);
         const delBtn = getSubmitBtn('Del');
 
         if (names.includes('edit')) {

@@ -32,7 +32,7 @@
                 <ul class="list-group list-group-flush">
                     <% for (let area of areas) { %>
                         <li class="list-group-item">
-                            <a href="/?areaId=<%= area._id %>">
+                            <a href="projects/<%= projectId %>/?areaId=<%= area._id %>">
                                 <h3><%= area.name %></h3>
                             </a>
                         </li>
@@ -59,6 +59,7 @@
     const projects = JSON.parse(projectsJSON);
 
     const username = '<%= username %>';
+    const projectId = '<%= projectId %>';
 </script>
 <!-- <script src="/js/jsonUtils.js"></script> -->
 <script src="/js/mapSetup.js"></script>

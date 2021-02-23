@@ -6,6 +6,7 @@ const ignoredKeyList = [
     'code', 
     'area', 
     'color',
+    'project',
     '_id', 
     '__v'
 ]

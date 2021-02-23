@@ -7,6 +7,8 @@ const sanitizeHtml = require('sanitize-html');
 
 const Area = require('../models/area.js');
 const City = require('../models/city.js');
+const User = require('../models/user.js');
+const Project = require('../models/project.js');
 const { parseMixedSchema, getOrCreateDefaultArea } = require('../utils/formUtils.js');
 
 const ExpressError = require('../utils/ExpressError.js');
@@ -32,26 +34,33 @@ module.exports.addNew = async (req,res) => {
     console.log(req.body.area);
     if ( !req.body.area ) throw new ExpressError('Invalid Request Format', 400);
 
+    const { projectId } = req.params;
     const { name, code, color, quickInfo } = req.body.area;
     const generalInfo = req.body.area['General Information'];
+
+    const project = await Project.findById(projectId);
 
     let area = new Area({
         name: parseMixedSchema(name),
         code: parseMixedSchema(code),
         color: parseMixedSchema(color),
         quickInfo: parseMixedSchema(quickInfo),
+        project: project,
         'General Information': parseMixedSchema(generalInfo),
     });
     area.markModified('General Information');
 
     await area.save();
 
+    project.areas.push(area);
+    await project.save();
+
     req.flash('success', `New area "${area.name}" has been added!`);
-    res.redirect('/');
+    res.redirect(`/projects/${projectId}`);
 }
 
 module.exports.renderEdit = async (req,res) => {
-    const { id } = req.params;
+    const { projectId, id } = req.params;
 
     const selected = await Area.findOne({ _id: id });
     if ( !selected ) throw new ExpressError('Area with Specified ID Does Not Exist', 400);
@@ -66,7 +75,7 @@ module.exports.updateEdited = async (req,res) => {
     console.log('REQ.BODY.AREA:');
     console.log(req.body.area);
     
-    const { id } = req.params;
+    const { projectId, id } = req.params;
     const area = await Area.findById(id);
     if ( !area ) throw new ExpressError('Area with Specified ID Does Not Exist', 400);
     if ( !req.body.area ) throw new ExpressError('Invalid Request Format', 400);
@@ -97,11 +106,11 @@ module.exports.updateEdited = async (req,res) => {
     await areaNew.save();  
 
     req.flash('success', `"${area.name}" has been succesfully updated!`);
-    res.redirect('/');
+    res.redirect(`/projects/${projectId}`);
 }
 
 module.exports.delete = async (req,res) => {
-    const { id } = req.params;
+    const { projectId, id } = req.params;
 
     // if current area is DEFAULT AREA and it has children - ignore
     const area = await Area.findById(id);
@@ -114,7 +123,7 @@ module.exports.delete = async (req,res) => {
             `that are assigned to it.\n` + 
             `If you want to delete the "DEFAULT AREA", reassign all the ` +
             `cities that belong to it to different areas and try again.`);
-        res.redirect('/');
+        res.redirect(`/projects/${projectId}`);
         return;
     }
 
@@ -140,6 +149,13 @@ module.exports.delete = async (req,res) => {
         defaultArea.save();
     }
 
+    // delete area from its parent project
+    const project = await Project.findByIdAndUpdate(
+        projectId,
+        { $pull: { areas: area._id }}
+    );
+    await project.save();
+
     req.flash('success', `"${area.name}" has been succesfully deleted!`);
-    res.redirect('/');
+    res.redirect(`/projects/${projectId}`);
 }

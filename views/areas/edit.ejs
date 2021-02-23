@@ -5,7 +5,7 @@
 
             <h1 class="my-5">Edit Area</h1>
 
-            <form method="POST" action="/areas/<%= selected._id %>/edit" class="needs-validation" novalidate>
+            <form method="POST" action="/projects/<%= projectId %>/areas/<%= selected._id %>/edit" class="needs-validation" novalidate>
 
                 <div class="card w-100">
                     <div class="card-body" id="region-info">
@@ -86,6 +86,9 @@
         const areasJSON = '<%- JSON.stringify(areas) %>';
 
         const selected = JSON.parse(selectedJSON);
+
+        // get locals
+        const projectId = '<%= projectId %>';
 
         // unescape (textify) db entry for <input type="text"> elements;
         nameHtml.value = jsonTextify(selected.name);
