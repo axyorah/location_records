@@ -43,6 +43,7 @@ module.exports.addNew = async (req,res) => {
 
     await project.save();
 
+    res.cookie('projectId', project._id);
     req.flash('success', `New Project "${project.name}" was added!`);
     res.redirect(`/projects/${project._id}`);
     //res.send(req.body.project);

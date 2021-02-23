@@ -32,6 +32,7 @@ module.exports.register = async (req,res,next) => {
         req.login(registeredUser, (err) => {
             if (err) { return next(err); }
 
+            res.cookie('projectId', project._id);
             req.flash('success', `Welcome, ${username}!`); 
             res.redirect(`/projects/${project._id}`);
         });
@@ -51,6 +52,7 @@ module.exports.login = async (req,res) => {
     const user = await User.findOne({ username: username }).populate('projects');
     const project = user.projects[0];
 
+    res.cookie('projectId', project._id);
     req.flash('success', `Welcome back, ${username}!`);
     res.redirect(`/projects/${project._id}`);
 }
