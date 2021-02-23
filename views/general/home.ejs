@@ -1,6 +1,9 @@
 <% layout('layout/boilerplate.ejs') %>
 
-<h1>Konichiwa, Gentlemen!</h1>
+<% if ( username !== 'anonymous' && project ) { %>
+    <h1><%= project.name %></h1>
+    <p class="text-muted"><%= project.token %></p>
+<% } %>
 
 <div class="row">
 

@@ -18,26 +18,31 @@ module.exports.home = async (req,res) => {
 
     // if not logged in show empty map
     if ( username === 'anonymous' ) {
-        return res.render('./general/home.ejs', { cities: [], areas: [], projects: [] })
+        return res.render(
+            './general/home.ejs', 
+            { selected: undefined, cities: [], areas: [], project: undefined, projects: [] }
+        );
     }
 
     // if logged in:
     // 1. get logged in user
     const user = await User.findOne({ username: username }).populate('projects');
-    console.log('USER');
-    console.log(user);
     
     // 2. get logged in user's project (if none specified - get first project)
     const project = projectId ? await Project.findById(projectId) : user.projects[0];    
 
-    // 3. get areas and cities corresponding to a project
+    // 3. get areas and cities associated with the project
     const areas = await Area.find({}).populate('cities');
     const cities = await City.find({});
 
+    // 4. get area if specified
     const selected = areaId ? await Area.findById(areaId).populate('cities') : undefined;
     
     console.log('GENERAL.HOME: SELECTED');
     console.log(selected);
 
-    res.render('./general/home.ejs', { selected, cities, areas, user, projects: user.projects });
+    res.render(
+        './general/home.ejs', 
+        { selected, cities, areas, project, projects: user.projects }
+    );
 }
