@@ -25,8 +25,8 @@ module.exports.addNew = async (req,res) => {
     });
 
     await project.save();
+    res.locals.projectId = project._id;
 
     req.flash('success', `New Project "${project.name}" was added!`);
     res.redirect('/');
-    //res.send(req.body.project);
 }

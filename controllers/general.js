@@ -29,7 +29,8 @@ module.exports.home = async (req,res) => {
     const user = await User.findOne({ username: username }).populate('projects');
     
     // 2. get logged in user's project (if none specified - get first project)
-    const project = projectId ? await Project.findById(projectId) : user.projects[0];    
+    const project = projectId ? await Project.findById(projectId) : user.projects[0];
+    res.locals.projectId = project._id;
 
     // 3. get areas and cities associated with the project
     const areas = await Area.find({}).populate('cities');
