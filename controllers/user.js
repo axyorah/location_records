@@ -26,6 +26,7 @@ module.exports.register = async (req,res,next) => {
             email: email
         });
         user.projects.push(project);
+        res.cookie('projectId', project._id);
 
         const registeredUser = await User.register(user, password);
 
@@ -45,8 +46,13 @@ module.exports.renderLogin = (req,res) => {
     res.render('./users/login.ejs');
 }
 
-module.exports.login = (req,res) => {
+module.exports.login = async (req,res) => {
     const { username } = req.body;
+
+    const user = await User.findOne({ username: username }).populate('projects');
+    const project = user.projects[0];
+    res.cookie('projectId', project._id);
+
     req.flash('success', `Welcome back, ${username}!`);
     res.redirect('/');
 }
