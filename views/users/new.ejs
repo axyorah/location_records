@@ -25,6 +25,12 @@
                             <input class="form-control" type="text" id="user[email]" name="user[email]" required>
                         </div>
 
+                        <div class="form-box">
+                            <label for="user[projectToken]">Default Project Token</label>
+                            <input class="form-control" type="hidden" id="user[projectToken]" name="user[projectToken]" required>
+                            <p class="text-muted" id="user-project-token"></p>
+                        </div>
+
                     </div>
                 </div>
 
@@ -35,3 +41,26 @@
 
         </div>
     </div>
+
+<script>
+    const tokenPHtml = document.getElementById('user-project-token');
+    const tokenInptHtml = document.getElementById('user[projectToken]');
+
+    const getToken = (len) => {
+        token = ['default-']
+        for (let i = 8; i < len; i ++) {
+            let chr = Math.floor((122 - 48)*Math.random() + 48);
+            while ( (chr >= 58 && chr <= 64) || (chr >= 91 & chr <= 96) ) {
+                chr = Math.floor((122 - 48)*Math.random() + 48);
+            }
+            token.push(String.fromCharCode(chr));        
+        }
+        return token.join('');
+    };
+
+    window.addEventListener('load', function() {
+        const token = getToken(64);
+        tokenPHtml.innerText = token;
+        tokenInptHtml.value = token;
+    })
+</script>

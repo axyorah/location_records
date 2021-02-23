@@ -7,7 +7,13 @@ const userSchema = new Schema({
         type: String,
         required: true,
         unique: true
-    }
+    },
+    projects: {
+        type: [ {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Project'
+        } ]
+    },
 });
 
 // add username + pasword with passport
