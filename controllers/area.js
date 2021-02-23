@@ -7,24 +7,44 @@ const sanitizeHtml = require('sanitize-html');
 
 const Area = require('../models/area.js');
 const City = require('../models/city.js');
+const User = require('../models/user.js');
+const Project = require('../models/project.js');
 const { parseMixedSchema, getOrCreateDefaultArea } = require('../utils/formUtils.js');
 
 const ExpressError = require('../utils/ExpressError.js');
 
 module.exports.show = async (req,res) => {
-
+    const { username } = res.locals;
     const { id } = req.params;
+
+    if ( username === 'anonymous' ) {
+        return res.render(
+            './general/show.ejs',
+            { selected: undefined, cities: [], areas: [], project: undefined, projects: [] }
+        )
+    }
+
+    const user = await User.findOne({ username: username }).populate('projects');
+    const project = projectId ? await Project.findById(projectId) : user.projects[0];
+    
     const selected = await Area.findOne({ _id: id }).populate('cities');
     if ( !selected ) throw new ExpressError('Area with Specified ID Does Not Exist', 400);
 
     const areas = await Area.find({}).populate('cities');
     const cities = await City.find({});
 
-    res.render('./general/show.ejs', { selected, areas, cities });
+    res.render(
+        './general/show.ejs', 
+        { selected, areas, cities, project, projects: user.projects }
+    );
 }
 
 module.exports.renderNew = async (req,res) => {
-    res.render('./areas/new.ejs');
+    const { username, projectId } = res.locals;
+    const user = await User.findOne({ username: username }).populate('projects');
+    const project = await Project.findById(projectId);
+    
+    res.render('./areas/new.ejs', { project, projects: user.projects });
 }
 
 module.exports.addNew = async (req,res) => {
@@ -52,6 +72,10 @@ module.exports.addNew = async (req,res) => {
 
 module.exports.renderEdit = async (req,res) => {
     const { id } = req.params;
+    const { username, projectId } = res.locals;
+    
+    const user = await User.findOne({ username: username }).populate('projects');
+    const project = projectId ? await Project.findById(projectId) : user.projects[0];
 
     const selected = await Area.findOne({ _id: id });
     if ( !selected ) throw new ExpressError('Area with Specified ID Does Not Exist', 400);
@@ -59,7 +83,7 @@ module.exports.renderEdit = async (req,res) => {
     const cities = await City.find({});
     const areas = await Area.find({}).populate('cities');
 
-    res.render('./areas/edit.ejs', { selected, cities, areas });
+    res.render('./areas/edit.ejs', { selected, cities, areas, project, projects: user.projects });
 }
 
 module.exports.updateEdited = async (req,res) => {

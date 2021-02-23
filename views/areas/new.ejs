@@ -3,7 +3,7 @@
     <div class="row">
         <div class="col-xl-8 offset-xl-2">
 
-            <h1 class="my-5">Add New Area</h1>
+            <h1>Add New Area to "<%= project.name %>"</h1>
 
             <form method="POST" action="/areas/new" class="needs-validation" novalidate>
 
@@ -58,7 +58,6 @@
         const genInfoRootHtml = document.getElementById('area[generalInfo]');
         const mapBoxToken = '<%= process.env.MAPBOX_TOKEN %>';
     </script>
-    <!-- <script src="/js/jsonUtils.js"></script> -->
     <script src="/js/textUtils.js"></script>
     <script src="/js/btnUtils.js"></script>
     <script src="/js/addInfo.js"></script>
