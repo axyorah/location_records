@@ -1,0 +1,68 @@
+<% layout('layout/boilerplate.ejs') %>
+
+<h1><%= project.name %></h1>
+
+<div class="row">
+
+    <div class="col-xl-4 offset-0 pt-5">
+        <div id="map-nl" class="w-100" style="height: 500px;"></div>
+    </div>
+
+    <div class="col-xl-8 pt-5">
+        <div class="card w-100">
+            <!--
+                by default display label `Areas`;
+                this will be overwritten by City/Area name + buttons
+                by `showFullInfo(selected)`
+                when area link is clicked on the list or 
+                city marker is clicked on the map
+            -->
+            <h1 id="region-name" class="d-flex justify-content-between m-4">
+                <%= selected === undefined ? 'Areas' : selected.name %>
+            </h1>
+
+            <!-- 
+                by default show all area links;
+                this will be overwritten with detailed City/Area info
+                by `showFullInfo(selected)`
+                when area link is clicked on the list or 
+                city marker is clicked on the map
+            -->
+            <div class="card-body" id="region-info">
+                <ul class="list-group list-group-flush">
+                    <% for (let area of areas) { %>
+                        <li class="list-group-item">
+                            <a href="/?areaId=<%= area._id %>">
+                                <h3><%= area.name %></h3>
+                            </a>
+                        </li>
+                    <% } %>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const regionNameHtml = document.querySelector('#region-name');
+    const regionInfoHtml = document.querySelector('#region-info');
+    
+    const mapBoxToken = '<%= process.env.MAPBOX_TOKEN %>';
+    const selectedJSON = '<%- JSON.stringify(selected) %>';
+    const areasJSON = '<%- JSON.stringify(areas) %>';
+    const citiesJSON = '<%- JSON.stringify(cities) %>';
+    const projectsJSON = '<%- JSON.stringify(projects) %>';
+
+    //const selected = JSON.parse(selectedJSON); // in showInfo.js
+    const cities = JSON.parse(citiesJSON); // needed for map
+    const areas = JSON.parse(areasJSON); // needed for map
+    const projects = JSON.parse(projectsJSON);
+
+    const username = '<%= username %>';
+</script>
+<!-- <script src="/js/jsonUtils.js"></script> -->
+<script src="/js/mapSetup.js"></script>
+<script src="/js/mapGetInfo.js"></script>
+<script src="/js/btnUtils.js"></script>
+<script src="/js/showInfoUtils.js"></script>
+<script src="/js/showInfo.js"></script>

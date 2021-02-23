@@ -33,7 +33,7 @@ module.exports.register = async (req,res,next) => {
             if (err) { return next(err); }
 
             req.flash('success', `Welcome, ${username}!`); 
-            res.redirect('/');
+            res.redirect(`/projects/${project._id}`);
         });
     } catch (err) {
         req.flash('error', err.message);
@@ -45,10 +45,14 @@ module.exports.renderLogin = (req,res) => {
     res.render('./users/login.ejs');
 }
 
-module.exports.login = (req,res) => {
+module.exports.login = async (req,res) => {
     const { username } = req.body;
+
+    const user = await User.findOne({ username: username }).populate('projects');
+    const project = user.projects[0];
+
     req.flash('success', `Welcome back, ${username}!`);
-    res.redirect('/');
+    res.redirect(`/projects/${project._id}`);
 }
 
 module.exports.logout = (req,res) => {
