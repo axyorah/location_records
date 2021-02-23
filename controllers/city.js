@@ -7,6 +7,8 @@ const sanitizeHtml = require('sanitize-html');
 
 const Area = require('../models/area.js');
 const City = require('../models/city.js');
+const User = require('../models/user.js');
+const Project = require('../models/project.js');
 const ExpressError = require('../utils/ExpressError.js');
 const { parseMixedSchema } = require('../utils/formUtils.js');
 
@@ -24,6 +26,10 @@ module.exports.data = async (req,res) => {
 module.exports.show = async (req,res) => {
 
     const { id } = req.params;
+    const { username, projectId } = res.locals;
+
+    const user = await User.findOne({ username: username });
+    const project = await Project.findById(projectId);
 
     const selected = await City.findOne({ _id: id });
     if ( !selected ) throw new ExpressError('City with Specified ID Does Not Exist', 400);
@@ -33,14 +39,21 @@ module.exports.show = async (req,res) => {
     
     console.log('CITY.SHOW: SELECTED CITY:');
     console.log(selected);
-    res.render('./general/show.ejs', { selected, areas, cities });
+    res.render(
+        './general/show.ejs', 
+        { selected, areas, cities, project, projects: user.projects }
+    );
 }
 
 module.exports.renderNew = async (req,res) => {
+    const { username, projectId } = res.locals;
+
+    const user = await User.findOne({ username: username });
+    const project = await Project.findById(projectId);
     const areas = await Area.find({}).populate('cities');
     const cities = await City.find({});
 
-    res.render('./cities/new.ejs', { areas, cities });
+    res.render('./cities/new.ejs', { areas, cities, project,  projects: user.projects });
 }
 
 module.exports.addNew = async (req,res) => {
@@ -48,9 +61,14 @@ module.exports.addNew = async (req,res) => {
     console.log(req.body.city);
     if ( !req.body.city ) throw new ExpressError('Invalid City Submission', 400);
     
+    
+    const { username, projectId } = res.locals;
     const { name, code, lat, lng, quickInfo, area } = req.body.city;
     const generalInfo = req.body.city['General Information'];
     //const citySpecific = req.body.city['City-Specific'];
+
+    const user = await User.findOne({ username: username });
+    const project = await Project.findById(projectId);
 
     const areaObj = await Area.findOne({ name: area });
     if ( !areaObj ) throw new ExpressError('Specified Area Does Not Exist', 400);
@@ -84,7 +102,11 @@ module.exports.addNew = async (req,res) => {
 }
 
 module.exports.renderEdit = async (req,res) => {
-    const { id } = req.params;
+    const { id } = req.params; 
+    const { username, projectId } = res.locals;
+
+    const user = await User.findOne({ username: username });
+    const project = await Project.findById(projectId);
 
     const selected = await City.findOne({ _id: id });
     if ( !selected ) throw new ExpressError('City with Specified ID Does Not Exist', 400);
@@ -92,7 +114,10 @@ module.exports.renderEdit = async (req,res) => {
     const cities = await City.find({});
     const areas = await Area.find({}).populate('cities');
 
-    res.render('./cities/edit.ejs', { selected, cities, areas });
+    res.render(
+        './cities/edit.ejs', 
+        { selected, cities, areas, project, projects: user.projects }
+    );
 }
 
 module.exports.updateEdited = async (req,res) => {
@@ -100,10 +125,14 @@ module.exports.updateEdited = async (req,res) => {
     console.log(req.body.city);
     if ( !req.body.city ) throw new ExpressError('Invalid Format', 400);
 
-    const { id } = req.params;
+    const { id } = req.params; 
+    const { username, projectId } = res.locals;
     const { name, code, lat, lng, quickInfo, area } = await req.body.city;
     const generalInfo = await req.body.city['General Information'];
     //const citySpecific = req.body.city['City-Specific'];
+
+    const user = await User.findOne({ username: username });
+    const project = await Project.findById(projectId);
 
     const cityOld = await City.findById( id );
 
