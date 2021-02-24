@@ -13,6 +13,8 @@ const { parseMixedSchema, getOrCreateDefaultArea } = require('../utils/formUtils
 
 const ExpressError = require('../utils/ExpressError.js');
 
+// TODO: check whether project/area belongs to user
+
 module.exports.show = async (req,res) => {
 
     const { projectId, id } = req.params;
