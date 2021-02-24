@@ -1,14 +1,14 @@
 const express = require('express');
 const router = express.Router({ mergeParams: true });
 
-const { setLocals, validateArea, isLoggedIn } = require('../middleware.js');
+const { setLocals, validateArea, isLoggedIn, isProjectDefined } = require('../middleware.js');
 const area = require('../controllers/area.js');
 
 const catchAsync = require('../utils/catchAsync.js');
 
 router.route('/projects/:projectId/areas/new')
-    .get(setLocals, isLoggedIn, catchAsync(area.renderNew))
-    .post(setLocals, isLoggedIn, validateArea, catchAsync(area.addNew));
+    .get(setLocals, isLoggedIn, isProjectDefined, catchAsync(area.renderNew))
+    .post(setLocals, isLoggedIn, isProjectDefined, validateArea, catchAsync(area.addNew));
 
 router.route('/projects/:projectId/areas/:id/edit')
     .get(setLocals, isLoggedIn, catchAsync(area.renderEdit))

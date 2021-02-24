@@ -3,13 +3,13 @@ const express = require('express');
 const router = express.Router({ mergeParams: true });
 
 const city = require('../controllers/city.js');
-const { setLocals, validateCity, isLoggedIn } = require('../middleware.js');
+const { setLocals, validateCity, isLoggedIn, isProjectDefined } = require('../middleware.js');
 
 const catchAsync = require('../utils/catchAsync.js');
 
 router.route('/projects/:projectId/cities/new')
-    .get(setLocals, isLoggedIn, city.renderNew)
-    .post(setLocals, isLoggedIn, validateCity, catchAsync(city.addNew));
+    .get(setLocals, isLoggedIn, isProjectDefined, city.renderNew)
+    .post(setLocals, isLoggedIn, isProjectDefined, validateCity, catchAsync(city.addNew));
 
 router.route('/projects/:projectId/cities/:id/edit')
     .get(setLocals, isLoggedIn, city.renderEdit)
