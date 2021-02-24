@@ -21,7 +21,7 @@ map.on('load', function () {
         // upadate detailed city info
         map.on('click', `cities-${area.name}`, function (e) {
             const id = e.features[0].properties._id;
-            postData(`/cities/${id}`, { id })
+            postData(`/projects/${projectId}/cities/${id}`, { id })
                 // .then((data) => JSON.stringify(data))
                 // .then((data) => jsonEscape(data))
                 // .then((data) => JSON.parse(data))

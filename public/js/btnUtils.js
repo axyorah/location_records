@@ -56,8 +56,7 @@ const getCityButtons = (item, names) => {
     // ['back', 'edit', 'del']
     if ( item.area ) {
         const form = document.createElement('form');
-        form.setAttribute('action', `/cities/${item._id}/delete?_method=DELETE`);
-        form.setAttribute('action', `/`);
+        form.setAttribute('action', `/projects/${projectId}/cities/${item._id}/delete?_method=DELETE`);
         form.setAttribute('method', 'POST');
         form.setAttribute('class', 'd-inline ms-auto'); //d-inline 
         form.setAttribute(
@@ -70,8 +69,8 @@ const getCityButtons = (item, names) => {
         btnGroup.setAttribute('class', 'btn-group');
         btnGroup.setAttribute('role', 'group');
 
-        const backBtn = getABtn('Back to Area', `/?areaId=${item.area}`);
-        const editBtn = getABtn('Edit', `/cities/${item._id}/edit`);
+        const backBtn = getABtn('Back to Area', `/projects/${projectId}/?areaId=${item.area}`);
+        const editBtn = getABtn('Edit', `/projects/${projectId}/cities/${item._id}/edit`);
         const delBtn = getSubmitBtn('Del');
 
         if (names.includes('back')) {

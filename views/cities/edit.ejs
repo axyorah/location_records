@@ -5,7 +5,7 @@
 
             <h1 class="my-5">Edit City</h1>
 
-            <form method="POST" action="/cities/<%= selected._id %>/edit" class="needs-validation" novalidate>
+            <form method="POST" action="/projects/<%= projectId %>/cities/<%= selected._id %>/edit" class="needs-validation" novalidate>
 
                 <div class="card w-100">
                     <div class="card-body" id="region-info">
@@ -78,7 +78,7 @@
 
             </form>
 
-            <form method="POST" action="/cities/<%= selected._id %>/delete?_method=DELETE" 
+            <form method="POST" action="/projects/<%= projectId %>/cities/<%= selected._id %>/delete?_method=DELETE" 
                 id="misplaced-delete-form">
                 <button type="submit" class="btn btn-outline-danger">Delete</button>
             </form>
@@ -103,6 +103,9 @@
         const selected = JSON.parse(selectedJSON);
         const cities = JSON.parse(citiesJSON);
         const areas = JSON.parse(areasJSON);
+
+        // get locals
+        const projectId = '<%= projectId %>';
 
         // render text
         // unescape (textify) db entry for <input type="text"> elements;

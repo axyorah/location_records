@@ -26,8 +26,13 @@ const citySchema = new Schema({
         required: true
     },
     area: {
-        type: Schema.Types.ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         ref: 'Area',
+        required: true
+    },
+    project: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Project',
         required: true
     },
     'General Information': {},

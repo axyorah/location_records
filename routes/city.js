@@ -7,18 +7,18 @@ const { setLocals, validateCity, isLoggedIn } = require('../middleware.js');
 
 const catchAsync = require('../utils/catchAsync.js');
 
-router.route('/cities/new')
+router.route('/projects/:projectId/cities/new')
     .get(setLocals, isLoggedIn, city.renderNew)
     .post(setLocals, isLoggedIn, validateCity, catchAsync(city.addNew));
 
-router.route('/cities/:id/edit')
+router.route('/projects/:projectId/cities/:id/edit')
     .get(setLocals, isLoggedIn, city.renderEdit)
     .post(setLocals, isLoggedIn, validateCity, catchAsync(city.updateEdited));
 
-router.route('/cities/:id/delete')
+router.route('/projects/:projectId/cities/:id/delete')
     .delete(setLocals, isLoggedIn, catchAsync(city.delete));
 
-router.route('/cities/:id')
+router.route('/projects/:projectId/cities/:id')
     .get(setLocals, catchAsync(city.show))
     .post(setLocals, catchAsync(city.data));
 

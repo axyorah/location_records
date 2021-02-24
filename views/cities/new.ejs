@@ -5,7 +5,7 @@
 
             <h1 class="my-5">Add New City</h1>
 
-            <form method="POST" action="/cities/new" class="needs-validation" novalidate>
+            <form method="POST" action="/projects/<%= projectId %>/cities/new" class="needs-validation" novalidate>
 
                 <div class="card w-100">
                     <div class="card-body" id="region-info">
@@ -72,6 +72,8 @@
 
         const cities = JSON.parse(citiesJSON);
         const areas = JSON.parse(areasJSON);
+
+        const projectId = '<%= projectId %>';
     </script>
     <!-- <script src="/js/jsonUtils.js"></script> -->
     <script src="/js/mapSetup.js"></script>
