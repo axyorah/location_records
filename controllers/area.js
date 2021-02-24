@@ -76,7 +76,7 @@ module.exports.renderEdit = async (req,res) => {
     const selected = await Area.findOne({ _id: id });
     if ( !selected ) throw new ExpressError('Area with Specified ID Does Not Exist', 400);
 
-    const projectt = await Project.findById(projectId);
+    const project = await Project.findById(projectId);
     if ( !project ) throw new ExpressError('Project with Specified ID Does Not Exist', 400);
     
     const cities = await City.find({});
