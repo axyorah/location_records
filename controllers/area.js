@@ -15,9 +15,12 @@ const ExpressError = require('../utils/ExpressError.js');
 
 module.exports.show = async (req,res) => {
 
-    const { id } = req.params;
+    const { projectId, id } = req.params;
     const selected = await Area.findOne({ _id: id }).populate('cities');
     if ( !selected ) throw new ExpressError('Area with Specified ID Does Not Exist', 400);
+    
+    const project = await Project.findById(projectId);
+    if ( !project ) throw new ExpressError('Project with Specified ID Does Not Exist', 400);
 
     const areas = await Area.find({}).populate('cities');
     const cities = await City.find({});
@@ -26,6 +29,11 @@ module.exports.show = async (req,res) => {
 }
 
 module.exports.renderNew = async (req,res) => {
+    const { projectId } = req.params;
+
+    const project = await Project.findById(projectId);
+    if ( !project ) throw new ExpressError('Project with Specified ID Does Not Exist', 400);
+    
     res.render('./areas/new.ejs');
 }
 
@@ -39,7 +47,8 @@ module.exports.addNew = async (req,res) => {
     const generalInfo = req.body.area['General Information'];
 
     const project = await Project.findById(projectId);
-
+    if ( !project ) throw new ExpressError('Project with Specified ID Does Not Exist', 400);
+    
     let area = new Area({
         name: parseMixedSchema(name),
         code: parseMixedSchema(code),
@@ -65,6 +74,9 @@ module.exports.renderEdit = async (req,res) => {
     const selected = await Area.findOne({ _id: id });
     if ( !selected ) throw new ExpressError('Area with Specified ID Does Not Exist', 400);
 
+    const projectt = await Project.findById(projectId);
+    if ( !project ) throw new ExpressError('Project with Specified ID Does Not Exist', 400);
+    
     const cities = await City.find({});
     const areas = await Area.find({}).populate('cities');
 
@@ -77,7 +89,10 @@ module.exports.updateEdited = async (req,res) => {
     
     const { projectId, id } = req.params;
     const area = await Area.findById(id);
+    const project = await Project.findById(projectId);
+    
     if ( !area ) throw new ExpressError('Area with Specified ID Does Not Exist', 400);
+    if ( !project ) throw new ExpressError('Project with Specified ID Does Not Exist', 400);    
     if ( !req.body.area ) throw new ExpressError('Invalid Request Format', 400);
 
     const { name, code, color, quickInfo } = await req.body.area;
@@ -115,6 +130,9 @@ module.exports.delete = async (req,res) => {
     // if current area is DEFAULT AREA and it has children - ignore
     const area = await Area.findById(id);
     if ( !area ) throw new ExpressError('Area with Specified ID Does Not Exist', 400);
+
+    let project = await Project.findById(projectId);
+    if ( !project ) throw new ExpressError('Project with Specified ID Does Not Exist', 400);
     
     if ( area.name === 'DEFAULT AREA' && area.cities.length ) {
         req.flash(
@@ -150,7 +168,7 @@ module.exports.delete = async (req,res) => {
     }
 
     // delete area from its parent project
-    const project = await Project.findByIdAndUpdate(
+    project = await Project.findByIdAndUpdate(
         projectId,
         { $pull: { areas: area._id }}
     );
