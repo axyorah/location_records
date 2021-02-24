@@ -131,11 +131,11 @@ module.exports.updateEdited = async (req,res) => {
     const project = await Project.findById(projectId);
     if ( !project ) throw new ExpressError('Project with Specified ID Does Not Exist', 400);
 
+    const cityOld = await City.findById( id );
     const areaOld = await Area.findById( cityOld.area );
+
     const areaNew = await Area.findOne({ name: area });
     if ( !areaNew ) throw new ExpressError('Specified Area Does Not Exist', 400);
-
-    const cityOld = await City.findById( id );
 
     const city = await City.findByIdAndUpdate(
         id, 
