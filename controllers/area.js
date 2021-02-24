@@ -166,7 +166,9 @@ module.exports.delete = async (req,res) => {
             city.area = defaultArea;
             city.save();
         }
+        defaultArea.project = project;
         defaultArea.save();
+        project.areas.push(defaultArea);
     }
 
     // delete area from its parent project
