@@ -50,6 +50,12 @@ module.exports.addNew = async (req,res) => {
 
     const project = await Project.findById(projectId);
     if ( !project ) throw new ExpressError('Project with Specified ID Does Not Exist', 400);
+
+    // skip if area with the same name already exists
+    if ( await Area.findOne({ project, name })) {
+        req.flash('error', `${name} already exists in this project`);
+        return res.redirect(`/projects/${projectId}/areas/new`);
+    }
     
     let area = new Area({
         name: parseMixedSchema(name),
@@ -100,6 +106,13 @@ module.exports.updateEdited = async (req,res) => {
     const { name, code, color, quickInfo } = await req.body.area;
     const generalInfo = await req.body.area['General Information'];
     //const areaSpecific = req.body.area['Area-Specific'];
+
+    // skip if area with the same name already exists
+    if ( await Area.findOne({ project, name }) &&
+         !(await Area.findOne({ project, name, _id: id })) ) {
+        req.flash('error', `${name} already exists in this project`);
+        return res.redirect(`/projects/${projectId}/areas/${id}/edit`);
+    }
 
     const areaNew = await Area.findByIdAndUpdate(
         id, 
@@ -166,6 +179,7 @@ module.exports.delete = async (req,res) => {
             city.area = defaultArea;
             city.save();
         }
+        // add default area to deleted area's parent project
         defaultArea.project = project;
         defaultArea.save();
         project.areas.push(defaultArea);
