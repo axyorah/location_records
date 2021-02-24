@@ -11,13 +11,13 @@ router.route('/projects/:projectId/areas/new')
     .post(setLocals, isLoggedIn, isProjectDefined, validateArea, catchAsync(area.addNew));
 
 router.route('/projects/:projectId/areas/:id/edit')
-    .get(setLocals, isLoggedIn, catchAsync(area.renderEdit))
-    .post(setLocals, isLoggedIn, validateArea, catchAsync(area.updateEdited));
+    .get(setLocals, isLoggedIn, isProjectDefined, catchAsync(area.renderEdit))
+    .post(setLocals, isLoggedIn, isProjectDefined, validateArea, catchAsync(area.updateEdited));
 
 router.route('/projects/:projectId/areas/:id/delete')
-    .delete(setLocals, isLoggedIn, catchAsync(area.delete));
+    .delete(setLocals, isLoggedIn, isProjectDefined, catchAsync(area.delete));
 
 router.route('/projects/:projectId/areas/:id')
-    .get(setLocals, catchAsync(area.show));
+    .get(setLocals, isProjectDefined, catchAsync(area.show));
 
 module.exports = router;
