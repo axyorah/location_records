@@ -74,6 +74,12 @@ module.exports.addNew = async (req,res) => {
     const areaObj = await Area.findOne({ name: area, project });
     if ( !areaObj ) throw new ExpressError('Specified Area Does Not Exist', 400);
 
+    // skip if city with the same name already exists
+    if ( await City.findOne({ project, name })) {
+        req.flash('error', `${name} already exists in this project`);
+        return res.redirect(`/projects/${projectId}/cities/new`);
+    }
+
     let city = new City({
         name: parseMixedSchema(name),
         geometry: {
@@ -134,9 +140,15 @@ module.exports.updateEdited = async (req,res) => {
     const cityOld = await City.findById(id);
     const areaOld = await Area.findById(cityOld.area);
 
-    //const areaNew = await Area.findOne({ name: area });
     const areaNew = await Area.findById(area);
     if ( !areaNew ) throw new ExpressError('Specified Area Does Not Exist', 400);
+
+    // skip if city with the same name already exists
+    if ( await City.findOne({ project, name }) &&
+         !(await City.findOne({ project, name, _id: id })) ) {
+        req.flash('error', `${name} already exists in this project`);
+        return res.redirect(`/projects/${projectId}/cities/${id}/edit`);
+    }
 
     const city = await City.findByIdAndUpdate(
         id, 
