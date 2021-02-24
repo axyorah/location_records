@@ -134,7 +134,8 @@ module.exports.updateEdited = async (req,res) => {
     const cityOld = await City.findById(id);
     const areaOld = await Area.findById(cityOld.area);
 
-    const areaNew = await Area.findOne({ name: area });
+    //const areaNew = await Area.findOne({ name: area });
+    const areaNew = await Area.findById(area);
     if ( !areaNew ) throw new ExpressError('Specified Area Does Not Exist', 400);
 
     const city = await City.findByIdAndUpdate(
@@ -148,6 +149,7 @@ module.exports.updateEdited = async (req,res) => {
             code: parseMixedSchema(code),
             quickInfo: parseMixedSchema(quickInfo),
             area: areaNew,
+            project: project,
             'General Information': parseMixedSchema(generalInfo),
         },
         {

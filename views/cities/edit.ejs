@@ -30,11 +30,11 @@
                                 <option disabled value="">Select Area</option>
                                 <% for (let area of areas) { %>
                                     <% if (area._id.toString() === selected.area.toString()) { %>
-                                        <option selected value="<%= area.name %>">
+                                        <option selected value="<%= area._id %>">
                                             <%= area.name %>
                                         </option>
                                     <% } else { %>
-                                        <option value="<%= area.name %>">
+                                        <option value="<%= area._id %>">
                                             <%= area.name %>
                                         </option>
                                     <% } %>
