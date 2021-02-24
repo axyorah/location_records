@@ -1,14 +1,10 @@
 mapboxgl.accessToken = mapBoxToken;
-// const areas = JSON.parse(jsonEscape(areasJSON));
-// const cities = JSON.parse(jsonEscape(citiesJSON));
-// const areas = JSON.parse(areasJSON);
-// const cities = JSON.parse(citiesJSON);
 
 const map = new mapboxgl.Map({
     container: 'map-nl',
-    style: 'mapbox://styles/mapbox/streets-v10',
-    center: [5.58, 52.25],
-    zoom: 6
+    style: `mapbox://styles/mapbox/${project.mapStyle}`,
+    center: [project.lng, project.lat],
+    zoom: project.zoom
 });
 
 map.on('load', function () {

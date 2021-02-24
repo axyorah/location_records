@@ -99,10 +99,12 @@
         const selectedJSON = '<%- JSON.stringify(selected) %>';  
         const citiesJSON = '<%- JSON.stringify(cities) %>';      
         const areasJSON = '<%- JSON.stringify(areas) %>';
+        const projectJSON = '<%- JSON.stringify(project) %>';
 
         const selected = JSON.parse(selectedJSON);
         const cities = JSON.parse(citiesJSON);
         const areas = JSON.parse(areasJSON);
+        const project = JSON.parse(projectJSON);
 
         // get locals
         const projectId = '<%= projectId %>';

@@ -56,11 +56,13 @@
     const selectedJSON = '<%- JSON.stringify(selected) %>';
     const areasJSON = '<%- JSON.stringify(areas) %>';
     const citiesJSON = '<%- JSON.stringify(cities) %>';
+    const projectJSON = '<%- JSON.stringify(project) %>';
     const projectsJSON = '<%- JSON.stringify(projects) %>';
 
     //const selected = JSON.parse(selectedJSON); // in showInfo.js
     const cities = JSON.parse(citiesJSON); // needed for map
     const areas = JSON.parse(areasJSON); // needed for map
+    const project = JSON.parse(projectJSON);
     const projects = JSON.parse(projectsJSON);
 
     const username = '<%= username %>';
