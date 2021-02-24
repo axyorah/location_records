@@ -11,6 +11,9 @@ router.route('/projects/new')
     .get(setLocals, isLoggedIn, project.renderNew)
     .post(setLocals, isLoggedIn, catchAsync(project.addNew));
 
+router.route('/projects/share')
+    .post(setLocals, isLoggedIn, project.share);
+
 router.route('/projects/:projectId')
     .get(setLocals, isLoggedIn, project.show);
 

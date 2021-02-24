@@ -13,6 +13,7 @@ module.exports.show = async (req,res) => {
     const user = await User.findOne({ username: username }).populate('projects');
     const project = await Project.findById(projectId);
     res.cookie('projectId', project._id);
+    res.locals.projectId = project._id;
 
     const areas = await Area.find({ project }).populate('cities');
     const cities = await City.find({ project });
@@ -21,6 +22,27 @@ module.exports.show = async (req,res) => {
     const selected = areaId ? await Area.findById(areaId).populate('cities') : undefined;
 
     res.render('./projects/show.ejs', { selected, areas, cities, project, projects: user.projects });
+}
+
+module.exports.share = async (req,res) => {
+    const { username } = res.locals;
+    const projectToken = parseMixedSchema(req.body.projectToken);
+
+    const user = await User.findOne({ username }).populate('projects');
+    const project = await Project.findOne({ token: projectToken });
+
+    if ( !project ) throw new ExpressError('Project with Given Token Does Not Exist', 400);
+
+    if ( await User.findOne({ username: username, projects: project }) ) {
+        console.log('ALREADY HAVE THIS')
+        return res.redirect(`/projects/${project._id}`);
+    }
+
+    user.projects.push(project);
+    await user.save();
+
+    req.flash('success', `${project.name} can be accessed now!`);
+    res.redirect(`/projects/${project._id}`);
 }
 
 module.exports.renderNew = (req,res) => {

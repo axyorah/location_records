@@ -21,6 +21,18 @@
                 <% } %>            
             </ul>
         </div>
+
+        <div>
+            <p>.. or insert shared Project Token</p>
+            <form action="/projects/share" method="POST" class="row">
+                <div class="form-group col-md-10">                    
+                    <input type="text" class="form-control" id="projectToken" name="projectToken" placeholder="Project Token">
+                </div>
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-outline-secondary w-100">Submit</button>
+                </div>                
+            </form>
+        </div>
     <% } %>
 
     
