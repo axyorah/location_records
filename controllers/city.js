@@ -106,10 +106,10 @@ module.exports.addNew = async (req,res) => {
 module.exports.renderEdit = async (req,res) => {
     const { projectId, id } = req.params;
 
-    const project = await Project.findById(projectId);
+    const project = await Project.findById( projectId );
     if ( !project ) throw new ExpressError('Project with Specified ID Does Not Exist', 400);
 
-    const selected = await City.findById(id);
+    const selected = await City.findById( id );
     if ( !selected ) throw new ExpressError('City with Specified ID Does Not Exist', 400);
 
     const cities = await City.find({ project });
@@ -131,8 +131,8 @@ module.exports.updateEdited = async (req,res) => {
     const project = await Project.findById(projectId);
     if ( !project ) throw new ExpressError('Project with Specified ID Does Not Exist', 400);
 
-    const cityOld = await City.findById( id );
-    const areaOld = await Area.findById( cityOld.area );
+    const cityOld = await City.findById(id);
+    const areaOld = await Area.findById(cityOld.area);
 
     const areaNew = await Area.findOne({ name: area });
     if ( !areaNew ) throw new ExpressError('Specified Area Does Not Exist', 400);
@@ -163,7 +163,7 @@ module.exports.updateEdited = async (req,res) => {
     await city.save();
 
     // if area was changed:
-    if (areaOld._id !== areaNew._id ) {
+    if ( areaOld._id !== areaNew._id ) {
         // delete city from old area
         await areaOld.updateOne({
             $pull: { cities: city._id }
