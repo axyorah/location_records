@@ -30,6 +30,7 @@ module.exports.renderNew = (req,res) => {
 module.exports.addNew = async (req,res) => {
     if ( !req.body.project ) throw new ExpressError('Invalid Project Submission', 400);
 
+    const { username } = res.locals;
     const { name, description, lng, lat, zoom, mapStyle, mapUrl, token } = req.body.project;
     
     const project = new Project({
@@ -44,6 +45,10 @@ module.exports.addNew = async (req,res) => {
     });
 
     await project.save();
+
+    const user = await User.findOne({ username });
+    user.projects.push(project);
+    await user.save();
 
     res.cookie('projectId', project._id);
     req.flash('success', `New Project "${project.name}" was added!`);
