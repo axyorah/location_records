@@ -59,6 +59,7 @@ module.exports.login = async (req,res) => {
 
 module.exports.logout = (req,res) => {
     req.logout();
+    req.user = {username: 'anonymous'};
     req.flash('success', 'Bye!');
     res.redirect('/');
 }
