@@ -63,3 +63,30 @@ module.exports.isProjectDefined = async (req,res,next) => {
     } 
     next();
 }
+
+module.exports.isProjectInDB = async (req,res,next) => {
+    const { projectId } = req.params;
+    if ( await Project.findById(projectId)) {
+        next();
+    } else {
+        throw new ExpressError('Project with Specified ID Does Not Exist', 400);
+    }
+}
+
+module.exports.isAreaInDB = async (req,res,next) => {
+    const { id } = req.params;
+    if ( await Area.findById(id)) {
+        next();
+    } else {
+        throw new ExpressError('Area with Specified ID Does Not Exist', 400);
+    }
+}
+
+module.exports.isCityInDB = async (req,res,next) => {
+    const { id } = req.params;
+    if ( await City.findById(id)) {
+        next();
+    } else {
+        throw new ExpressError('City with Specified ID Does Not Exist', 400);
+    }
+}

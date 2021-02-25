@@ -34,7 +34,6 @@ module.exports.share = async (req,res) => {
     if ( !project ) throw new ExpressError('Project with Given Token Does Not Exist', 400);
 
     if ( await User.findOne({ username: username, projects: project }) ) {
-        console.log('ALREADY HAVE THIS')
         return res.redirect(`/projects/${project._id}`);
     }
 
