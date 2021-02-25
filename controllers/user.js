@@ -14,8 +14,8 @@ module.exports.register = async (req,res,next) => {
             name: 'My First Project',
             description: 'My first project.',
             lng: 0,
-            lat: 0,
-            zoom: 0,
+            lat: 25,
+            zoom: 0.7,
             mapStyle: 'streets-v11',
             token: projectToken
         });
@@ -50,11 +50,10 @@ module.exports.login = async (req,res) => {
     const { username } = req.body;
 
     const user = await User.findOne({ username: username }).populate('projects');
-    const project = user.projects[0];
-
-    res.cookie('projectId', project._id);
+    res.cookie('projectId', undefined);
+    
     req.flash('success', `Welcome back, ${username}!`);
-    res.redirect(`/projects/${project._id}`);
+    res.redirect('/');
 }
 
 module.exports.logout = (req,res) => {
