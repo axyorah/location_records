@@ -10,7 +10,7 @@ module.exports.setLocals = (req,res,next) => {
     res.locals.success = req.flash('success');
     res.locals.error = req.flash('error');
 
-    const projectId = req.cookies.projectId || req.params.projectId;
+    const projectId = req.params.projectId || req.cookies.projectId;
     res.locals.projectId = projectId;
     next();
 }
@@ -54,7 +54,6 @@ module.exports.isLoggedIn = (req,res,next) => {
 }
 
 module.exports.isProjectDefined = async (req,res,next) => {
-    console.log('ISPROJECTDEFEIND')
     if(!res.locals ||
         res.locals.projectId === undefined || 
         res.locals.projectId === 'undefined' ||
