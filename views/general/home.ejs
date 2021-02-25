@@ -57,6 +57,9 @@
     const mapBoxToken = '<%= process.env.MAPBOX_TOKEN %>';
     mapboxgl.accessToken = mapBoxToken;
 
+    const projectsJSON = '<%- JSON.stringify(projects) %>';
+    const projects = JSON.parse(projectsJSON);
+
     const map = new mapboxgl.Map({
         container: 'map-world',
         style: 'mapbox://styles/mapbox/light-v10',
