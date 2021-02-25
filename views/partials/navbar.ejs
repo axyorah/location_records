@@ -4,11 +4,7 @@
         <a class="navbar-brand mx-3" href="/">GEONOTES</a>
 
         <% if ( username && username !== 'anonymous' ) { %>
-            <% if ( projectId ) { %>
-                <a class="navbar-brand mx-3" href="/projects/<%= projectId %>">Project Home</a>
-            <% } else { %>
-                <a class="navbar-brand mx-3" href="/projects/undefined">Project Home</a>
-            <% } %>            
+            <a class="navbar-brand mx-3" href="/projects/<%= projectId || 'anonymous' %>">Project Home</a>            
         <% } %>
         
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
@@ -25,10 +21,10 @@
                     <a class="nav-link active" href="/projects/new">Add New Project</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link active" href="/projects/<%= projectId %>/areas/new">Add New Area</a>
+                    <a class="nav-link active" href="/projects/<%= projectId || 'anonymous' %>/areas/new">Add New Area</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link active" href="/projects/<%= projectId %>/cities/new">Add New City</a>
+                    <a class="nav-link active" href="/projects/<%= projectId || 'anonymous' %>/cities/new">Add New City</a>
                 </li>
                 <% } %>
             </ul>
