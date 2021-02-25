@@ -94,7 +94,9 @@
 
         const mapBoxToken = '<%= process.env.MAPBOX_TOKEN %>';
         const username = '<%= username %>';
-        
+
+        const projectJSON = '<%- JSON.stringify(project) %>';
+        const project = JSON.parse(projectJSON);        
         const areas = [];
     </script>
     <script src="/js/mapSetup.js"></script>

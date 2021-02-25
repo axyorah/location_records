@@ -44,8 +44,23 @@ module.exports.share = async (req,res) => {
     res.redirect(`/projects/${project._id}`);
 }
 
-module.exports.renderNew = (req,res) => {
-    res.render('./projects/new.ejs');
+module.exports.renderNew = async (req,res) => {
+    // get dummy project with default map settings
+    let project = await Project.findOne({ name: 'DUMMY PROJECT'});
+    if ( !project ) {
+        project = new Project({
+            name: 'DUMMY PROJECT',
+            description: 'Dummy Project',
+            lat: 25,
+            lng: 0,
+            zoom: 0.7,
+            mapStyle: 'streets-v11',
+            mapUrl: '',
+            token: 'dummy-project'
+        });
+        await project.save();
+    }
+    res.render('./projects/new.ejs', { cities: [], areas: [], project });
 }
 
 module.exports.addNew = async (req,res) => {
@@ -115,4 +130,46 @@ module.exports.updateEdited = async (req,res) => {
 
     req.flash('success', `"${project.name}" was succesfully updated!`);
     res.redirect(`/projects/${projectId}`);
+}
+
+module.exports.delete = async (req,res) => {
+    const { projectId } = req.params;
+    const { username } = req.params;
+
+    const user = await User.findOne({ username });
+    const project = await Project.findById(projectId);
+    const areas = await Area.find({ project });
+    const cities = await City.find({ project });
+
+    // delete project and its children only if 
+    // there's only one user who has access to it
+    if ( (await User.find({ projects: project })).length === 1 ) {
+        // delete project's children cities and areas
+        for (let city of cities) {
+            await City.findByIdAndDelete(city._id);
+        }
+        for (let area of areas) {
+            await Area.findByIdAndDelete(area._id);
+        }
+
+        // delete project
+        await Project.findByIdAndDelete(projectId);
+
+        req.flash(
+            'success', 
+            `${project.name} is no longer available you, ` +
+            `however this project will not be deleted as long as there is ` +
+            `at least one person sharing it.`
+        );
+    } else {
+        req.flash('success', `${project.name} was succesfully deleted!`);
+    }    
+
+    // delete project from its parent user
+    await User.findByIdAndUpdate(
+        user._id,
+        { $pull: { projects: project } }
+    )
+
+    res.redirect('/');
 }
