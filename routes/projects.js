@@ -14,6 +14,10 @@ router.route('/projects/new')
 router.route('/projects/share')
     .post(setLocals, isLoggedIn, project.share);
 
+router.route('/projects/:projectId/edit')
+    .get(setLocals, isLoggedIn, isProjectDefined, isProjectInDB, catchAsync(project.renderEdit))
+    .post(setLocals, isLoggedIn, isProjectDefined, isProjectInDB, catchAsync(project.updateEdited));
+
 router.route('/projects/:projectId')
     .get(setLocals, isLoggedIn, isProjectDefined, isProjectInDB, project.show);
 

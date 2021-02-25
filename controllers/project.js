@@ -59,7 +59,7 @@ module.exports.addNew = async (req,res) => {
         description: parseMixedSchema(description),
         lng: parseFloat(lng),
         lat: parseFloat(lat),
-        zoom: parseInt(zoom),
+        zoom: parseFloat(zoom),
         mapStyle: parseMixedSchema(mapStyle),
         mapUrl: mapUrl, // should be checked client-side
         token: token
@@ -74,4 +74,45 @@ module.exports.addNew = async (req,res) => {
     res.cookie('projectId', project._id);
     req.flash('success', `New Project "${project.name}" was added!`);
     res.redirect(`/projects/${project._id}`);
+}
+
+module.exports.renderEdit = async (req,res) => {
+    const { projectId } = req.params;
+
+    const project = await Project.findById(projectId);
+    const cities = await City.find({ project });
+    const areas = await Area.find({ project }).populate('cities');
+
+    console.log(projectId)
+    console.log(project)
+
+    res.render('./projects/edit.ejs', { cities, areas, project });
+}
+
+module.exports.updateEdited = async (req,res) => {
+    const { projectId } = req.params;
+
+    if ( !req.body.project ) throw new ExpressError('Invalid Request Format', 400);    
+    const { name, description, lat, lng, zoom, mapStyle, mapUrl } = req.body.project;
+    
+    const project = await Project.findByIdAndUpdate(
+        projectId, 
+        {
+            name: parseMixedSchema(name),
+            description: parseMixedSchema(description),
+            lat: parseFloat(lat),
+            lng: parseFloat(lng),
+            zoom: parseFloat(zoom),
+            mapStyle: parseMixedSchema(mapStyle),
+            mapUrl: mapUrl
+        },
+        {
+            new: true,
+            runValidators: true
+        }
+    );
+    await project.save();
+
+    req.flash('success', `"${project.name}" was succesfully updated!`);
+    res.redirect(`/projects/${projectId}`);
 }

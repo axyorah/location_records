@@ -1,0 +1,112 @@
+<% layout('layout/boilerplate.ejs') %>
+
+    <div class="row">
+        <div class="col-xl-8 offset-xl-2">
+
+            <h1 class="my-5">Edit "<%= project.name %>"</h1>
+
+            <form method="POST" action="/projects/<%= project._id %>/edit" class="needs-validation" novalidate>
+
+                <div class="card w-100">
+                    <div class="card-body" id="region-info">
+
+                        <div class="form-box">
+                            <label for="project[name]">Project Name</label>
+                            <input class="form-control" type="text" id="project[name]" name="project[name]" 
+                                value="<%= project.name %>" required>
+                        </div>
+
+                        <div class="form-box">
+                            <label for="project[description]">Short description</label>
+                            <textarea class="form-control" id="project[description]" name="project[description]"
+                                ><%= project.description %></textarea>
+                        </div>
+
+                        <div class="form-box">
+                            <p>Project Map</p>
+                            <p class="text-muted">Select the area of the map that will show by default for this project.</p>
+                            <div>
+                            <div id="map-menu">
+                                <% for (let style of ["streets-v11", "light-v10", "dark-v10"]) { %>
+                                    <label for="<%= style %>"><%= style.split("-")[0] %></label>
+                                    <% if ( project.mapStyle === style ) { %>
+                                        <input id="<%= style %>" type="radio" name="rtoggle" value="<%= style.split("-")[0] %>" checked="checked">
+                                    <% } else { %>
+                                        <input id="<%= style %>" type="radio" name="rtoggle" value="<%= style.split("-")[0] %>">
+                                    <% } %>
+                                <% } %>
+                            </div>
+                            <div id="map-nl" class="w-100" style="height: 500px;"></div>
+                            </div>
+                            
+                            <input class="form-control text-muted" type="hidden" id="project[lat]" name="project[lat]" 
+                                value="<%= project.lat %>" required>
+                            <input class="form-control text-muted" type="hidden" id="project[lng]" name="project[lng]" 
+                                value="<%= project.lng %>" required>
+                            <input class="form-control text-muted" type="hidden" id="project[zoom]" name="project[zoom]" 
+                                value="<%= project.zoom %>" required>
+                            <input class="form-control text-muted" type="hidden" id="project[mapStyle]" name="project[mapStyle]"
+                                value="<%= project.mapStyle %>">                            
+                        </div>
+
+                        <div class="form-box">
+                            <label for="project[mapUrl]">Custom Map Image URL [Optional]</label>
+                            <div class="row">
+                                <div class="col-10">
+                                    <input class="form-control text-muted" type="text" id="project[mapUrl]" name="project[mapUrl]"
+                                        value="<%= project.mapUrl %>">
+                                </div>
+                                <div class="col-2">
+                                    <button id="map-url-btn" type="button" class="btn btn-outline-secondary w-100">Try</button>
+                                </div>
+                            </div>
+                        </div>
+                        
+
+                        <div class="form-box">
+                            <label for="project[token]">Project Token</label>
+                            <p class="text-muted">You can use this token to share this project with other people.</p>
+                            <p id="project-token" name="project-token" class="text-muted"><%= project.token %></p>
+                            <!-- <input type="hidden" id="project[token]" name="project[token]"> -->
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="mt-3">
+                    <button type="submit" class="btn btn-outline-secondary w-100">Submit</button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+
+
+    <script>
+        const lngHtml = document.getElementById('project[lng]');
+        const latHtml = document.getElementById('project[lat]');
+        const zoomHtml = document.getElementById('project[zoom]');
+        const mapStyleHtml = document.getElementById('project[mapStyle]');
+        const mapUrlHtml = document.getElementById('project[mapUrl]');
+        const tokenPHtml = document.getElementById('project-token');
+        const tokenInptHtml = undefined;//document.getElementById('project[token]');
+
+        const mapStyleList = document.getElementById('map-menu');
+        const mapStyles = mapStyleList.getElementsByTagName('input');
+
+        const mapUrlBtn = document.getElementById('map-url-btn');
+
+        const mapBoxToken = '<%= process.env.MAPBOX_TOKEN %>';
+        const username = '<%= username %>';
+
+        const projectJSON = '<%- JSON.stringify(project) %>';
+        const areasJSON = '<%- JSON.stringify(areas) %>';
+        const citiesJSON = '<%- JSON.stringify(cities) %>';
+
+        const project = JSON.parse(projectJSON);
+        const areas = JSON.parse(areasJSON);
+        const cities = JSON.parse(citiesJSON);
+    </script>
+    <script src="/js/mapSetup.js"></script>
+    <script src="/js/newProjectUtils.js"></script>
+    <script src="/js/btnUtils.js"></script>

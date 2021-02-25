@@ -123,6 +123,40 @@ const getAreaButtons = (item, names) => {
     }
 }
 
+const getProjectButtons = (item, names) => {
+    // names should be an array of any combination of:
+    // ['edit', 'del']
+    if ( item.token ) {
+        const form = document.createElement('form');
+        form.setAttribute('action', `/projects/${projectId}/delete?_method=DELETE`);
+        form.setAttribute('method', 'POST');
+        form.setAttribute('class', 'd-inline mr-auto');
+        form.setAttribute(
+            'onsubmit', 
+            `return confirm('Are you sure you want to delete ${jsonTextify(item.name)}?')`
+        );
+        form.style.display = 'inline-block';
+
+        const btnGroup = document.createElement('div');
+        btnGroup.setAttribute('class', 'btn-group');
+        btnGroup.setAttribute('role', 'group');
+
+        const editBtn = getABtn('Edit', `/projects/${projectId}/edit`);
+        const delBtn = getSubmitBtn('Del');
+
+        if (names.includes('edit')) {
+            btnGroup.appendChild(editBtn);
+        }
+        if (names.includes('del')) {
+            btnGroup.appendChild(delBtn);
+        }
+
+        form.append(btnGroup);
+
+        return form;
+    }
+}
+
 const getBtnParentId = (btnId) => {
     const found = btnId.match(pattern);
 
