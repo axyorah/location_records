@@ -80,7 +80,7 @@ for (let i = 0; i < mapStyles.length; i++) {
 mapUrlBtn.addEventListener('click', function () {
     if ( mapUrlHtml.value ) {
         //const url = 'https://miro.medium.com/max/2400/1*vAKUjotJ3K6djUeEQIwyHw.jpeg';
-        // const url = 'https://images.unsplash.com/photo-1613929905911-96040610a54d?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=701&q=80';
+        //const url = 'https://images.unsplash.com/photo-1613929905911-96040610a54d?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=701&q=80';
         const url = mapUrlHtml.value;
         overlayImage(url);
     }
@@ -98,8 +98,10 @@ const getToken = (len) => {
     return token;
 };
 
-window.addEventListener('load', function () {     
-    const token = getToken(64);
-    tokenPHtml.innerText = token.join('');
-    tokenInptHtml.value = token.join('');
+window.addEventListener('load', function () {
+    if ( tokenInptHtml ) {
+        const token = getToken(64);
+        tokenPHtml.innerText = token.join('');
+        tokenInptHtml.value = token.join('');
+    }
 });
