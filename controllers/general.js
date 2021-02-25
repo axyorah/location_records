@@ -14,17 +14,10 @@ module.exports.home = async (req,res) => {
     // on area request (click area link) - shows specific area info
     // on city request (click map marker) - show specific city info
     const { username } = res.locals;
-    const { areaId } = req.query;
 
-    const user = await User.findOne({ username }).populate('projects');
+    const user = username === 'anonymous' ? 
+        undefined : await User.findOne({ username }).populate('projects');
+    const projects = username === 'anonymous' ? [] : user.projects;
 
-    //const areas = await Area.find({}).populate('cities');
-    //const cities = await City.find({});
-
-    const selected = areaId ? await Area.findById(areaId).populate('cities') : undefined;
-    
-    console.log('GENERAL.HOME: SELECTED');
-    console.log(selected);
-
-    res.render('./general/home.ejs', { selected, cities: [], areas: [], projects: user.projects });
+    res.render('./general/home.ejs', { selected: undefined, cities: [], areas: [], projects });
 }
