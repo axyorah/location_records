@@ -54,7 +54,9 @@ module.exports.isLoggedIn = (req,res,next) => {
 }
 
 module.exports.isProjectDefined = async (req,res,next) => {
-    if (res.locals.projectId === undefined || res.locals.projectId === 'undefined') {
+    if(!res.locals ||
+        res.locals.projectId === undefined || 
+        res.locals.projectId === 'undefined') {
         req.flash('error', 'Select Project First');
         return res.redirect('/');
     } 

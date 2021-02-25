@@ -3,8 +3,12 @@
         
         <a class="navbar-brand mx-3" href="/">GEONOTES</a>
 
-        <% if ( username !== 'anonymous' ) { %>
-            <a class="navbar-brand mx-3" href="/projects/<%= projectId %>">Project Home</a>
+        <% if ( username && username !== 'anonymous' ) { %>
+            <% if ( projectId ) { %>
+                <a class="navbar-brand mx-3" href="/projects/<%= projectId %>">Project Home</a>
+            <% } else { %>
+                <a class="navbar-brand mx-3" href="/projects/undefined">Project Home</a>
+            <% } %>            
         <% } %>
         
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
