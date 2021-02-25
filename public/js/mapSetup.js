@@ -33,6 +33,7 @@ const getAreaSource = (area) => {
 const getAreaLayer = (area) => {
     return {
         'id': `cities-${area.name}`,
+        "interactive": true,
         'type': 'circle',
         'source': `cities-${area.name}`,
         'paint': { 
@@ -68,20 +69,21 @@ const removePopupCallback = (popup) => {
     }
 }
 
-const showMarkers = () => {
+const populateMap = () => {
     for (let area of areas) {
+        if ( !map.getSource(`cities-${area.name}`) ) {
+            // add city-data of the current area in correct format
+            map.addSource(`cities-${area.name}`, getAreaSource(area));
+                
+            // add a layer showing the city markers for the current area
+            map.addLayer(getAreaLayer(area));
         
-        // add city-data of the current area in correct format
-        map.addSource(`cities-${area.name}`, getAreaSource(area));
-        
-        // add a layer showing the city markers for the current area
-        map.addLayer(getAreaLayer(area));
-        
-        // show popup on mouseenter, remove on mouseleave
-        let popup = new mapboxgl.Popup();
-        map.on('mouseenter', `cities-${area.name}`, addPopupCallback(popup));
-        map.on('mouseleave', `cities-${area.name}`, removePopupCallback(popup));
+            // show popup on mouseenter, remove on mouseleave
+            let popup = new mapboxgl.Popup();
+            map.on('mouseenter', `cities-${area.name}`, addPopupCallback(popup));
+            map.on('mouseleave', `cities-${area.name}`, removePopupCallback(popup));
+        }        
     }    
 }
 
-map.on('load', showMarkers);
+map.on("styledata", populateMap);
