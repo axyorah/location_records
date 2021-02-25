@@ -1,7 +1,17 @@
 <% layout('layout/boilerplate.ejs') %>
 
-<h1><%= project.name %></h1>
+<div class="d-flex justify-content-between">
+    <h1 class="d-inline"><%= project.name %></h1>
+    <form action="/projects/<%= project._id %>/delete?_method=DELETE">
+        <div class="btn-group" role="group">
+            <a class="btn btn-outline-secondary" href="/projects/<%= project._id %>/edit">Edit</a>
+            <button type="submit" class="btn btn-outline-secondary">Del</button>
+        </div>
+    </form>
+</div>
+
 <p class="text-muted my-2"><%= project.token %></p>
+
 <details>
     <summary>Description</summary>
     <p class="my-2"><%= project.description %></p>
