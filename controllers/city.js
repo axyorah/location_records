@@ -15,14 +15,10 @@ const { parseMixedSchema } = require('../utils/formUtils.js');
 // TODO: check if the project/city belongs to user
 
 module.exports.data = async (req,res) => {
-    const { projectId, id } = req.params;
+    const { id } = req.params;
     
     const selected = await City.findById(id);
-    //if ( !selected ) throw new ExpressError('City with Specified ID Does Not Exist', 400);
-
-    const project = await Project.findById(projectId);
-    //if ( !project ) throw new ExpressError('Project with Specified ID Does Not Exist', 400);
-
+    
     console.log('CITY.DATA: SELECTED CITY:');
     console.log(selected);    
     res.send(selected);
@@ -33,11 +29,7 @@ module.exports.show = async (req,res) => {
     const { projectId, id } = req.params;
 
     const project = await Project.findById(projectId);
-    //if ( !project ) throw new ExpressError('Project with Specified ID Does Not Exist', 400);
-
-    const selected = await City.findOne({ _id: id });
-    //if ( !selected ) throw new ExpressError('City with Specified ID Does Not Exist', 400);
-
+    const selected = await City.findById(id);    
     const cities = await City.find({ project });
     const areas = await Area.find({ project }).populate('cities');     
     
@@ -50,8 +42,6 @@ module.exports.renderNew = async (req,res) => {
     const { projectId } = req.params;
 
     const project = await Project.findById(projectId);
-    //if ( !project ) throw new ExpressError('Project with Specified ID Does Not Exist', 400);
-
     const areas = await Area.find({ project }).populate('cities');
     const cities = await City.find({ project });
 
@@ -66,12 +56,9 @@ module.exports.addNew = async (req,res) => {
     const { projectId } = req.params;
     const { name, code, lat, lng, quickInfo, area } = req.body.city;
     const generalInfo = req.body.city['General Information'];
-    //const citySpecific = req.body.city['City-Specific'];
-
+    
     const project = await Project.findById(projectId);
-    //if ( !project ) throw new ExpressError('Project with Specified ID Does Not Exist', 400);
-
-    const areaObj = await Area.findOne({ name: area, project });
+    const areaObj = await Area.findOne({ name: area, project }); // TODO: SHOULD BE ID!!!!!
     if ( !areaObj ) throw new ExpressError('Specified Area Does Not Exist', 400);
 
     // skip if city with the same name already exists
@@ -88,17 +75,13 @@ module.exports.addNew = async (req,res) => {
         },
         code: parseMixedSchema(code),
         quickInfo: parseMixedSchema(quickInfo),
+        'General Information': parseMixedSchema(generalInfo),
         area: areaObj,
         project: project
     });
-
-    // add mixed schema fields separately
-    city['General Information'] = parseMixedSchema(generalInfo);
-    //city['City-Specific'] = parseMixedSchema(citySpecific);
-
-    city.markModified('General Information'); // mixed schema fields require explicit update
-    //city.markModified('City-Specific');    
-
+    
+    // mixed schema fields require explicit update
+    city.markModified('General Information');     
     await city.save();
 
     // add city to resp. area and save
@@ -113,11 +96,7 @@ module.exports.renderEdit = async (req,res) => {
     const { projectId, id } = req.params;
 
     const project = await Project.findById( projectId );
-    //if ( !project ) throw new ExpressError('Project with Specified ID Does Not Exist', 400);
-
-    const selected = await City.findById( id );
-    //if ( !selected ) throw new ExpressError('City with Specified ID Does Not Exist', 400);
-
+    const selected = await City.findById( id );    
     const cities = await City.find({ project });
     const areas = await Area.find({ project }).populate('cities');
 
@@ -132,14 +111,10 @@ module.exports.updateEdited = async (req,res) => {
     const { projectId, id } = req.params;
     const { name, code, lat, lng, quickInfo, area } = await req.body.city;
     const generalInfo = await req.body.city['General Information'];
-    //const citySpecific = req.body.city['City-Specific'];
-
-    const project = await Project.findById(projectId);
-    //if ( !project ) throw new ExpressError('Project with Specified ID Does Not Exist', 400);
-
+    
+    const project = await Project.findById(projectId);    
     const cityOld = await City.findById(id);
     const areaOld = await Area.findById(cityOld.area);
-
     const areaNew = await Area.findById(area);
     if ( !areaNew ) throw new ExpressError('Specified Area Does Not Exist', 400);
 
@@ -171,9 +146,7 @@ module.exports.updateEdited = async (req,res) => {
     )
 
     // mixed schema fields require explicit update
-    city.markModified('General Information'); 
-    //city.markModified('City-Specific');    
-
+    city.markModified('General Information');
     await city.save();
 
     // if area was changed:
@@ -199,11 +172,7 @@ module.exports.delete = async (req,res) => {
 
     // delete city from City collection
     const city = await City.findByIdAndDelete(id);
-    //if ( !city ) throw new ExpressError('City with Specified ID Does Not Exist', 400);
-
-    //const project = await Project.findById(projectId);
-    //if ( !project ) throw new ExpressError('Project with Specified ID Does Not Exist', 400);
-
+    
     // delete city from its parent Area
     const area = await Area.findOneAndUpdate(
         { cities: id },
