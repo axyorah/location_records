@@ -2,15 +2,15 @@
 
 <div class="row">
 
-    <h1 class="col-lg-8 col-12 offset-lg-2 offset-0 pt-5">GEONOTES</h1>
+    <h1 class="col-lg-8 col-12 offset-lg-2 offset-0 text-center mt-3">GEONOTES</h1>
 
-    <div class="col-lg-8 col-12 offset-lg-2 offset-0 pt-5">
+    <div class="col-lg-8 col-12 offset-lg-2 offset-0 mt-3">
         <div id="map-world" class="w-100" style="height: 350px;"></div>
     </div>
 
     <% if ( username !== 'anonymous' ) { %>
-    <div class="col-lg-8 col-12 offset-lg-2 offset-0 pt-5">
-        <div class="dropdown my-5">
+    <div class="col-lg-8 col-12 offset-lg-2 offset-0 mt-3">
+        <div class="dropdown my-4">
             <button class="btn btn-lg btn-outline-secondary dropdown-toggle w-100" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
                 Select Your Project
             </button>
@@ -42,7 +42,7 @@
 
 <div class="row">
     <% if ( username === 'anonymous' ) { %>
-        <div class="col-12">
+        <div class="col-lg-8 col-12 offset-lg-2 offset-0 text-center">
             <p class="text-muted mt-5 mx-3">
                 You can add new and edit existing information 
                 after <a href="/users/login">logging in</a>. 
