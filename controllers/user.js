@@ -1,5 +1,6 @@
 const User = require('../models/user.js');
 const Project = require('../models/project.js');
+const { createDefaultProject } = require('../utils/formUtils.js');
 const ExpressError = require('../utils/ExpressError.js');
 
 module.exports.renderRegister = (req,res) => {
@@ -10,21 +11,13 @@ module.exports.register = async (req,res,next) => {
     try {
         const { username, password, email, projectToken } = req.body.user;
 
-        const project = new Project({
-            name: 'My First Project',
-            description: 'My first project.',
-            lng: 0,
-            lat: 25,
-            zoom: 0.7,
-            mapStyle: 'streets-v11',
-            token: projectToken
-        });
-        await project.save();
-
         const user = new User({ 
             username: username, 
             email: email
         });
+
+        const project = createDefaultProject(projectToken);
+        await project.save();
         user.projects.push(project);
 
         const registeredUser = await User.register(user, password);
