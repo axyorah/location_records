@@ -19,14 +19,13 @@ module.exports.register = async (req,res,next) => {
         const project = createDefaultProject(projectToken);
         await project.save();
         user.projects.push(project);
-        res.cookie('projectId', project._id);
+        res.cookie('projectId', project._id, { sameSite: 'strict' });
 
         const registeredUser = await User.register(user, password);
 
         req.login(registeredUser, (err) => {
             if (err) { return next(err); }
 
-            res.cookie('projectId', project._id);
             req.flash('success', `Welcome, ${username}!`); 
             res.redirect(`/projects/${project._id}`);
         });
@@ -43,8 +42,8 @@ module.exports.renderLogin = (req,res) => {
 module.exports.login = async (req,res) => {
     const { username } = req.body;
 
-    const user = await User.findOne({ username: username }).populate('projects');
-    res.cookie('projectId', undefined);
+    //const user = await User.findOne({ username: username }).populate('projects');
+    res.cookie('projectId', undefined, { sameSite: 'strict' });
     
     req.flash('success', `Welcome back, ${username}!`);
     res.redirect('/');

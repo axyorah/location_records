@@ -81,13 +81,12 @@ module.exports.addNew = async (req,res) => {
     });
 
     await project.save();
-    res.cookie('projectId', project._id);
 
     const user = await User.findOne({ username });
     user.projects.push(project);
     await user.save();
 
-    res.cookie('projectId', project._id);
+    res.cookie('projectId', project._id, { sameSite: 'strict' });
     req.flash('success', `New Project "${project.name}" was added!`);
     res.redirect(`/projects/${project._id}`);
 }
