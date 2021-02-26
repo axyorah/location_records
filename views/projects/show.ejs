@@ -74,7 +74,7 @@
     const cities = JSON.parse(citiesJSON); // needed for map
     const areas = JSON.parse(areasJSON); // needed for map
     const project = JSON.parse(projectJSON);
-    const projects = JSON.parse(projectsJSON);
+    const projects = JSON.parse(projectsJSON) || [];
 
     const username = '<%= username %>';
     const projectId = '<%= projectId %>';
