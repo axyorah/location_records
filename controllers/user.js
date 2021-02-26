@@ -19,6 +19,7 @@ module.exports.register = async (req,res,next) => {
         const project = createDefaultProject(projectToken);
         await project.save();
         user.projects.push(project);
+        res.cookie('projectId', project._id);
 
         const registeredUser = await User.register(user, password);
 

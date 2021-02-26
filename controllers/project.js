@@ -81,6 +81,7 @@ module.exports.addNew = async (req,res) => {
     });
 
     await project.save();
+    res.cookie('projectId', project._id);
 
     const user = await User.findOne({ username });
     user.projects.push(project);

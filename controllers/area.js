@@ -27,7 +27,11 @@ module.exports.show = async (req,res) => {
 }
 
 module.exports.renderNew = async (req,res) => {
-    res.render('./areas/new.ejs');
+    const { username, projectId } = res.locals;
+    const user = await User.findOne({ username: username }).populate('projects');
+    const project = await Project.findById(projectId);
+    
+    res.render('./areas/new.ejs', { project, projects: user.projects });
 }
 
 module.exports.addNew = async (req,res) => {
