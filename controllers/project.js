@@ -134,7 +134,7 @@ module.exports.updateEdited = async (req,res) => {
 
 module.exports.delete = async (req,res) => {
     const { projectId } = req.params;
-    const { username } = req.params;
+    const { username } = res.locals;
 
     const user = await User.findOne({ username });
     const project = await Project.findById(projectId);
@@ -143,7 +143,7 @@ module.exports.delete = async (req,res) => {
 
     // delete project and its children only if 
     // there's only one user who has access to it
-    if ( (await User.find({ projects: project })).length === 1 ) {
+    if ( (await User.find({ projects: project._id })).length === 1 ) {
         // delete project's children cities and areas
         for (let city of cities) {
             await City.findByIdAndDelete(city._id);
@@ -155,20 +155,21 @@ module.exports.delete = async (req,res) => {
         // delete project
         await Project.findByIdAndDelete(projectId);
 
+        req.flash('success', `${project.name} was succesfully deleted!`);        
+    } else {
         req.flash(
             'success', 
-            `${project.name} is no longer available you, ` +
-            `however this project will not be deleted as long as there is ` +
-            `at least one person sharing it.`
+            `${project.name} is removed from your projects, ` +
+            `however it will still be available to other people.`
         );
-    } else {
-        req.flash('success', `${project.name} was succesfully deleted!`);
     }    
+
+    console.log(user, username);
 
     // delete project from its parent user
     await User.findByIdAndUpdate(
         user._id,
-        { $pull: { projects: project } }
+        { $pull: { projects: project._id } }
     )
 
     res.redirect('/');
