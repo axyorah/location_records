@@ -3,7 +3,7 @@
     <div class="row">
         <div class="col-xl-8 offset-xl-2">
 
-            <h1 class="my-5">Edit "<%= project.name %>"</h1>
+            <h1 id="title" class="my-5">Edit "<%= project.name %>"</h1>
 
             <form method="POST" action="/projects/<%= project._id %>/edit" class="needs-validation" novalidate>
 
@@ -93,6 +93,9 @@
 
 
     <script>
+        const titleHtml = document.getElementById('title');
+        const projectNameHtml = document.getElementById('project[name]');
+        const projectDescrHtml = document.getElementById('project[description]')
         const lngHtml = document.getElementById('project[lng]');
         const latHtml = document.getElementById('project[lat]');
         const zoomHtml = document.getElementById('project[zoom]');
@@ -116,6 +119,10 @@
         const project = JSON.parse(projectJSON);
         const areas = JSON.parse(areasJSON);
         const cities = JSON.parse(citiesJSON);
+
+        titleHtml.innerHTML = `Edit "${jsonHtmlify(project.name)}"`;
+        projectNameHtml.value = jsonTextify(project.name);
+        projectDescrHtml.innerHTML = project.description;
     </script>
     <script src="/js/mapSetup.js"></script>
     <script src="/js/newProjectUtils.js"></script>
