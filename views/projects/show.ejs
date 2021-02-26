@@ -1,7 +1,7 @@
 <% layout('layout/boilerplate.ejs') %>
 
 <div class="d-flex justify-content-between">
-    <h1 class="d-inline"><%= project.name %></h1>
+    <h1 id="project-name" class="d-inline"><%= project.name %></h1>
     <form action="/projects/<%= project._id %>/delete?_method=DELETE" method="POST"
         onsubmit="return confirm('Are you sure you want to delete <%= project.name %>?')">
         <div class="btn-group" role="group">
@@ -15,7 +15,7 @@
 
 <details>
     <summary>Description</summary>
-    <p class="my-2"><%= project.description %></p>
+    <p id="project-description" class="my-2"><%= project.description %></p>
 </details>
 
 <div class="row">
@@ -60,8 +60,8 @@
 </div>
 
 <script>
-    const regionNameHtml = document.querySelector('#region-name');
-    const regionInfoHtml = document.querySelector('#region-info');
+    const projectNameHtml = document.getElementById('project-name');
+    const projectDescrHtml = document.getElementById('project-description');
     
     const mapBoxToken = '<%= process.env.MAPBOX_TOKEN %>';
     const selectedJSON = '<%- JSON.stringify(selected) %>';
@@ -78,6 +78,9 @@
 
     const username = '<%= username %>';
     const projectId = '<%= projectId %>';
+
+    projectNameHtml.innerHTML = jsonHtmlify(project.name);
+    projectDescrHtml.innerHTML = jsonHtmlify(project.description);
 </script>
 <!-- <script src="/js/jsonUtils.js"></script> -->
 <script src="/js/mapSetup.js"></script>
