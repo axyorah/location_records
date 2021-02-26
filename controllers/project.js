@@ -12,7 +12,7 @@ module.exports.show = async (req,res) => {
 
     const user = await User.findOne({ username: username }).populate('projects');
     const project = await Project.findById(projectId);
-    res.cookie('projectId', project._id);
+    res.cookie('projectId', project._id, { sameSite: 'strict' }); //secure: true, 
     res.locals.projectId = project._id;
 
     const areas = await Area.find({ project }).populate('cities');

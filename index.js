@@ -80,7 +80,9 @@ const sessionOptions = {
     cookie: { 
         expires: Date.now() + 1000 * 60 * 60 * 24 * 7, // in ms
         maxAge: 1000 * 60 * 60 * 24 * 7,
-        httpOnly: true
+        httpOnly: true,
+        sameSite: 'strict',
+        secure: true
     }
 }
 app.use(session(sessionOptions));
