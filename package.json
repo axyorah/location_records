@@ -1,8 +1,9 @@
 {
   "name": "geonotes",
   "version": "1.0.0",
-  "description": "notes attached to geolocations in nl",
+  "description": "notes attached to geolocations",
   "main": "index.js",
+  "engines" : { "node" : ">=15.0.0" },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node index.js"
