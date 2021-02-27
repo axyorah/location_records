@@ -20,6 +20,8 @@ module.exports.show = async (req,res) => {
 
     // TODO: check if selected area belongs to project
     const selected = areaId ? await Area.findById(areaId).populate('cities') : undefined;
+    console.log('PROJECT.SHOW: SELECTED');
+    console.log(selected);
 
     res.render('./projects/show.ejs', { selected, areas, cities, project, projects: user.projects });
 }
