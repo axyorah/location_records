@@ -31,7 +31,11 @@ module.exports.share = async (req,res) => {
     const user = await User.findOne({ username }).populate('projects');
     const project = await Project.findOne({ token: projectToken });
 
-    if ( !project ) throw new ExpressError('Project with Given Token Does Not Exist', 400);
+    //if ( !project ) throw new ExpressError('Project with Given Token Does Not Exist', 400);
+    if ( !project ) {
+        req.flash('error', 'Project with this token does not exist!');
+        return res.redirect('/');
+    }
 
     if ( await User.findOne({ username: username, projects: project }) ) {
         return res.redirect(`/projects/${project._id}`);
