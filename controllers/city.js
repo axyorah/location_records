@@ -58,7 +58,7 @@ module.exports.addNew = async (req,res) => {
     const generalInfo = req.body.city['General Information'];
     
     const project = await Project.findById(projectId);
-    const areaObj = await Area.findOne({ name: area, project }); // TODO: SHOULD BE ID!!!!!
+    const areaObj = await Area.findOne({ _id: area, project });
     if ( !areaObj ) throw new ExpressError('Specified Area Does Not Exist', 400);
 
     // skip if city with the same name already exists

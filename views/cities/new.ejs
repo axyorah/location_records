@@ -25,7 +25,7 @@
                             <select class="form-control" id="city[area]" name="city[area]" required>
                                 <option disabled selected value="">Select Area</option>
                                 <% for (let area of areas) { %>
-                                    <option value="<%= area.name %>">
+                                    <option value="<%= area._id %>">
                                         <%= area.name %>
                                     </option>
                                 <% } %>
