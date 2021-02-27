@@ -13,6 +13,8 @@ const jsonTextify = (str) => {
 
 // for html elements that do have .innerHTML attr (<p>, <textarea>)
 const jsonHtmlify = (str) => {
+    console.log('INPUT TO JSONHTMLIFY');
+    console.log(str);
     return String(str)
         .replaceAll("<", "&lt;")
         .replaceAll(">", "&gt;")
