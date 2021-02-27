@@ -48,7 +48,7 @@
                 <ul class="list-group list-group-flush">
                     <% for (let area of areas) { %>
                         <li class="list-group-item">
-                            <a href="/projects/<%= projectId %>/?areaId=<%= area._id %>">
+                            <a href="/projects/<%= project._id %>/?areaId=<%= area._id %>">
                                 <h3><%= area.name %></h3>
                             </a>
                         </li>
@@ -71,17 +71,17 @@
     const areasJSON = '<%- JSON.stringify(areas) %>';
     const citiesJSON = '<%- JSON.stringify(cities) %>';
     const projectJSON = '<%- JSON.stringify(project) %>';
-    const projectsJSON = '<%- JSON.stringify(projects) %>';
-
+    
     //const selected = JSON.parse(selectedJSON); // in showInfo.js
     const cities = JSON.parse(citiesJSON); // needed for map
     const areas = JSON.parse(areasJSON); // needed for map
     const project = JSON.parse(projectJSON);
-    const projects = JSON.parse(projectsJSON) || [];
+    //const projects = JSON.parse(projectsJSON) || [];
 
-    const username = '<%= username %>';
-    const projectId = '<%= projectId %>';
+    const username = '<%= username %>'; // needed for btnUtils.js
+    const projectId = '<%= projectId %>'; // needed for postData
 
+    // name and description are already set, but might not be htmlified correctly
     projectNameHtml.innerHTML = jsonHtmlify(project.name);
     projectDescrHtml.innerHTML = jsonHtmlify(project.description);
 </script>

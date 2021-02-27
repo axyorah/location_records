@@ -10,7 +10,7 @@ module.exports.show = async (req,res) => {
     const { username } = res.locals;
     const { areaId } = req.query;
 
-    const user = await User.findOne({ username: username }).populate('projects');
+    const user = await User.findOne({ username: username });//.populate('projects');
     const project = await Project.findById(projectId);
     res.cookie('projectId', project._id, { sameSite: 'strict' }); //secure: true, 
     res.locals.projectId = project._id;
@@ -23,7 +23,7 @@ module.exports.show = async (req,res) => {
     console.log('PROJECT.SHOW: SELECTED');
     console.log(selected);
 
-    res.render('./projects/show.ejs', { selected, areas, cities, project, projects: user.projects });
+    res.render('./projects/show.ejs', { selected, areas, cities, project });//, projects: user.projects });
 }
 
 module.exports.share = async (req,res) => {
