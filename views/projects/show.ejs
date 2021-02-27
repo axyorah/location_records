@@ -81,6 +81,8 @@
     const project = JSON.parse(projectJSON);
 
     // name and description are already set, but might not be htmlified correctly
+    console.log('PROJECT');
+    console.log(project);
     projectNameHtml.innerHTML = jsonHtmlify(project.name);
     projectDescrHtml.innerHTML = jsonHtmlify(project.description);
 </script>
