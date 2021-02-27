@@ -20,6 +20,6 @@ router.route('/users/login')
     );
 
 router.route('/users/logout')
-    .get(setLocals, catchAsync(user.logout));
+    .get(setLocals, user.logout);
 
 module.exports = router;
