@@ -60,26 +60,25 @@
 </div>
 
 <script>
-    const regionNameHtml = document.getElementById('region-name');
-    const regionInfoHtml = document.getElementById('region-info');
+    const regionNameHtml = document.getElementById('region-name'); // needed for showInfo.js
+    const regionInfoHtml = document.getElementById('region-info'); // needed for showInfo.js
 
     const projectNameHtml = document.getElementById('project-name');
     const projectDescrHtml = document.getElementById('project-description');
     
     const mapBoxToken = '<%= process.env.MAPBOX_TOKEN %>';
+    const username = '<%= username %>'; // needed for btnUtils.js
+    const projectId = '<%= projectId %>'; // needed for postData
+
     const selectedJSON = '<%- JSON.stringify(selected) %>';
-    const areasJSON = '<%- JSON.stringify(areas) %>';
     const citiesJSON = '<%- JSON.stringify(cities) %>';
+    const areasJSON = '<%- JSON.stringify(areas) %>';
     const projectJSON = '<%- JSON.stringify(project) %>';
     
     //const selected = JSON.parse(selectedJSON); // in showInfo.js
     const cities = JSON.parse(citiesJSON); // needed for map
     const areas = JSON.parse(areasJSON); // needed for map
     const project = JSON.parse(projectJSON);
-    //const projects = JSON.parse(projectsJSON) || [];
-
-    const username = '<%= username %>'; // needed for btnUtils.js
-    const projectId = '<%= projectId %>'; // needed for postData
 
     // name and description are already set, but might not be htmlified correctly
     projectNameHtml.innerHTML = jsonHtmlify(project.name);

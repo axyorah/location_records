@@ -13,6 +13,7 @@ const ignoredKeyList = [
 
 const showFullInfo = (item) => {
     // show detailed info on City or Area next to the map
+    // requires globals `regionNameHtml` and `regionInfoHtml`
 
     // set City/Area name
     if ( item.area ) {
@@ -49,7 +50,6 @@ const showFullInfo = (item) => {
 }
 
 if (selectedJSON) {
-    // const item = JSON.parse(jsonEscape(selectedJSON)); // area
     const item = JSON.parse(selectedJSON); // area
     showFullInfo(item);
 }
