@@ -27,11 +27,12 @@ module.exports.show = async (req,res) => {
 }
 
 module.exports.renderNew = async (req,res) => {
-    const { username, projectId } = res.locals;
-    const user = await User.findOne({ username: username }).populate('projects');
-    const project = await Project.findById(projectId);
+    // const { username, projectId } = res.locals;
+    // const user = await User.findOne({ username: username }).populate('projects');
+    // const project = await Project.findById(projectId);
     
-    res.render('./areas/new.ejs', { project, projects: user.projects });
+    // res.render('./areas/new.ejs', { project, projects: user.projects });
+    res.render('./areas/new.ejs');
 }
 
 module.exports.addNew = async (req,res) => {

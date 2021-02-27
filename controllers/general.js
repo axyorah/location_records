@@ -8,8 +8,6 @@ const mbxToken = process.env.MAPBOX_TOKEN;
 
 const baseClient = mbxClient({ accessToken: mbxToken });
 const ExpressError = require('../utils/ExpressError.js');
-const { resolve } = require('url');
-const { request } = require('http');
 
 module.exports.home = async (req,res) => {  
     // by default `/` shows the list of all areas as links;

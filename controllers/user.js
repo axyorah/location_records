@@ -19,13 +19,13 @@ module.exports.register = async (req,res,next) => {
         const project = createDefaultProject(projectToken);
         await project.save();
         user.projects.push(project);
-        res.cookie('projectId', project._id, { sameSite: 'strict' });
 
         const registeredUser = await User.register(user, password);
 
         req.login(registeredUser, (err) => {
             if (err) { return next(err); }
 
+            res.cookie('projectId', project._id, { sameSite: 'strict' });
             req.flash('success', `Welcome, ${username}!`); 
             res.redirect(`/projects/${project._id}`);
         });
