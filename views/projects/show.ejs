@@ -62,6 +62,7 @@
 <script>
     const regionNameHtml = document.getElementById('region-name'); // needed for showInfo.js
     const regionInfoHtml = document.getElementById('region-info'); // needed for showInfo.js
+    const h3s = regionInfoHtml.getElementsByTagName('h3');
 
     const projectNameHtml = document.getElementById('project-name');
     const projectDescrHtml = document.getElementById('project-description');
@@ -83,6 +84,9 @@
     // name and description are already set, but might not be htmlified correctly
     projectNameHtml.innerHTML = jsonHtmlify(project.name);
     projectDescrHtml.innerHTML = jsonHtmlify(project.description);
+    for (i = 0; i < h3s.length; i++) {
+        h3s[i].innerHTML = jsonHtmlify(areas[i].name);
+    }
 
     mapboxgl.accessToken = mapBoxToken;
     const mu = new MapUtils('map-nl', project);
