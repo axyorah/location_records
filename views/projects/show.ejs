@@ -59,7 +59,7 @@
     </div>
 </div>
 
-<script async="false">
+<script>
     const regionNameHtml = document.getElementById('region-name'); // needed for showInfo.js
     const regionInfoHtml = document.getElementById('region-info'); // needed for showInfo.js
 
@@ -75,7 +75,7 @@
     const areasJSON = '<%- JSON.stringify(areas) %>';
     const projectJSON = '<%- JSON.stringify(project) %>';
     
-    //const selected = JSON.parse(selectedJSON); // in showInfo.js
+    const selected = JSON.parse(selectedJSON);
     const cities = JSON.parse(citiesJSON); // needed for map
     const areas = JSON.parse(areasJSON); // needed for map
     const project = JSON.parse(projectJSON);
@@ -87,12 +87,12 @@
     mapboxgl.accessToken = mapBoxToken;
     const mu = new MapUtils('map-nl', project);
     mu.populateMapWithCitiesOnEvent(areas, 'load');
-</script>
-<!-- <script async="false" src="/js/mapSetup.js"></script>
-<script async="false" src="/js/mapGetInfo.js"></script> -->
-<script async="false" src="/js/btnUtils.js"></script>
-<script async="false" src="/js/showInfoUtils.js"></script>
-<script async="false" src="/js/showInfo.js"></script>
-<script>
-    mu.addCityInfoToDOMOnEvent(areas, regionNameHtml, regionInfoHtml, 'click')
+
+    // add city info on map click
+    mu.addCityInfoToDOMOnEvent(areas, regionNameHtml, regionInfoHtml, 'click');
+
+    // add area info if path is `/projects/<projectId>/?areaId=<areaId>`    
+    if (selected) {
+        addDataToDOM(selected, regionNameHtml, regionInfoHtml);
+    }
 </script>
