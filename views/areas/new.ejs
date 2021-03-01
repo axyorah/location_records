@@ -56,9 +56,5 @@
 
     <script>
         const genInfoRootHtml = document.getElementById('area[generalInfo]');
-        const mapBoxToken = '<%= process.env.MAPBOX_TOKEN %>';
-        const projectId = '<%= projectId %>';
+        showGenInfoInit(genInfoRootHtml);
     </script>
-    <script src="/js/textUtils.js"></script>
-    <script src="/js/btnUtils.js"></script>
-    <script src="/js/addInfo.js"></script>

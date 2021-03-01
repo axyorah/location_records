@@ -1,4 +1,4 @@
-const showGenInfoInit = () => {
+const showGenInfoInit = (genInfoRootHtml) => {
     const found = genInfoRootHtml.id.match(/^(?<region>.*)\[generalInfo\]$/);
     const name = `${found.groups.region}[General Information]`;
 
@@ -11,4 +11,4 @@ const showGenInfoInit = () => {
     genInfoRootHtml.appendChild(ul);    
 }
 
-showGenInfoInit();
+showGenInfoInit(genInfoRootHtml);
