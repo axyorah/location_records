@@ -75,7 +75,7 @@
     const areasJSON = '<%- JSON.stringify(areas) %>';
     const projectJSON = '<%- JSON.stringify(project) %>';
     
-    const selected = JSON.parse(selectedJSON);
+    //const selected = JSON.parse(selectedJSON); // below
     const cities = JSON.parse(citiesJSON); // needed for map
     const areas = JSON.parse(areasJSON); // needed for map
     const project = JSON.parse(projectJSON);
@@ -92,7 +92,8 @@
     mu.addCityInfoToDOMOnEvent(areas, regionNameHtml, regionInfoHtml, 'click');
 
     // add area info if path is `/projects/<projectId>/?areaId=<areaId>`    
-    if (selected) {
+    if (selectedJSON) {
+        const selected = JSON.parse(selectedJSON);
         addDataToDOM(selected, regionNameHtml, regionInfoHtml);
     }
 </script>
