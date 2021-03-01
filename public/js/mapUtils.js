@@ -14,12 +14,15 @@ class MapUtils {
         return this.map;
     }
 
-    getAreaSource = function (area) {
+    getAreaSource = function (area, exceptCities) {
+        exceptCities = exceptCities ? exceptCities : [];
         return {
             'type': 'geojson',
             'data': {
                 'type': 'FeatureCollection',
-                'features': area.cities.map(city => ({
+                'features': area.cities
+                .filter(city => !exceptCities.map(exCity => exCity._id).includes(city._id))
+                .map(city => ({
                     'type': 'Feature',
                     'geometry': city.geometry,
                     'properties': {
@@ -52,6 +55,7 @@ class MapUtils {
     }
 
     addPopupCallback = function (popup) {
+        // callback associated with adding popup
         return (evt) => {
             // this: MapUtils
             let coordinates = evt.features[0].geometry.coordinates.slice();
@@ -72,6 +76,7 @@ class MapUtils {
     }
 
     removePopupCallback = function (popup) {
+        // callback associated with removing popup
         return (evt) => {
             popup.remove();
         }
@@ -171,38 +176,12 @@ class MapUtils {
             this.map.removeSource(`cities-${area.name}`);
 
             // add again all markers EXCEPT for selected city
-            this.map.addSource(`cities-${area.name}`, {
-                'type': 'geojson',
-                'data': {
-                    'type': 'FeatureCollection',
-                    'features': area.cities
-                            .filter(city => city._id !== selected._id)
-                            .map(city => ({
-                        'type': 'Feature',
-                        'geometry': city.geometry,
-                        'properties': {
-                            '_id': city._id,
-                            'name': city.name,
-                            'description': 
-                                `<strong>${jsonHtmlify(city.name)} `+
-                                `(${jsonHtmlify(city.code)})</strong><br>`+
-                                `${jsonHtmlify(city.quickInfo)}`
-                        }
-                    })),
-                }
-            });
+            const source = this.getAreaSource(area, [selected]);
+            this.map.addSource(`cities-${area.name}`, source );
 
             // add a layer showing the places.
-            this.map.addLayer({
-                'id': `cities-${area.name}`,
-                'type': 'circle',
-                'source': `cities-${area.name}`,
-                'paint': { 
-                    'circle-color': area.color,
-                    'circle-radius': 8,
-                    'circle-opacity': 0.7,
-                }
-            });
+            const layer = this.getAreaLayer(area);
+            this.map.addLayer( layer );
         });
     }
 
