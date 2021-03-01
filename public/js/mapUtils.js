@@ -40,20 +40,14 @@ const addInfoToDOM = (item, titleHtml, infoHtml) => {
         titleHtml.innerHTML =  
             `${jsonHtmlify(item.name)} (${jsonHtmlify(item.code)})`;
 
-        // if user is loggen in - add edit buttons
-        if ( username !== 'anonymous' ) {
-            const btns = getCityButtons(item, ['back', 'edit', 'del']);
-            titleHtml.appendChild(btns);
-        }        
+        const btns = getCityButtons(item, ['back', 'edit', 'del']);
+        titleHtml.appendChild(btns);     
     } else if ( item.cities ) {
         // areas have ref to child cities        
-        titleHtml.innerHTML =  `${jsonHtmlify(item.name)}`;
+        titleHtml.innerHTML = `${jsonHtmlify(item.name)}`;
 
-        // if user is loggen in - add edit buttons
-        if ( username !== 'anonymous' ) {
-            const btns = getAreaButtons(item, ['edit', 'del']);
-            titleHtml.appendChild(btns);
-        }
+        const btns = getAreaButtons(item, ['edit', 'del']);
+        titleHtml.appendChild(btns);
     } else {
         return;
     }

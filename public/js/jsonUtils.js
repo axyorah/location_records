@@ -8,7 +8,7 @@ const jsonTextify = (str) => {
         .replace(/\\t/g, "\t")
         .replace(/&quot;/g, "\"")
         .replace(/&apos;/g, "\u02c8")
-        ;        
+        ;
 }
 
 // for html elements that do have .innerHTML attr (<p>, <textarea>)
