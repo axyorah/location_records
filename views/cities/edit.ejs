@@ -88,14 +88,19 @@
 
 
     <script>
-        // get DOM
+        // DOM
         const nameHtml = document.getElementById('city[name]');
         const codeHtml = document.getElementById('city[code]');
         const quickInfoHtml = document.getElementById('city[quickInfo]');
         const genInfoRootHtml = document.getElementById('city[General Information]');
+
+        const latInpt = document.getElementById('city[lat]');
+        const lngInpt = document.getElementById('city[lng]');
         
-        // get db entries
-        const mapBoxToken = '<%= process.env.MAPBOX_TOKEN %>';
+        const areaSelect = document.getElementById('city[area]');
+        const areaOpts = areaSelect.getElementsByTagName('option');
+
+        // DB
         const selectedJSON = '<%- JSON.stringify(selected) %>';  
         const citiesJSON = '<%- JSON.stringify(cities) %>';      
         const areasJSON = '<%- JSON.stringify(areas) %>';
@@ -106,22 +111,33 @@
         const areas = JSON.parse(areasJSON);
         const project = JSON.parse(projectJSON);
 
-        // get locals
-        const projectId = '<%= projectId %>';
-
-        // render text
+        // text
         // unescape (textify) db entry for <input type="text"> elements;
         nameHtml.value = jsonTextify(selected.name);
         codeHtml.value = jsonTextify(selected.code);
         // set db entries as .innerHTML for <textarea> elements;
-        quickInfoHtml.innerHTML = selected.quickInfo;
-        // 'General Information' is handled separately in `editInfo*.js`
+        quickInfoHtml.innerHTML = selected.quickInfo;        
+        // area names have already been set, but might not be htmlified correctly
+        // recall: areaOpts[0].innerHTML is 'Select Area'
+        for (let i = 0; i < areas.length; i++) {
+            areaOpts[i+1].innerHTML = jsonHtmlify(areas[i].name);
+        }
+        // 'General Information' is handled separately
+        //showGenInfoInit(genInfoRootHtml);
+        showGenInfoInitForEdit(selected['General Information'], genInfoRootHtml);
+
+        // map
+        const mapBoxToken = '<%= process.env.MAPBOX_TOKEN %>';
+        mapboxgl.accessToken = mapBoxToken;
+
+        const mu = new MapUtils('map-nl', project);
+        mu.populateMapWithCitiesOnEvent(areas, 'load');
+
+        mu.removeCityFromSourcesOnEvent(selected, 'load'); // instead of a circle we'll add movabel marker
+        mu.addMarkerAtLngLatToMapOnEvent(selected.geometry.coordinates, 'load');
+
+        mu.addNewMarkerToMapOnEvent('click');
+        mu.addNewMarkerCoordinatesToFormOnEvent(latInpt, lngInpt, 'click');
+        mu.removeLastMarkerOnKey('Escape');
 
     </script>
-    <!-- <script src="/js/jsonUtils.js"></script> -->
-    <script src="/js/mapSetup.js"></script>
-    <script src="/js/mapEditCity.js"></script>
-    <script src="/js/textUtils.js"></script>
-    <script src="/js/btnUtils.js"></script>
-    <script src="/js/editInfoUtils.js"></script>
-    <script src="/js/editInfo.js"></script>

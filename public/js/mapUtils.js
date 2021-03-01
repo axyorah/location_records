@@ -160,4 +160,58 @@ class MapUtils {
             }
         })
     }
+
+    removeCityFromSourcesOnEvent = function (selected, event) {
+        this.map.on(event, (evt) => {
+            // get area corresponding to the selected city
+            const area = areas.filter(area => area._id === selected.area)[0];
+
+            // remove all markers that belong to the area of the selected city
+            this.map.removeLayer(`cities-${area.name}`);
+            this.map.removeSource(`cities-${area.name}`);
+
+            // add again all markers EXCEPT for selected city
+            this.map.addSource(`cities-${area.name}`, {
+                'type': 'geojson',
+                'data': {
+                    'type': 'FeatureCollection',
+                    'features': area.cities
+                            .filter(city => city._id !== selected._id)
+                            .map(city => ({
+                        'type': 'Feature',
+                        'geometry': city.geometry,
+                        'properties': {
+                            '_id': city._id,
+                            'name': city.name,
+                            'description': 
+                                `<strong>${jsonHtmlify(city.name)} `+
+                                `(${jsonHtmlify(city.code)})</strong><br>`+
+                                `${jsonHtmlify(city.quickInfo)}`
+                        }
+                    })),
+                }
+            });
+
+            // add a layer showing the places.
+            this.map.addLayer({
+                'id': `cities-${area.name}`,
+                'type': 'circle',
+                'source': `cities-${area.name}`,
+                'paint': { 
+                    'circle-color': area.color,
+                    'circle-radius': 8,
+                    'circle-opacity': 0.7,
+                }
+            });
+        });
+    }
+
+    addMarkerAtLngLatToMapOnEvent = function(lngLat, event) {
+        this.map.on(event, (evt) => {
+            let marker = new mapboxgl.Marker()
+                .setLngLat(lngLat) // geojson: geometry.coordinates
+                .addTo(this.map);
+            this.markers.push(marker);
+        });  
+    }
 }
