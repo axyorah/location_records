@@ -1,5 +1,3 @@
-//mapboxgl.accessToken = mapBoxToken;
-
 class MapUtils {
     constructor(containerId, project) {
         this.map = new mapboxgl.Map({

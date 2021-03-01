@@ -93,6 +93,7 @@
 
 
     <script>
+        // DOM
         const titleHtml = document.getElementById('title');
         const projectNameHtml = document.getElementById('project[name]');
         const projectDescrHtml = document.getElementById('project[description]')
@@ -102,28 +103,30 @@
         const mapStyleHtml = document.getElementById('project[mapStyle]');
         const mapUrlHtml = document.getElementById('project[mapUrl]');
         const tokenPHtml = document.getElementById('project-token');
-        const tokenInptHtml = undefined;//document.getElementById('project[token]');
-
+        
         const mapStyleList = document.getElementById('map-menu');
         const mapStyles = mapStyleList.getElementsByTagName('input');
-
         const mapUrlBtn = document.getElementById('map-url-btn');
 
-        const mapBoxToken = '<%= process.env.MAPBOX_TOKEN %>';
-        const username = '<%= username %>';
+        // text fields have already been set, but might not be htmlified correctly
+        titleHtml.innerHTML = `Edit "${jsonHtmlify(project.name)}"`;
+        projectNameHtml.value = jsonTextify(project.name);
+        projectDescrHtml.innerHTML = jsonHtmlify(project.description);
 
+        // DB elements
         const projectJSON = '<%- JSON.stringify(project) %>';
         const areasJSON = '<%- JSON.stringify(areas) %>';
-        const citiesJSON = '<%- JSON.stringify(cities) %>';
 
         const project = JSON.parse(projectJSON);
         const areas = JSON.parse(areasJSON);
-        const cities = JSON.parse(citiesJSON);
 
-        titleHtml.innerHTML = `Edit "${jsonHtmlify(project.name)}"`;
-        projectNameHtml.value = jsonTextify(project.name);
-        projectDescrHtml.innerHTML = project.description;
+        // map
+        const mapBoxToken = '<%= process.env.MAPBOX_TOKEN %>';
+        mapboxgl.accessToken = mapBoxToken;
+        const mu = new MapUtils('map-nl', project);
+        const map = mu.getMap();
+
+        mu.populateMapWithCitiesOnEvent(areas, 'styledata');
+        updateFormInputsOnMapConfigChange(map, lngHtml, latHtml, zoomHtml);
+        updateMapStyle(map, mapStyles, mapUrlBtn, mapUrlHtml, mapStyleHtml);
     </script>
-    <script src="/js/mapSetup.js"></script>
-    <script src="/js/newProjectUtils.js"></script>
-    <script src="/js/btnUtils.js"></script>

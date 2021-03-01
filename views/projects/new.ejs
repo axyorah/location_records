@@ -79,6 +79,7 @@
 
 
     <script>
+        // DOM
         const lngHtml = document.getElementById('project[lng]');
         const latHtml = document.getElementById('project[lat]');
         const zoomHtml = document.getElementById('project[zoom]');
@@ -89,16 +90,19 @@
 
         const mapStyleList = document.getElementById('map-menu');
         const mapStyles = mapStyleList.getElementsByTagName('input');
-
         const mapUrlBtn = document.getElementById('map-url-btn');
 
-        const mapBoxToken = '<%= process.env.MAPBOX_TOKEN %>';
-        const username = '<%= username %>';
-
+        // DB elements
         const projectJSON = '<%- JSON.stringify(project) %>';
-        const project = JSON.parse(projectJSON);        
-        const areas = [];
+        const project = JSON.parse(projectJSON);
+        
+        // map
+        const mapBoxToken = '<%= process.env.MAPBOX_TOKEN %>';
+        mapboxgl.accessToken = mapBoxToken;
+        const mu = new MapUtils('map-nl', project);
+        const map = mu.getMap();
+
+        updateFormInputsOnMapConfigChange(map, lngHtml, latHtml, zoomHtml);
+        updateMapStyle(map, mapStyles, mapUrlBtn, mapUrlHtml, mapStyleHtml);
+        addToken(tokenPHtml, tokenInptHtml);
     </script>
-    <script src="/js/mapSetup.js"></script>
-    <script src="/js/newProjectUtils.js"></script>
-    <script src="/js/btnUtils.js"></script>

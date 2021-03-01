@@ -34,15 +34,25 @@ const getOverlayedMapStyle = (url, lng, lat) => {
     };
 }
 
-const overlayImage = (url) => {
+const updateFormInputsOnMapConfigChange = (map, lngHtml, latHtml, zoomHtml) => {
+    for (let event of ['load', 'move']) {
+        map.on(event, function () {
+            lngHtml.value = map.getCenter().lng;
+            latHtml.value = map.getCenter().lat;
+            zoomHtml.value = map.getZoom();
+        });
+    }    
+}
+
+const overlayImage = (map, imgUrl, mapUrlHtml) => {
     const img = document.createElement('img');
-    img.src = url;
+    img.src = imgUrl;
     img.onload = () => {
         const aspectRatio = img.width / img.height;
         const lng = aspectRatio > 1 ? 180 : 89 * aspectRatio * 2;
         const lat = aspectRatio > 1 ? 180 / aspectRatio / 2 : 89;
 
-        const mapStyle = getOverlayedMapStyle(url, lng, lat);
+        const mapStyle = getOverlayedMapStyle(imgUrl, lng, lat);
     
         map.setStyle(mapStyle);
         map.setZoom(0);  
@@ -54,54 +64,46 @@ const overlayImage = (url) => {
     };
 }
 
-map.on('load', function () {
-    lngHtml.value = map.getCenter().lng;
-    latHtml.value = map.getCenter().lat;
-    zoomHtml.value = map.getZoom();
-});
-
-map.on('move', function () {
-    lngHtml.value = map.getCenter().lng;
-    latHtml.value = map.getCenter().lat;
-    zoomHtml.value = map.getZoom();
-});
-
-const switchLayer = (layer) => {
-    const layerId = layer.target.id;
-    map.setStyle('mapbox://styles/mapbox/' + layerId);
-    mapStyleHtml.value = layerId;
-    mapUrlHtml.value = '';
-}
- 
-for (let i = 0; i < mapStyles.length; i++) {
-    mapStyles[i].onclick = switchLayer;
-}
-
-mapUrlBtn.addEventListener('click', function () {
-    if ( mapUrlHtml.value ) {
-        //const url = 'https://miro.medium.com/max/2400/1*vAKUjotJ3K6djUeEQIwyHw.jpeg';
-        //const url = 'https://images.unsplash.com/photo-1613929905911-96040610a54d?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=701&q=80';
-        const url = mapUrlHtml.value;
-        overlayImage(url);
+const updateMapStyle = (map, mapStyles, mapUrlBtn, mapUrlHtml, mapStyleHtml) => {
+    // default styles
+    for (let i = 0; i < mapStyles.length; i++) {
+        mapStyles[i].addEventListener('click', (evt) => {
+            const layerId = evt.target.id;
+            map.setStyle('mapbox://styles/mapbox/' + layerId);
+            mapStyleHtml.value = layerId;
+            mapUrlHtml.value = '';
+        })
     }
-});
+
+    // custom img
+    mapUrlBtn.addEventListener('click', () => {
+        if ( mapUrlHtml.value ) {
+            //const url = 'https://miro.medium.com/max/2400/1*vAKUjotJ3K6djUeEQIwyHw.jpeg';
+            //const url = 'https://images.unsplash.com/photo-1613929905911-96040610a54d?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=701&q=80';
+            const imgUrl = mapUrlHtml.value;
+            overlayImage(map, imgUrl, mapUrlHtml);
+        }
+    });
+}
 
 const getToken = (len) => {
-    token = [`${username}-`.slice(0,len)]
-    for (let i = username.length + 1; i < len; i ++) {
+    token = [];
+    for (let i = 0; i < len; i ++) {
         let chr = Math.floor((122 - 48)*Math.random() + 48);
         while ( (chr >= 58 && chr <= 64) || (chr >= 91 & chr <= 96) ) {
             chr = Math.floor((122 - 48)*Math.random() + 48);
         }
         token.push(String.fromCharCode(chr));        
     }
-    return token;
+    return token.join('');
 };
 
-window.addEventListener('load', function () {
-    if ( tokenInptHtml ) {
-        const token = getToken(64);
-        tokenPHtml.innerText = token.join('');
-        tokenInptHtml.value = token.join('');
-    }
-});
+const addToken = (tokenPHtml,tokenInptHtml) => {
+    window.addEventListener('load', function () {
+        if ( tokenInptHtml ) {
+            const token = getToken(64);
+            tokenPHtml.innerText = token;
+            tokenInptHtml.value = token;
+        }
+    });
+}
