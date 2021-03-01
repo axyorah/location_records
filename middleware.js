@@ -87,7 +87,7 @@ module.exports.isAreaInDB = catchAsync(async (req,res,next) => {
 
 module.exports.isCityInDB = catchAsync(async (req,res,next) => {
     const { id } = req.params;
-    if ( !(await City.find.findById(id)) ) {
+    if ( !(await City.findById(id)) ) {
         throw new ExpressError('City with Specified ID Does Not Exist', 400);
     } else {
         next();
