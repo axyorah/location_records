@@ -108,17 +108,17 @@
         const mapStyles = mapStyleList.getElementsByTagName('input');
         const mapUrlBtn = document.getElementById('map-url-btn');
 
-        // text fields have already been set, but might not be htmlified correctly
-        titleHtml.innerHTML = `Edit "${jsonHtmlify(project.name)}"`;
-        projectNameHtml.value = jsonTextify(project.name);
-        projectDescrHtml.innerHTML = jsonHtmlify(project.description);
-
         // DB elements
         const projectJSON = '<%- JSON.stringify(project) %>';
         const areasJSON = '<%- JSON.stringify(areas) %>';
 
         const project = JSON.parse(projectJSON);
         const areas = JSON.parse(areasJSON);
+
+        // text fields have already been set, but might not be htmlified correctly
+        titleHtml.innerHTML = `Edit "${jsonHtmlify(project.name)}"`;
+        projectNameHtml.value = jsonTextify(project.name);
+        projectDescrHtml.innerHTML = project.description;
 
         // map
         const mapBoxToken = '<%= process.env.MAPBOX_TOKEN %>';
