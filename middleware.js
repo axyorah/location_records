@@ -1,5 +1,6 @@
 const { citySchema, areaSchema } = require('./validationSchemas.js');
 const ExpressError = require('./utils/ExpressError.js');
+const catchAsync = require('./utils/catchAsync.js');
 const City = require('./models/city.js');
 const Area = require('./models/area.js');
 const User = require('./models/user.js');
@@ -25,7 +26,7 @@ module.exports.validateCity = (req,res,next) => {
     if (error) {
         const msg = error.details.map(err => err.message).join(',');
         throw new ExpressError(msg, 400);
-    } else {
+    }  else {
         next();
     }
 }
@@ -49,44 +50,46 @@ module.exports.isLoggedIn = (req,res,next) => {
     if (!req.isAuthenticated()) {
         req.flash('error', 'You must be logged in');
         return res.redirect('/users/login');
+    } else {
+        next();
     }
-    next();
 }
 
-module.exports.isProjectDefined = async (req,res,next) => {
+module.exports.isProjectDefined = (req,res,next) => {
     if(!res.locals ||
         res.locals.projectId === undefined || 
         res.locals.projectId === 'undefined' ||
         res.locals.projectId === '"undefined"') {
         req.flash('error', 'Select Project First');
         return res.redirect('/');
-    } 
-    next();
+    } else {
+        next();
+    }
 }
 
-module.exports.isProjectInDB = async (req,res,next) => {
+module.exports.isProjectInDB = catchAsync(async (req,res,next) => {
     const { projectId } = req.params;
-    if ( await Project.findById(projectId)) {
-        next();
-    } else {
+    if ( !(await Project.findById(projectId)) ) {
         throw new ExpressError('Project with Specified ID Does Not Exist', 400);
-    }
-}
-
-module.exports.isAreaInDB = async (req,res,next) => {
-    const { id } = req.params;
-    if ( await Area.findById(id)) {
-        next();
     } else {
+        next();
+    }
+})
+
+module.exports.isAreaInDB = catchAsync(async (req,res,next) => {
+    const { id } = req.params;
+    if ( !(await Area.findById(id)) ){
         throw new ExpressError('Area with Specified ID Does Not Exist', 400);
-    }
-}
-
-module.exports.isCityInDB = async (req,res,next) => {
-    const { id } = req.params;
-    if ( await City.findById(id)) {
-        next();
     } else {
-        throw new ExpressError('City with Specified ID Does Not Exist', 400);
+        next();
     }
-}
+})
+
+module.exports.isCityInDB = catchAsync(async (req,res,next) => {
+    const { id } = req.params;
+    if ( !(await City.find.findById(id)) ) {
+        throw new ExpressError('City with Specified ID Does Not Exist', 400);
+    } else {
+        next();
+    }
+})
