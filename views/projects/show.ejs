@@ -83,9 +83,16 @@
     // name and description are already set, but might not be htmlified correctly
     projectNameHtml.innerHTML = jsonHtmlify(project.name);
     projectDescrHtml.innerHTML = jsonHtmlify(project.description);
+
+    mapboxgl.accessToken = mapBoxToken;
+    const mu = new MapUtils('map-nl', project);
+    mu.populateMapWithCitiesOnEvent(areas, 'load');
 </script>
-<script async="false" src="/js/mapSetup.js"></script>
-<script async="false" src="/js/mapGetInfo.js"></script>
+<!-- <script async="false" src="/js/mapSetup.js"></script>
+<script async="false" src="/js/mapGetInfo.js"></script> -->
 <script async="false" src="/js/btnUtils.js"></script>
 <script async="false" src="/js/showInfoUtils.js"></script>
 <script async="false" src="/js/showInfo.js"></script>
+<script>
+    mu.addCityInfoToDOMOnEvent(areas, regionNameHtml, regionInfoHtml, 'click')
+</script>
