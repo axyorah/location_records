@@ -6,6 +6,8 @@ class MapUtils {
             center: [project.lng, project.lat],
             zoom: project.zoom
         });
+
+        this.markers = [];
     }
 
     getMap = function () {
@@ -120,6 +122,42 @@ class MapUtils {
         this.map.on(event, () => {
             // this: MapUtils
             this.addCityInfoToDOM(areas, titleHtml, infoHtml);
+        })
+    }
+
+    addNewMarkerToMapOnEvent = function (event) {
+        this.map.on(event, (evt) => {
+            const lngLat = [evt.lngLat.lng, evt.lngLat.lat];
+        
+            // remove previous marker
+            if (this.markers.length) {
+                let marker = this.markers.pop();
+                marker.remove();            
+            }
+    
+            // create/add new marker
+            let marker = new mapboxgl.Marker()
+                .setLngLat(lngLat)
+                .addTo(this.map);
+    
+            this.markers.push(marker);
+        })
+    }
+
+    addNewMarkerCoordinatesToFormOnEvent = function (latInpt, lngInpt, event) {
+        this.map.on(event, (evt) => {
+            // set lat and lng vals in form inputs
+            latInpt.value = evt.lngLat.lat;
+            lngInpt.value = evt.lngLat.lng;
+        })
+    }
+
+    removeLastMarkerOnKey = function (key) {
+        document.addEventListener('keydown', (evt) => {
+            if ( evt.key === key && this.markers.length ) {
+                const marker = this.markers.pop();
+                marker.remove();
+            }
         })
     }
 }

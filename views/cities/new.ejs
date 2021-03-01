@@ -64,9 +64,15 @@
 
 
     <script>
+        // DOM
         const genInfoRootHtml = document.getElementById('city[generalInfo]');
+        const latInpt = document.getElementById('city[lat]');
+        const lngInpt = document.getElementById('city[lng]');
 
-        const mapBoxToken = '<%= process.env.MAPBOX_TOKEN %>';
+        const areaSelect = document.getElementById('city[area]');
+        const areaOpts = areaSelect.getElementsByTagName('option');
+
+        // DB        
         const areasJSON = '<%- JSON.stringify(areas) %>';
         const citiesJSON = '<%- JSON.stringify(cities) %>';
         const projectJSON = '<%- JSON.stringify(project) %>';
@@ -75,11 +81,22 @@
         const areas = JSON.parse(areasJSON);
         const project = JSON.parse(projectJSON);
 
-        const projectId = '<%= projectId %>';
+        // text
+        // area names have already been set, but might not be htmlified correctly
+        // recall: areaOpts[0].innerHTML is 'Select Area'
+        for (let i = 0; i < areas.length; i++) {
+            areaOpts[i+1].innerHTML = jsonHtmlify(areas[i].name);
+        }
+        showGenInfoInit(genInfoRootHtml);
+        //showGenInfoInitForEdit('', genInfoRootHtml);
+
+        // map
+        const mapBoxToken = '<%= process.env.MAPBOX_TOKEN %>';
+        mapboxgl.accessToken = mapBoxToken;
+
+        const mu = new MapUtils('map-nl', project);
+        mu.populateMapWithCitiesOnEvent(areas, 'load');
+        mu.addNewMarkerToMapOnEvent('click');
+        mu.addNewMarkerCoordinatesToFormOnEvent(latInpt, lngInpt, 'click');
+        mu.removeLastMarkerOnKey('Escape');
     </script>
-    <!-- <script src="/js/jsonUtils.js"></script> -->
-    <script src="/js/mapSetup.js"></script>
-    <script src="/js/mapNewCity.js"></script>
-    <script src="/js/textUtils.js"></script>
-    <script src="/js/btnUtils.js"></script>
-    <script src="/js/addInfo.js"></script>
