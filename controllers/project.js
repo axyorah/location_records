@@ -149,6 +149,9 @@ module.exports.delete = async (req,res) => {
     const areas = await Area.find({ project });
     const cities = await City.find({ project });
 
+    // remove prjectId from cookies    
+    res.cookie('projectId', undefined, { sameSite: 'strict' });
+
     // delete project and its children only if 
     // there's only one user who has access to it
     if ( (await User.find({ projects: project._id })).length === 1 ) {
