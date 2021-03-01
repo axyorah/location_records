@@ -3,7 +3,7 @@
     <div class="row">
         <div class="col-xl-8 offset-xl-2">
 
-            <h1 class="my-5">Edit Area</h1>
+            <h1 class="my-5" id="title">Edit "<%= selected.name %>"</h1>
 
             <form method="POST" action="/projects/<%= projectId %>/areas/<%= selected._id %>/edit" class="needs-validation" novalidate>
 
@@ -74,6 +74,7 @@
 
     <script>
         // get DOM
+        const titleHtml = document.getElementById('title');
         const nameHtml = document.getElementById('area[name]');
         const codeHtml = document.getElementById('area[code]');
         const quickInfoHtml = document.getElementById('area[quickInfo]');
@@ -84,21 +85,14 @@
         const selectedJSON = '<%- JSON.stringify(selected) %>';  
         const citiesJSON = '<%- JSON.stringify(cities) %>';      
         const areasJSON = '<%- JSON.stringify(areas) %>';
-
         const selected = JSON.parse(selectedJSON);
-
-        // get locals
-        const projectId = '<%= projectId %>';
 
         // unescape (textify) db entry for <input type="text"> elements;
         nameHtml.value = jsonTextify(selected.name);
         codeHtml.value = jsonTextify(selected.code);
-        // set db entries as .innerHTML for <textarea> elements;
+        // set db entries as .innerHTML for <h1>,<p>,<textarea> elements;
+        titleHtml.innerHTML = `Edit "${jsonHtmlify(selected.name)}"`; // already set, but possible not correctly displayed
         quickInfoHtml.innerHTML = selected.quickInfo;
-        // 'General Information' is handled separately in `editInfo*.js`
+        // 'General Information' is handled separately 
+        showGenInfoInitForEdit(selected['General Information'], genInfoRootHtml);
     </script>
-    <!-- <script src="/js/jsonUtils.js"></script> -->
-    <script src="/js/textUtils.js"></script>
-    <script src="/js/btnUtils.js"></script>
-    <script src="/js/editInfoUtils.js"></script>
-    <script src="/js/editInfo.js"></script>

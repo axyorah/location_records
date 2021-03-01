@@ -49,6 +49,11 @@ always have **alternating** `[<idx>]` and `[val]`. This is similar to `home.ejs`
 id's with suffix `[key]`.
 */
 
+const FORMFIELDROOTS = [
+    'city[General Information]',
+    'area[General Information]'
+]
+
 const addTextForEdit = (parent, txt) => {
     const parentName = parent.id.split('_')[0]; // should be 'li'
     const grandParent = parent.parentNode;
@@ -83,9 +88,9 @@ const addArrayForEdit = (parent, arr, ignoredKeyList, lvl) => {
         const li = document.createElement('li');
         li.setAttribute('class', 'list-group-item');
         li.setAttribute('id', `${baseName}[${i}]_li`); 
-        ul.appendChild(li); // set parent-child before `resolveSingleItem()`!
+        ul.appendChild(li); // set parent-child before `resolveSingleItemForEdit()`!
         
-        resolveSingleItem(li, item, ignoredKeyList, lvl);
+        resolveSingleItemForEdit(li, item, ignoredKeyList, lvl);
     }
 
     // add edit buttons unless we're at a root of `General Information`
@@ -110,11 +115,11 @@ const addKeyValPairToLi = (parent, key, val, ignoredKeyList, lvl) => {
         parent.appendChild(titleArea)
 
         // add val - info
-        resolveSingleItem(parent, val, ignoredKeyList, lvl+1);
+        resolveSingleItemForEdit(parent, val, ignoredKeyList, lvl+1);
     }
 }
 
-const addCitiesToUL = (ul, obj, ignoredKeyList, lvl) => {
+const addCitiesToULForEdit = (ul, obj, ignoredKeyList, lvl) => {
     if (obj.cities) {
         const baseName = 'cities';
         for (let i = 0; i < obj.cities.length; i++) {
@@ -123,7 +128,7 @@ const addCitiesToUL = (ul, obj, ignoredKeyList, lvl) => {
             const li = document.createElement('li');
             li.setAttribute('class', 'list-group-item');
             li.setAttribute('id', `${baseName}[${i}]_li`);
-            ul.appendChild(li); // set parent - child before `resolveSingleItem()`
+            ul.appendChild(li); // set parent - child before `resolveSingleItemForEdit()`
 
             // add key - title
             const titleArea = getTitleArea(parentName);
@@ -131,7 +136,7 @@ const addCitiesToUL = (ul, obj, ignoredKeyList, lvl) => {
             li.appendChild(titleArea)
 
             // add val - info
-            resolveSingleItem(li, city, ignoredKeyList, lvl+1);
+            resolveSingleItemForEdit(li, city, ignoredKeyList, lvl+1);
         }
     }
 }
@@ -158,11 +163,11 @@ const addObjectForEdit = (parent, obj, ignoredKeyList, lvl) => {
             kv[key] = obj[key];
             return kv;
         });
-        resolveSingleItem(parent, arr, ignoredKeyList, lvl);
+        resolveSingleItemForEdit(parent, arr, ignoredKeyList, lvl);
 
     } else if ( keys[0] === 'cities' ) {
         // if the key is 'cities' - append them to grandParent
-        addCitiesToUL(grandParent, obj.cities, ignoredKeyList, lvl);
+        addCitiesToULForEdit(grandParent, obj.cities, ignoredKeyList, lvl);
 
     } else {
         // if there is exactly one valid key - treat it normally
@@ -178,7 +183,7 @@ const addObjectForEdit = (parent, obj, ignoredKeyList, lvl) => {
     }
 }
 
-const resolveSingleItem = (parent, item, ignoredKeyList, lvl) => {
+const resolveSingleItemForEdit = (parent, item, ignoredKeyList, lvl) => {
     ignoredKeyList = (ignoredKeyList === undefined) ? [] : ignoredKeyList;
     lvl = (lvl === undefined) ? 5 : Math.min(lvl, 5);    
 
@@ -207,4 +212,12 @@ const resolveSingleItem = (parent, item, ignoredKeyList, lvl) => {
         console.log('OBJECT')
         console.log(parent)
     }
+}
+
+const showGenInfoInitForEdit = (item, genInfoRootHtml) => {
+    if ( typeof(item) === "string" || typeof(item) === "number" ) {
+        resolveSingleItemForEdit(genInfoRootHtml, [item], ignoredDBKeys);
+    } else {
+        resolveSingleItemForEdit(genInfoRootHtml, item, ignoredDBKeys);
+    }    
 }
