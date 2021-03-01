@@ -31,8 +31,6 @@ async function postData(url, data) {
 
 function addDataToDOM (item, titleHtml, infoHtml) {
     // show detailed info on City or Area next to the map
-    // requires globals `regionNameHtml` and `regionInfoHtml`
-
     // set City/Area name
     if ( item.area ) {
         // cities have ref to parent area        
