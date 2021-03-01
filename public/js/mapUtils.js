@@ -110,7 +110,7 @@ class MapUtils {
             this.map.on('click', `cities-${area.name}`, function (evt) {
                 const id = evt.features[0].properties._id;
                 postData(`/projects/${projectId}/cities/${id}`, { id })
-                    .then((data) => addInfoToDOM(data, titleHtml, infoHtml))
+                    .then((data) => addDataToDOM(data, titleHtml, infoHtml))
                     .catch((err) => console.log(err));
             });
         }  
