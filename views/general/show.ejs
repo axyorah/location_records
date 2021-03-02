@@ -10,7 +10,9 @@
 
     <div class="col-xl-8 pt-5">
         <div class="card w-100">
-            <h1 id="region-name" class="card-title m-4"><%= selected.code %></h1>
+            <h1 id="region-name" class="d-flex justify-content-between m-4">
+                <%= selected.code %>
+            </h1>
             <div class="card-body" id="region-info"></div>
         </div>
     </div>
@@ -22,16 +24,27 @@
     const regionNameHtml = document.querySelector('#region-name');
     const regionInfoHtml = document.querySelector('#region-info');
 
-    const mapBoxToken = '<%= process.env.MAPBOX_TOKEN %>';
     const selectedJSON = '<%- JSON.stringify(selected) %>';
     const areasJSON = '<%- JSON.stringify(areas) %>';
     const citiesJSON = '<%- JSON.stringify(cities) %>';
+    const projectJSON = '<%- JSON.stringify(project) %>';
 
+    const selected = JSON.parse(selectedJSON);
     const cities = JSON.parse(citiesJSON);
     const areas = JSON.parse(areasJSON);
+    const project = JSON.parse(projectJSON);
+
+    const username = '<%= username %>';
+    const projectId = '<%= projectId %>';
+
+    // add selected to DOM
+    addDataToDOM(selected, regionNameHtml, regionInfoHtml);
+
+    // map
+    const mapBoxToken = '<%= process.env.MAPBOX_TOKEN %>';
+    mapboxgl.accessToken = mapBoxToken;
+
+    const mu = new MapUtils('map-nl', project);
+    mu.populateMapWithCitiesOnEvent(areas, 'load');
+    mu.addCityInfoToDOMOnEvent(areas, regionNameHtml, regionInfoHtml, 'click');
 </script>
-<!-- <script src="/js/jsonUtils.js"></script> -->
-<script src="/js/mapSetup.js"></script>
-<script src="/js/mapGetInfo.js"></script>
-<script src="/js/showInfoUtils.js"></script>
-<script src="/js/showInfo.js"></script>
