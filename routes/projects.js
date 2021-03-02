@@ -3,7 +3,7 @@ const express = require('express');
 const router = express.Router({ mergeParams: true });
 
 const project = require('../controllers/project.js');
-const { setLocals, validateCity, isProjectDefined, isProjectInDB, isLoggedIn } = require('../middleware.js');
+const { setLocals, isProjectDefined, isProjectInDB, doesProjectBelongToUser, isLoggedIn } = require('../middleware.js');
 
 const catchAsync = require('../utils/catchAsync.js');
 
@@ -15,13 +15,13 @@ router.route('/projects/share')
     .post(setLocals, isLoggedIn, project.share);
 
 router.route('/projects/:projectId/edit')
-    .get(setLocals, isLoggedIn, isProjectDefined, isProjectInDB, catchAsync(project.renderEdit))
-    .post(setLocals, isLoggedIn, isProjectDefined, isProjectInDB, catchAsync(project.updateEdited));
+    .get(setLocals, isLoggedIn, isProjectDefined, isProjectInDB, doesProjectBelongToUser, catchAsync(project.renderEdit))
+    .post(setLocals, isLoggedIn, isProjectDefined, isProjectInDB, doesProjectBelongToUser, catchAsync(project.updateEdited));
 
 router.route('/projects/:projectId/delete')
-    .delete(setLocals, isLoggedIn, isProjectDefined, isProjectInDB, project.delete);
+    .delete(setLocals, isLoggedIn, isProjectDefined, isProjectInDB, doesProjectBelongToUser, project.delete);
 
 router.route('/projects/:projectId')
-    .get(setLocals, isLoggedIn, isProjectDefined, isProjectInDB, project.show);
+    .get(setLocals, isLoggedIn, isProjectDefined, isProjectInDB, doesProjectBelongToUser, project.show);
 
 module.exports = router;

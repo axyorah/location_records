@@ -93,3 +93,15 @@ module.exports.isCityInDB = catchAsync(async (req,res,next) => {
         next();
     }
 })
+
+module.exports.doesProjectBelongToUser = catchAsync(async (req,res,next) => {
+    const { projectId } = req.params;
+    const { username } = res.locals;
+
+    const user = await User.findOne({ username });
+    if ( !user.projects.includes(projectId) ) {
+        throw new ExpressError(`You don't have access to this project`, 400);
+    } else {
+        next();
+    }
+})
