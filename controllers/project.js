@@ -10,7 +10,6 @@ module.exports.show = async (req,res) => {
     const { username } = res.locals;
     const { areaId } = req.query;
 
-    const user = await User.findOne({ username: username });//.populate('projects');
     const project = await Project.findById(projectId);
     res.cookie('projectId', project._id, { sameSite: 'strict' }); //secure: true, 
     res.locals.projectId = project._id;
@@ -18,11 +17,8 @@ module.exports.show = async (req,res) => {
     const areas = await Area.find({ project }).populate('cities');
     const cities = await City.find({ project });
 
-    // TODO: check if selected area belongs to project
     const selected = areaId ? await Area.findById(areaId).populate('cities') : undefined;
-    console.log('PROJECT.SHOW: SELECTED');
-    console.log(selected);
-
+    
     res.render('./projects/show.ejs', { selected, areas, cities, project });//, projects: user.projects });
 }
 
@@ -106,9 +102,6 @@ module.exports.renderEdit = async (req,res) => {
     const cities = await City.find({ project });
     const areas = await Area.find({ project }).populate('cities');
 
-    console.log(projectId)
-    console.log(project)
-
     res.render('./projects/edit.ejs', { cities, areas, project });
 }
 
@@ -174,8 +167,6 @@ module.exports.delete = async (req,res) => {
             `however it will still be available to other people.`
         );
     }    
-
-    console.log(user, username);
 
     // delete project from its parent user
     await User.findByIdAndUpdate(

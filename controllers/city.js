@@ -12,15 +12,11 @@ const Project = require('../models/project.js');
 const ExpressError = require('../utils/ExpressError.js');
 const { parseMixedSchema } = require('../utils/formUtils.js');
 
-// TODO: check if the project/city belongs to user
-
 module.exports.data = async (req,res) => {
     const { id } = req.params;
     
     const selected = await City.findById(id);
-    
-    console.log('CITY.DATA: SELECTED CITY:');
-    console.log(selected);    
+      
     res.send(selected);
 }
 
@@ -33,8 +29,6 @@ module.exports.show = async (req,res) => {
     const cities = await City.find({ project });
     const areas = await Area.find({ project }).populate('cities');     
     
-    console.log('CITY.SHOW: SELECTED CITY:');
-    console.log(selected);
     res.render('./general/show.ejs', { selected, areas, cities, project });
 }
 
@@ -49,8 +43,6 @@ module.exports.renderNew = async (req,res) => {
 }
 
 module.exports.addNew = async (req,res) => {
-    console.log('REQ.BODY.CITY:');
-    console.log(req.body.city);
     if ( !req.body.city ) throw new ExpressError('Invalid City Submission', 400);
     
     const { projectId } = req.params;
@@ -104,8 +96,6 @@ module.exports.renderEdit = async (req,res) => {
 }
 
 module.exports.updateEdited = async (req,res) => {
-    console.log('REQ.BODY.CITY:');
-    console.log(req.body.city);
     if ( !req.body.city ) throw new ExpressError('Invalid Format', 400);
 
     const { projectId, id } = req.params;
@@ -168,7 +158,6 @@ module.exports.updateEdited = async (req,res) => {
 
 module.exports.delete = async (req,res) => {
     const { projectId, id } = req.params;
-    console.log(`DELETING CITY ${id}`);
 
     // delete city from City collection
     const city = await City.findByIdAndDelete(id);

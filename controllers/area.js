@@ -34,8 +34,6 @@ module.exports.renderNew = async (req,res) => {
 }
 
 module.exports.addNew = async (req,res) => {
-    console.log('REQ.BODY.AREA:');
-    console.log(req.body.area);
     if ( !req.body.area ) throw new ExpressError('Invalid Request Format', 400);
 
     const { projectId } = req.params;
