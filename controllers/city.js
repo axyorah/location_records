@@ -43,7 +43,7 @@ module.exports.renderNew = async (req,res) => {
 }
 
 module.exports.addNew = async (req,res) => {
-    if ( !req.body.city ) throw new ExpressError('Invalid City Submission', 400);
+    if ( !req.body.city ) throw new ExpressError('Invalid Location Submission', 400);
     
     const { projectId } = req.params;
     const { name, code, lat, lng, quickInfo, area } = req.body.city;
@@ -51,7 +51,7 @@ module.exports.addNew = async (req,res) => {
     
     const project = await Project.findById(projectId);
     const areaObj = await Area.findOne({ _id: area, project });
-    if ( !areaObj ) throw new ExpressError('Specified Area Does Not Exist', 400);
+    if ( !areaObj ) throw new ExpressError('Specified Collection Does Not Exist', 400);
 
     // skip if city with the same name already exists
     if ( await City.findOne({ project, name })) {
@@ -80,7 +80,7 @@ module.exports.addNew = async (req,res) => {
     areaObj.cities.push(city);
     await areaObj.save();
 
-    req.flash('success', `New City "${city.name}" has been added!`);
+    req.flash('success', `New Location "${city.name}" has been added!`);
     res.redirect(`/projects/${projectId}`);
 }
 
@@ -106,7 +106,7 @@ module.exports.updateEdited = async (req,res) => {
     const cityOld = await City.findById(id);
     const areaOld = await Area.findById(cityOld.area);
     const areaNew = await Area.findById(area);
-    if ( !areaNew ) throw new ExpressError('Specified Area Does Not Exist', 400);
+    if ( !areaNew ) throw new ExpressError('Specified Collection Does Not Exist', 400);
 
     // skip if city with the same name but different id already exists in this project
     if ( await City.findOne({ project, name }) &&

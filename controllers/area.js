@@ -63,7 +63,7 @@ module.exports.addNew = async (req,res) => {
     project.areas.push(area);
     await project.save();
 
-    req.flash('success', `New area "${area.name}" has been added!`);
+    req.flash('success', `New collection "${area.name}" has been added!`);
     res.redirect(`/projects/${projectId}`);
 }
 
@@ -123,25 +123,25 @@ module.exports.delete = async (req,res) => {
     const area = await Area.findById(id);
     let project = await Project.findById(projectId);
 
-    // if current area is DEFAULT AREA and it has children - ignore
-    if ( area.name === 'DEFAULT AREA' && area.cities.length ) {
+    // if current area is DEFAULT COLLECTION and it has children - ignore
+    if ( area.name === 'DEFAULT COLLECTION' && area.cities.length ) {
         req.flash(
             'error', 
-            `Can't delete the "DEFAULT AREA" while there are cities ` + 
+            `Can't delete the "DEFAULT COLLECTION" while there are locations ` + 
             `that are assigned to it.\n` + 
-            `If you want to delete the "DEFAULT AREA", reassign all the ` +
-            `cities that belong to it to different areas and try again.`);
+            `If you want to delete the "DEFAULT COLLECTION", reassign all the ` +
+            `locations that belong to it to different collections and try again.`);
         res.redirect(`/projects/${projectId}`);
         return;
     }
 
     // delete area from Area collection
-    console.log(`DELETING area ${area.name} (${id})`);
+    console.log(`DELETING ${area.name} (${id})`);
     await Area.findByIdAndDelete(id);
 
     // if there are any cities that belong to deleted area
-    // they need to be reassigned to DEFAULT AREA;
-    // if DEFAULT AREA doesn't yet exist - create it!
+    // they need to be reassigned to DEFAULT COLLECTION;
+    // if DEFAULT COLLECTION doesn't yet exist - create it!
     if ( area.cities.length ) {
         // get/create default area
         let defaultArea;

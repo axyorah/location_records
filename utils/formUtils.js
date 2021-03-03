@@ -39,19 +39,19 @@ const parseMixedSchema = ( inArray ) => {
 module.exports.parseMixedSchema = parseMixedSchema;
 
 const getOrCreateDefaultArea = async () => {
-    let defaultArea = await Area.findOne({ name: 'DEFAULT AREA' });
+    let defaultArea = await Area.findOne({ name: 'DEFAULT COLLECTION' });
     if ( !defaultArea ) {
         defaultArea = new Area({
-            name: 'DEFAULT AREA',
-            code: 'DEFAULT AREA',
+            name: 'DEFAULT COLLECTION',
+            code: 'DEFAULT COLLECTION',
             color: '#ff0000',
-            quickInfo: 'default area',
+            quickInfo: 'default collection',
             'General Information': 
-            [   `DEFAULT AREA was created because you have recently ` +
-                'deleted an area which had some cities assigned to it. ' +
-                'The information on these cities is not lost and is ' + 
-                'temporarily stored here. You can now reassign these cities ' +
-                'to correct areas. After that feel free to delete this area.'],
+            [   `DEFAULT COLLECTION was created because you have recently ` +
+                'deleted a collection which had some locations assigned to it. ' +
+                'The information on these locations is not lost and is ' + 
+                'temporarily stored here. You can now reassign these locations ' +
+                'to correct collection. After that feel free to delete this collection.'],
         });
         defaultArea.markModified('General Information');
     }    
@@ -71,17 +71,17 @@ const createDefaultProject = ( projectToken ) => {
             'You can start by editing this project to adjust its name, description and map settings ' +
             '(center, zoom and style).\n\n' +
             'Once it is done, you can start populating the project with data. ' +
-            'Start by creating a New Area. ' +
-            'It will not be visible on the map at first, but once you add a city to it, ' +
-            'a marker will appear on the map at the location that you chose for the city ' +
-            'and a color that you chose for the area.\n\n' +
-            'On project home page you can view all the areas that belong to this project. ' +
-            'If you follow the area-link you can see all the cities that belong to the area.\n\n' +
-            'You can also access the city-data from the map: ' +
-            'hover over the city markers to see a short city/area note ' +
+            'Start by creating a New Collection. ' +
+            'It will not be visible on the map at first, but once you add a location to it, ' +
+            'a marker will appear on the map at the chosen location with ' +
+            'a color that you chose for the collection.\n\n' +
+            'On project home page you can view all the collections that belong to this project. ' +
+            'If you follow the collection-link you can see all the locations that belong to the collection.\n\n' +
+            'You can also access the location-data from the map: ' +
+            'hover over the location markers to see a short location/collection note ' +
             'or click  on the marker to see the detailed information.\n\n' +
-            'You can always edit or delete any city or area information ' +
-            'by clicking city/area edit or delete buttons. ' +            
+            'You can always edit or delete any location or collection information ' +
+            'by clicking location/collection edit or delete buttons. ' +            
             'Finally, you can create a New Project and share it with other people ' +
             'by sharing the Project Token, which is always visitble on the project home page. ' +
             ''

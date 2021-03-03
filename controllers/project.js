@@ -19,7 +19,7 @@ module.exports.show = async (req,res) => {
 
     const selected = areaId ? await Area.findById(areaId).populate('cities') : undefined;
     
-    res.render('./projects/show.ejs', { selected, areas, cities, project });//, projects: user.projects });
+    res.render('./projects/show.ejs', { selected, areas, cities, project });
 }
 
 module.exports.share = async (req,res) => {
