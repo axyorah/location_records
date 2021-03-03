@@ -73,7 +73,7 @@ const createDefaultProject = ( projectToken ) => {
             'Once it is done, you can start populating the project with data. ' +
             'Start by creating a New Collection. ' +
             'It will not be visible on the map at first, but once you add a location to it, ' +
-            'a marker will appear on the map at the chosen location with ' +
+            'a corresponding marker will appear on the map with ' +
             'a color that you chose for the collection.\n\n' +
             'On project home page you can view all the collections that belong to this project. ' +
             'If you follow the collection-link you can see all the locations that belong to the collection.\n\n' +
