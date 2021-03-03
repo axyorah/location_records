@@ -27,19 +27,19 @@
     <div class="col-xl-8 pt-5">
         <div class="card w-100">
             <!--
-                by default display label `Areas`;
-                this will be overwritten by City/Area name + buttons
+                by default display label `Collections`;
+                this will be overwritten by City/Area (Location/Collection) name + buttons
                 by `showFullInfo(selected)`
                 when area link is clicked on the list or 
                 city marker is clicked on the map
             -->
             <h1 id="region-name" class="d-flex justify-content-between m-4">
-                <%= selected === undefined ? 'Areas' : selected.name %>
+                <%= selected === undefined ? 'Collections' : selected.name %>
             </h1>
 
             <!-- 
                 by default show all area links;
-                this will be overwritten with detailed City/Area info
+                this will be overwritten with detailed City/Area (Location/Collection) info
                 by `showFullInfo(selected)`
                 when area link is clicked on the list or 
                 city marker is clicked on the map

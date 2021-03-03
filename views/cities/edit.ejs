@@ -3,7 +3,7 @@
     <div class="row">
         <div class="col-xl-8 offset-xl-2">
 
-            <h1 class="my-5">Edit City</h1>
+            <h1 class="my-5">Edit Location</h1>
 
             <form method="POST" action="/projects/<%= projectId %>/cities/<%= selected._id %>/edit" class="needs-validation" novalidate>
 
@@ -11,23 +11,23 @@
                     <div class="card-body" id="region-info">
 
                         <div class="form-box">
-                            <label for="city[name]">City Name</label>
+                            <label for="city[name]">Name</label>
                             <input class="form-control" type="text" 
                                 id="city[name]" name="city[name]" 
                                 value="<%= selected.name %>" required>
                         </div>
 
                         <div class="form-box">
-                            <label for="city[code]">City Code</label>
+                            <label for="city[code]">Code</label>
                             <input class="form-control" type="text" 
                                 id="city[code]" name="city[code]" 
                                 value="<%= selected.code %>" required>
                         </div>
 
                         <div class="form-box">
-                            <label for="city[area]">Area that the city belongs to</label>
+                            <label for="city[area]">Collection that the location belongs to</label>
                             <select class="form-control" id="city[area]" name="city[area]" required>
-                                <option disabled value="">Select Area</option>
+                                <option disabled value="">Select Collection</option>
                                 <% for (let area of areas) { %>
                                     <% if (area._id.toString() === selected.area.toString()) { %>
                                         <option selected value="<%= area._id %>">
@@ -43,7 +43,7 @@
                         </div>
 
                         <div class="form-box">
-                            <p>City Location</p>
+                            <p>Location</p>
                             <div id="map-nl" class="w-100" style="height: 250px;"></div>
                             <input class="form-control muted-text" type="hidden" 
                                 id="city[lat]" name="city[lat]" value="<%= selected.geometry.coordinates[1]%>"

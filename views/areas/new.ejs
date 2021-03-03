@@ -3,7 +3,7 @@
     <div class="row">
         <div class="col-xl-8 offset-xl-2">
 
-            <h1>Add New Area to "<%= project.name %>"</h1>
+            <h1>Add New Collection to "<%= project.name %>"</h1>
 
             <form method="POST" action="/projects/<%= projectId %>/areas/new" class="needs-validation" novalidate>
 
@@ -11,21 +11,21 @@
                     <div class="card-body" id="region-info">
 
                         <div class="form-box">
-                            <label for="area[name]">Area Name</label>
+                            <label for="area[name]">Name</label>
                             <input class="form-control" type="text" id="area[name]" name="area[name]" required>
                         </div>
 
                         <div class="row">
                             <div class="col-sm-9">
                                 <div class="form-box">
-                                    <label for="area[code]">Area Code</label>
+                                    <label for="area[code]">Code</label>
                                     <input class="form-control" type="text" id="area[code]" name="area[code]" required>
                                 </div>
                             </div>
 
                             <div class="col-sm-3">
                                 <div class="form-box">
-                                    <label for="area[color]">Area Color</label>
+                                    <label for="area[color]">Color</label>
                                     <input class="form-control" type="color" value="#ff0000"
                                         id="area[color]" name="area[color]" required>
                                 </div>
