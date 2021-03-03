@@ -45,7 +45,7 @@ module.exports.addNew = async (req,res) => {
     // skip if area with the same name already exists in this project
     if ( await Area.findOne({ project, name })) {
         req.flash('error', `${name} already exists in this project`);
-        return res.redirect(`/projects/${projectId}/areas/new`);
+        return res.redirect(`/projects/${projectId}/collections/new`);
     }
     
     let area = new Area({
@@ -92,7 +92,7 @@ module.exports.updateEdited = async (req,res) => {
     if ( await Area.findOne({ project, name }) &&
          !(await Area.findOne({ project, name, _id: id })) ) {
         req.flash('error', `${name} already exists in this project`);
-        return res.redirect(`/projects/${projectId}/areas/${id}/edit`);
+        return res.redirect(`/projects/${projectId}/collections/${id}/edit`);
     }
 
     const areaNew = await Area.findByIdAndUpdate(

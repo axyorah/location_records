@@ -56,7 +56,7 @@ module.exports.addNew = async (req,res) => {
     // skip if city with the same name already exists
     if ( await City.findOne({ project, name })) {
         req.flash('error', `${name} already exists in this project`);
-        return res.redirect(`/projects/${projectId}/cities/new`);
+        return res.redirect(`/projects/${projectId}/locations/new`);
     }
 
     let city = new City({
@@ -112,7 +112,7 @@ module.exports.updateEdited = async (req,res) => {
     if ( await City.findOne({ project, name }) &&
          !(await City.findOne({ project, name, _id: id })) ) {
         req.flash('error', `${name} already exists in this project`);
-        return res.redirect(`/projects/${projectId}/cities/${id}/edit`);
+        return res.redirect(`/projects/${projectId}/locations/${id}/edit`);
     }
 
     const city = await City.findByIdAndUpdate(

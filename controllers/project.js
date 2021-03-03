@@ -8,7 +8,7 @@ const { parseMixedSchema } = require('../utils/formUtils.js');
 module.exports.show = async (req,res) => {    
     const { projectId } = req.params;
     const { username } = res.locals;
-    const { areaId } = req.query;
+    const { collectionId } = req.query;
 
     const project = await Project.findById(projectId);
     res.cookie('projectId', project._id, { sameSite: 'strict' }); //secure: true, 
@@ -17,7 +17,7 @@ module.exports.show = async (req,res) => {
     const areas = await Area.find({ project }).populate('cities');
     const cities = await City.find({ project });
 
-    const selected = areaId ? await Area.findById(areaId).populate('cities') : undefined;
+    const selected = collectionId ? await Area.findById(collectionId).populate('cities') : undefined;
     
     res.render('./projects/show.ejs', { selected, areas, cities, project });
 }

@@ -56,7 +56,7 @@ const getCityButtons = (item, names) => {
     // ['back', 'edit', 'del']
     if ( item.area ) {
         const form = document.createElement('form');
-        form.setAttribute('action', `/projects/${projectId}/cities/${item._id}/delete?_method=DELETE`);
+        form.setAttribute('action', `/projects/${projectId}/locations/${item._id}/delete?_method=DELETE`);
         form.setAttribute('method', 'POST');
         form.setAttribute('class', 'd-inline ms-auto'); //d-inline 
         form.setAttribute(
@@ -69,8 +69,8 @@ const getCityButtons = (item, names) => {
         btnGroup.setAttribute('class', 'btn-group');
         btnGroup.setAttribute('role', 'group');
 
-        const backBtn = getABtn('Back to Area', `/projects/${projectId}/?areaId=${item.area}`);
-        const editBtn = getABtn('Edit', `/projects/${projectId}/cities/${item._id}/edit`);
+        const backBtn = getABtn('Back to Collection', `/projects/${projectId}/?collectionId=${item.area}`);
+        const editBtn = getABtn('Edit', `/projects/${projectId}/locations/${item._id}/edit`);
         const delBtn = getSubmitBtn('Del');
 
         if (names.includes('back')) {
@@ -94,7 +94,7 @@ const getAreaButtons = (item, names) => {
     // ['edit', 'del']
     if ( item.cities ) {
         const form = document.createElement('form');
-        form.setAttribute('action', `/projects/${projectId}/areas/${item._id}/delete?_method=DELETE`);
+        form.setAttribute('action', `/projects/${projectId}/collections/${item._id}/delete?_method=DELETE`);
         form.setAttribute('method', 'POST');
         form.setAttribute('class', 'd-inline mr-auto');
         form.setAttribute(
@@ -107,7 +107,7 @@ const getAreaButtons = (item, names) => {
         btnGroup.setAttribute('class', 'btn-group');
         btnGroup.setAttribute('role', 'group');
 
-        const editBtn = getABtn('Edit', `/projects/${projectId}/areas/${item._id}/edit`);
+        const editBtn = getABtn('Edit', `/projects/${projectId}/collections/${item._id}/edit`);
         const delBtn = getSubmitBtn('Del');
 
         if (names.includes('edit')) {

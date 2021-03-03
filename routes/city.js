@@ -7,18 +7,18 @@ const { setLocals, validateCity, isLoggedIn, isProjectDefined, isProjectInDB, is
 
 const catchAsync = require('../utils/catchAsync.js');
 
-router.route('/projects/:projectId/cities/new')
+router.route('/projects/:projectId/locations/new')
     .get(setLocals, isLoggedIn, isProjectDefined, isProjectInDB, doesProjectBelongToUser, city.renderNew)
     .post(setLocals, isLoggedIn, isProjectDefined, isProjectInDB, doesProjectBelongToUser, validateCity, catchAsync(city.addNew));
 
-router.route('/projects/:projectId/cities/:id/edit')
+router.route('/projects/:projectId/locations/:id/edit')
     .get(setLocals, isLoggedIn, isProjectDefined, isProjectInDB, doesProjectBelongToUser, isCityInDB, city.renderEdit)
     .post(setLocals, isLoggedIn, isProjectDefined, isProjectInDB, doesProjectBelongToUser, isCityInDB, validateCity, catchAsync(city.updateEdited));
 
-router.route('/projects/:projectId/cities/:id/delete')
+router.route('/projects/:projectId/locations/:id/delete')
     .delete(setLocals, isLoggedIn, isProjectDefined, isProjectInDB, doesProjectBelongToUser, isCityInDB, catchAsync(city.delete));
 
-router.route('/projects/:projectId/cities/:id')
+router.route('/projects/:projectId/locations/:id')
     .get(setLocals, isLoggedIn, isProjectDefined, isProjectInDB, doesProjectBelongToUser, isCityInDB, catchAsync(city.show))
     .post(setLocals, isLoggedIn, isProjectDefined, isProjectInDB, doesProjectBelongToUser, isCityInDB, catchAsync(city.data));
 
