@@ -19,8 +19,8 @@ const passport = require('passport');
 const LocalStrategy = require('passport-local');
 
 const generalRoutes = require('./routes/general.js');
-const cityRoutes = require('./routes/city.js');
-const areaRoutes = require('./routes/area.js');
+const cityRoutes = require('./routes/location.js');
+const areaRoutes = require('./routes/collection.js');
 const userRoutes = require('./routes/user.js');
 const projectRoutes = require('./routes/projects.js');
 

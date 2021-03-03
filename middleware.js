@@ -1,8 +1,8 @@
 const { citySchema, areaSchema } = require('./validationSchemas.js');
 const ExpressError = require('./utils/ExpressError.js');
 const catchAsync = require('./utils/catchAsync.js');
-const City = require('./models/city.js');
-const Area = require('./models/area.js');
+const City = require('./models/location.js');
+const Area = require('./models/collection.js');
 const User = require('./models/user.js');
 const Project = require('./models/project.js');
 

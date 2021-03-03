@@ -5,8 +5,8 @@ const baseClient = mbxClient({ accessToken: mbxToken });
 
 const sanitizeHtml = require('sanitize-html');
 
-const Area = require('../models/area.js');
-const City = require('../models/city.js');
+const Area = require('../models/collection.js');
+const City = require('../models/location.js');
 const User = require('../models/user.js');
 const Project = require('../models/project.js');
 const ExpressError = require('../utils/ExpressError.js');
@@ -39,7 +39,7 @@ module.exports.renderNew = async (req,res) => {
     const areas = await Area.find({ project }).populate('cities');
     const cities = await City.find({ project });
 
-    res.render('./cities/new.ejs', { areas, cities, project });
+    res.render('./locations/new.ejs', { areas, cities, project });
 }
 
 module.exports.addNew = async (req,res) => {
@@ -92,7 +92,7 @@ module.exports.renderEdit = async (req,res) => {
     const cities = await City.find({ project });
     const areas = await Area.find({ project }).populate('cities');
 
-    res.render('./cities/edit.ejs', { selected, cities, areas, project });
+    res.render('./locations/edit.ejs', { selected, cities, areas, project });
 }
 
 module.exports.updateEdited = async (req,res) => {

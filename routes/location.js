@@ -2,7 +2,7 @@ const express = require('express');
 
 const router = express.Router({ mergeParams: true });
 
-const city = require('../controllers/city.js');
+const city = require('../controllers/location.js');
 const { setLocals, validateCity, isLoggedIn, isProjectDefined, isProjectInDB, isCityInDB, doesProjectBelongToUser } = require('../middleware.js');
 
 const catchAsync = require('../utils/catchAsync.js');

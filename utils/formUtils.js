@@ -1,6 +1,6 @@
 
 const sanitizeHtml = require('sanitize-html');
-const Area = require('../models/area.js');
+const Area = require('../models/collection.js');
 const Project = require('../models/project.js');
 
 const jsonEscape = (str) => {

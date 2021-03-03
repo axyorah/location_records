@@ -1,7 +1,7 @@
 const mbxClient = require('@mapbox/mapbox-sdk');
 
-const Area = require('../models/area.js');
-const City = require('../models/city.js');
+const Area = require('../models/collection.js');
+const City = require('../models/location.js');
 const User = require('../models/user.js');
 const Project = require('../models/project.js');
 const mbxToken = process.env.MAPBOX_TOKEN;
