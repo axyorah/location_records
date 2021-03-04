@@ -42,10 +42,10 @@ class MapUtils {
 
     getCollectionLayer = function (collection) {
         return {
-            'id': `locations-${collection.name}`,
+            'id': `${collection._id}`,
             'interactive': true,
             'type': 'circle',
-            'source': `locations-${collection.name}`,
+            'source': `${collection._id}`,
             'paint': { 
                 'circle-color': collection.color,
                 'circle-radius': 8,
@@ -84,17 +84,17 @@ class MapUtils {
 
     populateMapWithLocations = function (collections) {
         for (let collection of collections) {
-            if ( !this.map.getSource(`locations-${collection.name}`) ) {
+            if ( !this.map.getSource(`${collection._id}`) ) {
                 // add location-data of the current collection in correct format
-                this.map.addSource(`locations-${collection.name}`, this.getCollectionSource(collection));
+                this.map.addSource(`${collection._id}`, this.getCollectionSource(collection));
                     
                 // add a layer showing the location markers for the current collection
                 this.map.addLayer(this.getCollectionLayer(collection));
             
                 // show popup on mouseenter, remove on mouseleave
                 let popup = new mapboxgl.Popup();
-                this.map.on('mouseenter', `locations-${collection.name}`, this.addPopupCallback(popup));
-                this.map.on('mouseleave', `locations-${collection.name}`, this.removePopupCallback(popup));
+                this.map.on('mouseenter', `${collection._id}`, this.addPopupCallback(popup));
+                this.map.on('mouseleave', `${collection._id}`, this.removePopupCallback(popup));
             }
         }
     }
@@ -113,7 +113,7 @@ class MapUtils {
         // and `projectId` global
         for (let collection of collections) {  
             // upadate detailed location info
-            this.map.on('click', `locations-${collection.name}`, function (evt) {
+            this.map.on('click', `${collection._id}`, function (evt) {
                 const id = evt.features[0].properties._id;
                 postData(`/projects/${projectId}/locations/${id}`, { id })
                     .then((data) => addDataToDOM(data, titleHtml, infoHtml))
@@ -173,12 +173,12 @@ class MapUtils {
             const collection = collections.filter(collection => collection._id === selected.coll)[0];
 
             // remove all markers that belong to the area of the selected location
-            this.map.removeLayer(`locations-${collection.name}`);
-            this.map.removeSource(`locations-${collection.name}`);
+            this.map.removeLayer(`${collection._id}`);
+            this.map.removeSource(`${collection._id}`);
 
             // add again all markers EXCEPT for selected location
             const source = this.getCollectionSource(collection, [selected]);
-            this.map.addSource(`locations-${collection.name}`, source );
+            this.map.addSource(`${collection._id}`, source );
 
             // add a layer showing the places.
             const layer = this.getCollectionLayer(collection);
