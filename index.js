@@ -19,8 +19,8 @@ const passport = require('passport');
 const LocalStrategy = require('passport-local');
 
 const generalRoutes = require('./routes/general.js');
-const cityRoutes = require('./routes/location.js');
-const areaRoutes = require('./routes/collection.js');
+const locationRoutes = require('./routes/location.js');
+const collectionRoutes = require('./routes/collection.js');
 const userRoutes = require('./routes/user.js');
 const projectRoutes = require('./routes/projects.js');
 
@@ -99,8 +99,8 @@ passport.deserializeUser(User.deserializeUser());
 
 // --- ROUTE HANDLERS ---
 app.use('/', generalRoutes);
-app.use('/', cityRoutes);
-app.use('/', areaRoutes);
+app.use('/', locationRoutes);
+app.use('/', collectionRoutes);
 app.use('/', userRoutes);
 app.use('/', projectRoutes);
 

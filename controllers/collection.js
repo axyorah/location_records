@@ -20,10 +20,10 @@ module.exports.show = async (req,res) => {
 
     const selected = await Area.findById(id).populate('cities');
     const project = await Project.findById(projectId);
-    const areas = await Area.find({ project }).populate('cities');
-    const cities = await City.find({ project });
+    const collections = await Area.find({ project }).populate('cities');
+    const locations = await City.find({ project });
 
-    res.render('./general/show.ejs', { selected, areas, cities, project });
+    res.render('./general/show.ejs', { selected, collections, locations, project });
 }
 
 module.exports.renderNew = async (req,res) => {
@@ -34,11 +34,11 @@ module.exports.renderNew = async (req,res) => {
 }
 
 module.exports.addNew = async (req,res) => {
-    if ( !req.body.area ) throw new ExpressError('Invalid Request Format', 400);
+    if ( !req.body.collection ) throw new ExpressError('Invalid Request Format', 400);
 
     const { projectId } = req.params;
-    const { name, code, color, quickInfo } = req.body.area;
-    const generalInfo = req.body.area['General Information'];
+    const { name, code, color, quickInfo } = req.body.collection;
+    const generalInfo = req.body.collection['General Information'];
 
     const project = await Project.findById(projectId);
     
@@ -48,7 +48,7 @@ module.exports.addNew = async (req,res) => {
         return res.redirect(`/projects/${projectId}/collections/new`);
     }
     
-    let area = new Area({
+    let collection = new Area({
         name: parseMixedSchema(name),
         code: parseMixedSchema(code),
         color: parseMixedSchema(color),
@@ -57,35 +57,35 @@ module.exports.addNew = async (req,res) => {
         'General Information': parseMixedSchema(generalInfo),
     });
     // mixed schemas require explicit update
-    area.markModified('General Information');
-    await area.save();
+    collection.markModified('General Information');
+    await collection.save();
 
-    project.areas.push(area);
+    project.areas.push(collection);
     await project.save();
 
-    req.flash('success', `New collection "${area.name}" has been added!`);
+    req.flash('success', `New collection "${collection.name}" has been added!`);
     res.redirect(`/projects/${projectId}`);
 }
 
 module.exports.renderEdit = async (req,res) => {
     const { projectId, id } = req.params;
 
-    const selected = await Area.findOne({ _id: id });
+    const selected = await Area.findById(id);
     const project = await Project.findById(projectId);
-    const cities = await City.find({ project });
-    const areas = await Area.find({ project }).populate('cities');
+    const locations = await City.find({ project });
+    const collections = await Area.find({ project }).populate('cities');
 
-    res.render('./collections/edit.ejs', { selected, cities, areas, project });
+    res.render('./collections/edit.ejs', { selected, locations, collections, project });
 }
 
 module.exports.updateEdited = async (req,res) => {    
     const { projectId, id } = req.params;    
         
-    if ( !req.body.area ) throw new ExpressError('Invalid Request Format', 400);
-    const { name, code, color, quickInfo } = await req.body.area;
-    const generalInfo = await req.body.area['General Information'];
+    if ( !req.body.collection ) throw new ExpressError('Invalid Request Format', 400);
+    const { name, code, color, quickInfo } = await req.body.collection;
+    const generalInfo = await req.body.collection['General Information'];
 
-    const area = await Area.findById(id);
+    const collection = await Area.findById(id);
     const project = await Project.findById(projectId);
 
     // skip if area with the same name but different id already exists in this project
@@ -95,7 +95,7 @@ module.exports.updateEdited = async (req,res) => {
         return res.redirect(`/projects/${projectId}/collections/${id}/edit`);
     }
 
-    const areaNew = await Area.findByIdAndUpdate(
+    const collectionNew = await Area.findByIdAndUpdate(
         id, 
         {
             name: parseMixedSchema(name),
@@ -110,21 +110,21 @@ module.exports.updateEdited = async (req,res) => {
         }
     );
     // mixed schema fields require explicit update
-    areaNew.markModified('General Information'); 
-    await areaNew.save();  
+    collectionNew.markModified('General Information'); 
+    await collectionNew.save();  
 
-    req.flash('success', `"${area.name}" has been succesfully updated!`);
+    req.flash('success', `"${collection.name}" has been succesfully updated!`);
     res.redirect(`/projects/${projectId}`);
 }
 
 module.exports.delete = async (req,res) => {
     const { projectId, id } = req.params;
 
-    const area = await Area.findById(id);
+    const collection = await Area.findById(id);
     let project = await Project.findById(projectId);
 
     // if current area is DEFAULT COLLECTION and it has children - ignore
-    if ( area.name === 'DEFAULT COLLECTION' && area.cities.length ) {
+    if ( collection.name === 'DEFAULT COLLECTION' && collection.cities.length ) {
         req.flash(
             'error', 
             `Can't delete the "DEFAULT COLLECTION" while there are locations ` + 
@@ -136,37 +136,37 @@ module.exports.delete = async (req,res) => {
     }
 
     // delete area from Area collection
-    console.log(`DELETING ${area.name} (${id})`);
+    console.log(`DELETING ${collection.name} (${id})`);
     await Area.findByIdAndDelete(id);
 
     // if there are any cities that belong to deleted area
     // they need to be reassigned to DEFAULT COLLECTION;
     // if DEFAULT COLLECTION doesn't yet exist - create it!
-    if ( area.cities.length ) {
+    if ( collection.cities.length ) {
         // get/create default area
-        let defaultArea;
-        getOrCreateDefaultArea().then(area => { defaultArea = area });
+        let defaultCollection;
+        getOrCreateDefaultArea().then(collection => { defaultCollection = collection });
 
         // set orphaned cities to be children of default area        
-        const cities = await City.find({ area: area });
-        for (let city of cities ) {
-            defaultArea.cities.push(city);
-            city.area = defaultArea;
-            city.save();
+        const locations = await City.find({ area: collection });
+        for (let location of locations ) {
+            defaultCollection.cities.push(location);
+            location.area = defaultCollection;
+            location.save();
         }
         // add default area to deleted area's parent project
-        defaultArea.project = project;
-        defaultArea.save();
-        project.areas.push(defaultArea);
+        defaultCollection.project = project;
+        defaultCollection.save();
+        project.areas.push(defaultCollection);
     }
 
     // delete area from its parent project
     project = await Project.findByIdAndUpdate(
         projectId,
-        { $pull: { areas: area._id }}
+        { $pull: { areas: collection._id }}
     );
     await project.save();
 
-    req.flash('success', `"${area.name}" has been succesfully deleted!`);
+    req.flash('success', `"${collection.name}" has been succesfully deleted!`);
     res.redirect(`/projects/${projectId}`);
 }

@@ -110,10 +110,10 @@
 
         // DB elements
         const projectJSON = '<%- JSON.stringify(project) %>';
-        const areasJSON = '<%- JSON.stringify(areas) %>';
+        const collectionsJSON = '<%- JSON.stringify(collections) %>';
 
         const project = JSON.parse(projectJSON);
-        const areas = JSON.parse(areasJSON);
+        const collections = JSON.parse(collectionsJSON);
 
         // text fields have already been set, but might not be htmlified correctly
         titleHtml.innerHTML = `Edit "${jsonHtmlify(project.name)}"`;
@@ -126,7 +126,7 @@
         const mu = new MapUtils('map-nl', project);
         const map = mu.getMap();
 
-        mu.populateMapWithCitiesOnEvent(areas, 'styledata');
+        mu.populateMapWithCitiesOnEvent(collections, 'styledata');
         updateFormInputsOnMapConfigChange(map, lngHtml, latHtml, zoomHtml);
         updateMapStyle(map, mapStyles, mapUrlBtn, mapUrlHtml, mapStyleHtml);
     </script>

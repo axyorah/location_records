@@ -11,31 +11,31 @@
                     <div class="card-body" id="region-info">
 
                         <div class="form-box">
-                            <label for="city[name]">Name</label>
+                            <label for="location[name]">Name</label>
                             <input class="form-control" type="text" 
-                                id="city[name]" name="city[name]" 
+                                id="location[name]" name="location[name]" 
                                 value="<%= selected.name %>" required>
                         </div>
 
                         <div class="form-box">
-                            <label for="city[code]">Code</label>
+                            <label for="location[code]">Code</label>
                             <input class="form-control" type="text" 
-                                id="city[code]" name="city[code]" 
+                                id="location[code]" name="location[code]" 
                                 value="<%= selected.code %>" required>
                         </div>
 
                         <div class="form-box">
-                            <label for="city[area]">Collection that the location belongs to</label>
-                            <select class="form-control" id="city[area]" name="city[area]" required>
+                            <label for="location[area]">Collection that the location belongs to</label>
+                            <select class="form-control" id="location[area]" name="location[area]" required>
                                 <option disabled value="">Select Collection</option>
-                                <% for (let area of areas) { %>
-                                    <% if (area._id.toString() === selected.area.toString()) { %>
-                                        <option selected value="<%= area._id %>">
-                                            <%= area.name %>
+                                <% for (let collection of collections) { %>
+                                    <% if (collection._id.toString() === selected.area.toString()) { %>
+                                        <option selected value="<%= collection._id %>">
+                                            <%= collection.name %>
                                         </option>
                                     <% } else { %>
-                                        <option value="<%= area._id %>">
-                                            <%= area.name %>
+                                        <option value="<%= collection._id %>">
+                                            <%= collection.name %>
                                         </option>
                                     <% } %>
                                 <% } %>
@@ -46,22 +46,22 @@
                             <p>Location</p>
                             <div id="map-nl" class="w-100" style="height: 250px;"></div>
                             <input class="form-control muted-text" type="hidden" 
-                                id="city[lat]" name="city[lat]" value="<%= selected.geometry.coordinates[1]%>"
+                                id="location[lat]" name="location[lat]" value="<%= selected.geometry.coordinates[1]%>"
                                 required>
                             <input class="form-control muted-text" type="hidden" 
-                                id="city[lng]" name="city[lng]" value="<%= selected.geometry.coordinates[0]%>"
+                                id="location[lng]" name="location[lng]" value="<%= selected.geometry.coordinates[0]%>"
                                 required>
                         </div>
 
                         <div class="form-box">
-                            <label for="city[quickInfo]">Short note that will appear on mouse hover</label>
-                            <textarea class="form-control" id="city[quickInfo]" name="city[quickInfo]"
+                            <label for="location[quickInfo]">Short note that will appear on mouse hover</label>
+                            <textarea class="form-control" id="location[quickInfo]" name="location[quickInfo]"
                                 ><%= selected.quickInfo %></textarea>
                         </div>
 
                         <div class="form-box">
-                            <label for="city[General Information]">General Information</label>
-                            <div id="city[General Information]"></div>
+                            <label for="location[General Information]">General Information</label>
+                            <div id="location[General Information]"></div>
                         </div>
 
                     </div>
@@ -89,26 +89,26 @@
 
     <script>
         // DOM
-        const nameHtml = document.getElementById('city[name]');
-        const codeHtml = document.getElementById('city[code]');
-        const quickInfoHtml = document.getElementById('city[quickInfo]');
-        const genInfoRootHtml = document.getElementById('city[General Information]');
+        const nameHtml = document.getElementById('location[name]');
+        const codeHtml = document.getElementById('location[code]');
+        const quickInfoHtml = document.getElementById('location[quickInfo]');
+        const genInfoRootHtml = document.getElementById('location[General Information]');
 
-        const latInpt = document.getElementById('city[lat]');
-        const lngInpt = document.getElementById('city[lng]');
+        const latInpt = document.getElementById('location[lat]');
+        const lngInpt = document.getElementById('location[lng]');
         
-        const areaSelect = document.getElementById('city[area]');
-        const areaOpts = areaSelect.getElementsByTagName('option');
+        const collectionSelect = document.getElementById('location[area]');
+        const collectionOpts = collectionSelect.getElementsByTagName('option');
 
         // DB
         const selectedJSON = '<%- JSON.stringify(selected) %>';  
-        const citiesJSON = '<%- JSON.stringify(cities) %>';      
-        const areasJSON = '<%- JSON.stringify(areas) %>';
+        //const locationsJSON = '<%- JSON.stringify(locations) %>';      
+        const collectionsJSON = '<%- JSON.stringify(collections) %>';
         const projectJSON = '<%- JSON.stringify(project) %>';
 
         const selected = JSON.parse(selectedJSON);
-        const cities = JSON.parse(citiesJSON);
-        const areas = JSON.parse(areasJSON);
+        //const locations = JSON.parse(locationsJSON);
+        const collections = JSON.parse(collectionsJSON);
         const project = JSON.parse(projectJSON);
 
         // text
@@ -119,8 +119,8 @@
         quickInfoHtml.innerHTML = selected.quickInfo;        
         // area names have already been set, but might not be htmlified correctly
         // recall: areaOpts[0].innerHTML is 'Select Area'
-        for (let i = 0; i < areas.length; i++) {
-            areaOpts[i+1].innerHTML = jsonHtmlify(areas[i].name);
+        for (let i = 0; i < collections.length; i++) {
+            collectionOpts[i+1].innerHTML = jsonHtmlify(collections[i].name);
         }
         // 'General Information' is handled separately
         //showGenInfoInit(genInfoRootHtml);
@@ -131,9 +131,9 @@
         mapboxgl.accessToken = mapBoxToken;
 
         const mu = new MapUtils('map-nl', project);
-        mu.populateMapWithCitiesOnEvent(areas, 'load');
+        mu.populateMapWithCitiesOnEvent(collections, 'load');
 
-        mu.removeCityFromSourcesOnEvent(selected, 'load'); // instead of a circle we'll add movabel marker
+        mu.removeCityFromSourcesOnEvent(selected, collections, 'load'); // instead of a circle we'll add movabel marker
         mu.addMarkerAtLngLatToMapOnEvent(selected.geometry.coordinates, 'load');
 
         mu.addNewMarkerToMapOnEvent('click');

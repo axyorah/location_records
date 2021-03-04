@@ -39,9 +39,9 @@ const parseMixedSchema = ( inArray ) => {
 module.exports.parseMixedSchema = parseMixedSchema;
 
 const getOrCreateDefaultArea = async () => {
-    let defaultArea = await Area.findOne({ name: 'DEFAULT COLLECTION' });
-    if ( !defaultArea ) {
-        defaultArea = new Area({
+    let defaultCollection = await Area.findOne({ name: 'DEFAULT COLLECTION' });
+    if ( !defaultCollection ) {
+        defaultCollection = new Area({
             name: 'DEFAULT COLLECTION',
             code: 'DEFAULT COLLECTION',
             color: '#ff0000',
@@ -53,9 +53,9 @@ const getOrCreateDefaultArea = async () => {
                 'temporarily stored here. You can now reassign these locations ' +
                 'to correct collection. After that feel free to delete this collection.'],
         });
-        defaultArea.markModified('General Information');
+        defaultCollection.markModified('General Information');
     }    
-    return defaultArea;
+    return defaultCollection;
 }
 
 module.exports.getOrCreateDefaultArea = getOrCreateDefaultArea;

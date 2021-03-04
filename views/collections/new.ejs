@@ -11,35 +11,34 @@
                     <div class="card-body" id="region-info">
 
                         <div class="form-box">
-                            <label for="area[name]">Name</label>
-                            <input class="form-control" type="text" id="area[name]" name="area[name]" required>
+                            <label for="collection[name]">Name</label>
+                            <input class="form-control" type="text" id="collection[name]" name="collection[name]" required>
                         </div>
 
                         <div class="row">
                             <div class="col-sm-9">
                                 <div class="form-box">
-                                    <label for="area[code]">Code</label>
-                                    <input class="form-control" type="text" id="area[code]" name="area[code]" required>
-                                </div>
-                            </div>
+                                    <label for="collection[code]">Code</label>
+                                    <input class="form-control" type="text" id="collection[code]" name="collection[code]" required>
+                                </div>collection                         </div>
 
                             <div class="col-sm-3">
                                 <div class="form-box">
-                                    <label for="area[color]">Color</label>
+                                    <label for="collection[color]">Color</label>
                                     <input class="form-control" type="color" value="#ff0000"
-                                        id="area[color]" name="area[color]" required>
+                                        id="collection[color]" name="collection[color]" required>
                                 </div>
                             </div>
                         </div>
 
                         <div class="form-box">
-                            <label for="area[quickInfo]">Short note that will appear on mouse hover</label>
-                            <textarea class="form-control" id="area[quickInfo]" name="area[quickInfo]"></textarea>
+                            <label for="collection[quickInfo]">Short note that will appear on mouse hover</label>
+                            <textarea class="form-control" id="collection[quickInfo]" name="collection[quickInfo]"></textarea>
                         </div>
 
                         <div class="form-box">
-                            <label for="area[generalInfo]">General Information</label>
-                            <div id="area[generalInfo]"></div>
+                            <label for="collection[generalInfo]">General Information</label>
+                            <div id="collection[generalInfo]"></div>
                         </div>
 
                     </div>
@@ -55,6 +54,6 @@
 
 
     <script>
-        const genInfoRootHtml = document.getElementById('area[generalInfo]');
+        const genInfoRootHtml = document.getElementById('collection[generalInfo]');
         showGenInfoInit(genInfoRootHtml);
     </script>

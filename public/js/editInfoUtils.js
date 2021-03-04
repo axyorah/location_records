@@ -50,8 +50,8 @@ id's with suffix `[key]`.
 */
 
 const FORMFIELDROOTS = [
-    'city[General Information]',
-    'area[General Information]'
+    'location[General Information]',
+    'collection[General Information]'
 ]
 
 const addTextForEdit = (parent, txt) => {

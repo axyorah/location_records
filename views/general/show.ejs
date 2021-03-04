@@ -25,13 +25,13 @@
     const regionInfoHtml = document.querySelector('#region-info');
 
     const selectedJSON = '<%- JSON.stringify(selected) %>';
-    const areasJSON = '<%- JSON.stringify(areas) %>';
-    const citiesJSON = '<%- JSON.stringify(cities) %>';
+    const collectionsJSON = '<%- JSON.stringify(collections) %>';
+    //const locationsJSON = '<%- JSON.stringify(locations) %>';
     const projectJSON = '<%- JSON.stringify(project) %>';
 
     const selected = JSON.parse(selectedJSON);
-    const cities = JSON.parse(citiesJSON);
-    const areas = JSON.parse(areasJSON);
+    //const locations = JSON.parse(locationsJSON);
+    const collections = JSON.parse(collectionsJSON);
     const project = JSON.parse(projectJSON);
 
     const username = '<%= username %>';
@@ -45,6 +45,6 @@
     mapboxgl.accessToken = mapBoxToken;
 
     const mu = new MapUtils('map-nl', project);
-    mu.populateMapWithCitiesOnEvent(areas, 'load');
-    mu.addCityInfoToDOMOnEvent(areas, regionNameHtml, regionInfoHtml, 'click');
+    mu.populateMapWithCitiesOnEvent(collections, 'load');
+    mu.addCityInfoToDOMOnEvent(collections, regionNameHtml, regionInfoHtml, 'click');
 </script>

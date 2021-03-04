@@ -46,10 +46,10 @@
             -->
             <div class="card-body" id="region-info">
                 <ul class="list-group list-group-flush">
-                    <% for (let area of areas) { %>
+                    <% for (let collection of collections) { %>
                         <li class="list-group-item">
-                            <a href="/projects/<%= project._id %>/?collectionId=<%= area._id %>">
-                                <h3><%= area.name %></h3>
+                            <a href="/projects/<%= project._id %>/?collectionId=<%= collection._id %>">
+                                <h3><%= collection.name %></h3>
                             </a>
                         </li>
                     <% } %>
@@ -72,28 +72,28 @@
     const projectId = '<%= projectId %>'; // needed for postData
 
     const selectedJSON = '<%- JSON.stringify(selected) %>';
-    const citiesJSON = '<%- JSON.stringify(cities) %>';
-    const areasJSON = '<%- JSON.stringify(areas) %>';
+    //const locationsJSON = '<%- JSON.stringify(locations) %>';
+    const collectionsJSON = '<%- JSON.stringify(collections) %>';
     const projectJSON = '<%- JSON.stringify(project) %>';
     
     //const selected = JSON.parse(selectedJSON); // below
-    const cities = JSON.parse(citiesJSON); // needed for map
-    const areas = JSON.parse(areasJSON); // needed for map
+    //const locations = JSON.parse(locationsJSON); // needed for map
+    const collections = JSON.parse(collectionsJSON); // needed for map
     const project = JSON.parse(projectJSON);
 
     // name and description are already set, but might not be htmlified correctly
     projectNameHtml.innerHTML = jsonHtmlify(project.name);
     projectDescrHtml.innerHTML = jsonHtmlify(project.description);
     for (i = 0; i < h3s.length; i++) {
-        h3s[i].innerHTML = jsonHtmlify(areas[i].name);
+        h3s[i].innerHTML = jsonHtmlify(collections[i].name);
     }
 
     mapboxgl.accessToken = mapBoxToken;
     const mu = new MapUtils('map-nl', project);
-    mu.populateMapWithCitiesOnEvent(areas, 'load');
+    mu.populateMapWithCitiesOnEvent(collections, 'load');
 
     // add city info on map click
-    mu.addCityInfoToDOMOnEvent(areas, regionNameHtml, regionInfoHtml, 'click');
+    mu.addCityInfoToDOMOnEvent(collections, regionNameHtml, regionInfoHtml, 'click');
 
     // add area info if path is `/projects/<projectId>/?collectionId=<collectionId>`    
     if (selectedJSON) {

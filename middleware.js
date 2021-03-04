@@ -1,4 +1,4 @@
-const { citySchema, areaSchema } = require('./validationSchemas.js');
+const { locationSchema, collectionSchema } = require('./validationSchemas.js');
 const ExpressError = require('./utils/ExpressError.js');
 const catchAsync = require('./utils/catchAsync.js');
 const City = require('./models/location.js');
@@ -18,11 +18,8 @@ module.exports.setLocals = (req,res,next) => {
 
 module.exports.validateCity = (req,res,next) => {
 
-    console.log('VALIDATECITY: REQ.BODY:');
-    console.log(req.body);
-
     // validate with Joi
-    const { error } = citySchema.validate(req.body);
+    const { error } = locationSchema.validate(req.body);
     if (error) {
         const msg = error.details.map(err => err.message).join(',');
         throw new ExpressError(msg, 400);
@@ -33,11 +30,8 @@ module.exports.validateCity = (req,res,next) => {
 
 module.exports.validateArea = (req,res,next) => {
 
-    console.log('VALIDATEAREA: REQ.BODY:');
-    console.log(req.body);
-
     // validate with Joi
-    const { error } = areaSchema.validate(req.body);
+    const { error } = collectionSchema.validate(req.body);
     if (error) {
         const msg = error.details.map(err => err.message).join(',');
         throw new ExpressError(msg, 400);
@@ -79,7 +73,7 @@ module.exports.isProjectInDB = catchAsync(async (req,res,next) => {
 module.exports.isAreaInDB = catchAsync(async (req,res,next) => {
     const { id } = req.params;
     if ( !(await Area.findById(id)) ){
-        throw new ExpressError('Area with Specified ID Does Not Exist', 400);
+        throw new ExpressError('Collection with Specified ID Does Not Exist', 400);
     } else {
         next();
     }
@@ -88,7 +82,7 @@ module.exports.isAreaInDB = catchAsync(async (req,res,next) => {
 module.exports.isCityInDB = catchAsync(async (req,res,next) => {
     const { id } = req.params;
     if ( !(await City.findById(id)) ) {
-        throw new ExpressError('City with Specified ID Does Not Exist', 400);
+        throw new ExpressError('Location with Specified ID Does Not Exist', 400);
     } else {
         next();
     }

@@ -166,7 +166,7 @@ class MapUtils {
         })
     }
 
-    removeCityFromSourcesOnEvent = function (selected, event) {
+    removeCityFromSourcesOnEvent = function (selected, areas, event) {
         this.map.on(event, (evt) => {
             // get area corresponding to the selected city
             const area = areas.filter(area => area._id === selected.area)[0];

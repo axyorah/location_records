@@ -11,42 +11,38 @@
                     <div class="card-body" id="region-info">
 
                         <div class="form-box">
-                            <label for="area[name]">Name</label>
+                            <label for="collection[name]">Name</label>
                             <input class="form-control" type="text" 
-                                id="area[name]" name="area[name]" value="<%= selected.name %>" required>
+                                id="collection[name]" name="collection[name]" value="<%= selected.name %>" required>
                         </div>
 
                         <div class="row">
                             <div class="col-sm-9">
                                 <div class="form-box">
-                                    <label for="area[code]">Code</label>
+                                    <label for="collection[code]">Code</label>
                                     <input class="form-control" type="text" 
-                                        id="area[code]" name="area[code]" value="<%= selected.code %>" required>
+                                        id="collection[code]" name="collection[code]" value="<%= selected.code %>" required>
                                 </div>
                             </div>
 
                             <div class="col-sm-3">
                                 <div class="form-box">
-                                    <label for="area[color]">Color</label> 
+                                    <label for="collection[color]">Color</label> 
                                     <input type="color" class="form-control"
-                                        id="area[color]" name="area[color]" value="<%= selected.color %>" required>
+                                        id="collection[color]" name="collection[color]" value="<%= selected.color %>" required>
                                 </div>
                             </div>
                         </div>
 
                         <div class="form-box">
-                            <label for="area[quickInfo]">Short note that will appear on mouse hover</label>
-                            <textarea class="form-control" id="area[quickInfo]" name="area[quickInfo]"
-                                ><%= selected.quickInfo
-                                .replaceAll('\\n', '\n')
-                                .replaceAll('\\r', '')
-                                .replaceAll('\\t', '\t')
-                                .replaceAll('\\"', '\"') %></textarea>
+                            <label for="collection[quickInfo]">Short note that will appear on mouse hover</label>
+                            <textarea class="form-control" id="collection[quickInfo]" name="collection[quickInfo]"
+                                ><%= selected.quickInfo %></textarea>
                         </div>
 
                         <div class="form-box">
-                            <label for="area[General Information]">General Information</label>
-                            <div id="area[General Information]"></div>
+                            <label for="collection[General Information]">General Information</label>
+                            <div id="collection[General Information]"></div>
                         </div>
 
                     </div>
@@ -75,16 +71,16 @@
     <script>
         // get DOM
         const titleHtml = document.getElementById('title');
-        const nameHtml = document.getElementById('area[name]');
-        const codeHtml = document.getElementById('area[code]');
-        const quickInfoHtml = document.getElementById('area[quickInfo]');
-        const genInfoRootHtml = document.getElementById('area[General Information]');
+        const nameHtml = document.getElementById('collection[name]');
+        const codeHtml = document.getElementById('collection[code]');
+        const quickInfoHtml = document.getElementById('collection[quickInfo]');
+        const genInfoRootHtml = document.getElementById('collection[General Information]');
 
         // get db entries
         const mapBoxToken = '<%= process.env.MAPBOX_TOKEN %>';
         const selectedJSON = '<%- JSON.stringify(selected) %>';  
-        const citiesJSON = '<%- JSON.stringify(cities) %>';      
-        const areasJSON = '<%- JSON.stringify(areas) %>';
+        //const locationsJSON = '<%- JSON.stringify(locations) %>';      
+        //const collectionsJSON = '<%- JSON.stringify(collections) %>';
         const selected = JSON.parse(selectedJSON);
 
         // unescape (textify) db entry for <input type="text"> elements;

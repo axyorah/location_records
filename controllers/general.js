@@ -19,5 +19,5 @@ module.exports.home = async (req,res) => {
         undefined : await User.findOne({ username }).populate('projects');
     const projects = username === 'anonymous' ? [] : user.projects;
 
-    res.render('./general/home.ejs', { selected: undefined, cities: [], areas: [], projects });
+    res.render('./general/home.ejs', { selected: undefined, locations: [], collections: [], projects });
 }

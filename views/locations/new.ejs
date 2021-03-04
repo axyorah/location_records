@@ -11,22 +11,22 @@
                     <div class="card-body" id="region-info">
 
                         <div class="form-box">
-                            <label for="city[name]">Name</label>
-                            <input class="form-control" type="text" id="city[name]" name="city[name]" required>
+                            <label for="location[name]">Name</label>
+                            <input class="form-control" type="text" id="location[name]" name="location[name]" required>
                         </div>
 
                         <div class="form-box">
-                            <label for="city[code]">Code</label>
-                            <input class="form-control" type="text" id="city[code]" name="city[code]" required>
+                            <label for="location[code]">Code</label>
+                            <input class="form-control" type="text" id="location[code]" name="location[code]" required>
                         </div>
 
                         <div class="form-box">
-                            <label for="city[area]">Collection that the location belongs to</label>
-                            <select class="form-control" id="city[area]" name="city[area]" required>
+                            <label for="location[area]">Collection that the location belongs to</label>
+                            <select class="form-control" id="location[area]" name="location[area]" required>
                                 <option disabled selected value="">Select Collection</option>
-                                <% for (let area of areas) { %>
-                                    <option value="<%= area._id %>">
-                                        <%= area.name %>
+                                <% for (let collection of collections) { %>
+                                    <option value="<%= collection._id %>">
+                                        <%= collection.name %>
                                     </option>
                                 <% } %>
                             </select>
@@ -35,20 +35,20 @@
                         <div class="form-box">
                             <p> Location</p>
                             <div id="map-nl" class="w-100" style="height: 250px;"></div>
-                            <input class="form-control muted-text" type="hidden" id="city[lat]" name="city[lat]"
+                            <input class="form-control muted-text" type="hidden" id="location[lat]" name="location[lat]"
                                 required>
-                            <input class="form-control muted-text" type="hidden" id="city[lng]" name="city[lng]"
+                            <input class="form-control muted-text" type="hidden" id="location[lng]" name="location[lng]"
                                 required>
                         </div>
 
                         <div class="form-box">
-                            <label for="city[quickInfo]">Short note that will appear on mouse hover</label>
-                            <textarea class="form-control" id="city[quickInfo]" name="city[quickInfo]"></textarea>
+                            <label for="location[quickInfo]">Short note that will appear on mouse hover</label>
+                            <textarea class="form-control" id="location[quickInfo]" name="location[quickInfo]"></textarea>
                         </div>
 
                         <div class="form-box">
-                            <label for="city[generalInfo]">General Information</label>
-                            <div id="city[generalInfo]"></div>
+                            <label for="location[generalInfo]">General Information</label>
+                            <div id="location[generalInfo]"></div>
                         </div>
 
                     </div>
@@ -65,27 +65,27 @@
 
     <script>
         // DOM
-        const genInfoRootHtml = document.getElementById('city[generalInfo]');
-        const latInpt = document.getElementById('city[lat]');
-        const lngInpt = document.getElementById('city[lng]');
+        const genInfoRootHtml = document.getElementById('location[generalInfo]');
+        const latInpt = document.getElementById('location[lat]');
+        const lngInpt = document.getElementById('location[lng]');
 
-        const areaSelect = document.getElementById('city[area]');
-        const areaOpts = areaSelect.getElementsByTagName('option');
+        const collectionSelect = document.getElementById('location[area]');
+        const collectionOpts = collectionSelect.getElementsByTagName('option');
 
         // DB        
-        const areasJSON = '<%- JSON.stringify(areas) %>';
-        const citiesJSON = '<%- JSON.stringify(cities) %>';
+        const collectionsJSON = '<%- JSON.stringify(collections) %>';
+        //const locationsJSON = '<%- JSON.stringify(locations) %>';
         const projectJSON = '<%- JSON.stringify(project) %>';
 
-        const cities = JSON.parse(citiesJSON);
-        const areas = JSON.parse(areasJSON);
+        //const locations = JSON.parse(locationsJSON);
+        const collections = JSON.parse(collectionsJSON);
         const project = JSON.parse(projectJSON);
 
         // text
         // area names have already been set, but might not be htmlified correctly
         // recall: areaOpts[0].innerHTML is 'Select Area'
-        for (let i = 0; i < areas.length; i++) {
-            areaOpts[i+1].innerHTML = jsonHtmlify(areas[i].name);
+        for (let i = 0; i < collections.length; i++) {
+            collectionOpts[i+1].innerHTML = jsonHtmlify(collections[i].name);
         }
         showGenInfoInit(genInfoRootHtml);
         //showGenInfoInitForEdit('', genInfoRootHtml);
@@ -95,7 +95,7 @@
         mapboxgl.accessToken = mapBoxToken;
 
         const mu = new MapUtils('map-nl', project);
-        mu.populateMapWithCitiesOnEvent(areas, 'load');
+        mu.populateMapWithCitiesOnEvent(collections, 'load');
         mu.addNewMarkerToMapOnEvent('click');
         mu.addNewMarkerCoordinatesToFormOnEvent(latInpt, lngInpt, 'click');
         mu.removeLastMarkerOnKey('Escape');
