@@ -48,9 +48,10 @@
                 <ul class="list-group list-group-flush">
                     <% for (let collection of collections) { %>
                         <li class="list-group-item">
-                            <a href="/projects/<%= project._id %>/?collectionId=<%= collection._id %>">
+                            <!-- <a href="/projects/<%= project._id %>/?collectionId=<%= collection._id %>">
                                 <h3><%= collection.name %></h3>
-                            </a>
+                            </a> -->
+                            <a href="#"><h3 id="<%= collection._id %>"><%= collection.name %></h3></a>
                         </li>
                     <% } %>
                 </ul>
@@ -91,6 +92,14 @@
 
     // add location info on map click
     mu.addLocationInfoToDOMOnEvent(collections, regionNameHtml, regionInfoHtml, 'click');
+
+    // add collection info on link click
+    for (i = 0; i < h3s.length; i++) {
+        h3s[i].addEventListener('click', function (evt) {
+            const selected = collections.filter(collection => collection._id === this.id)[0];
+            addDataToDOM(selected, regionNameHtml, regionInfoHtml);
+        })
+    }
 
     // add collection info if path is `/projects/<projectId>/?collectionId=<collectionId>`    
     if (selectedJSON) {
