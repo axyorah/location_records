@@ -6,6 +6,7 @@ const ignoredDBKeys = [
     'code', 
     'area', 
     'collection',
+    'coll',
     'color',
     'project',
     '_id', 
@@ -33,15 +34,15 @@ async function postData(url, data) {
 function addDataToDOM (item, titleHtml, infoHtml) {
     // show detailed info on City or Area next to the map
     // set Location(City)/Collection(Area) name
-    if ( item.area ) {
-        // locations (cities) have ref to parent area        
+    if ( item.coll ) {
+        // locations (cities) have ref to parent collection (area)
         titleHtml.innerHTML =  
             `${jsonHtmlify(item.name)} (${jsonHtmlify(item.code)})`;
 
         const btns = getLocationButtons(item, ['back', 'edit', 'del']);
         titleHtml.appendChild(btns);     
-    } else if ( item.cities ) {
-        // collections (areas) have ref to child cities        
+    } else if ( item.locs ) {
+        // collections (areas) have ref to child locations (cities)
         titleHtml.innerHTML = `${jsonHtmlify(item.name)}`;
 
         const btns = getCollectionButtons(item, ['edit', 'del']);

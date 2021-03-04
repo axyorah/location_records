@@ -25,11 +25,11 @@
                         </div>
 
                         <div class="form-box">
-                            <label for="location[area]">Collection that the location belongs to</label>
-                            <select class="form-control" id="location[area]" name="location[area]" required>
+                            <label for="location[coll]">Collection that the location belongs to</label>
+                            <select class="form-control" id="location[coll]" name="location[coll]" required>
                                 <option disabled value="">Select Collection</option>
                                 <% for (let collection of collections) { %>
-                                    <% if (collection._id.toString() === selected.area.toString()) { %>
+                                    <% if (collection._id.toString() === selected.coll.toString()) { %>
                                         <option selected value="<%= collection._id %>">
                                             <%= collection.name %>
                                         </option>
@@ -97,17 +97,15 @@
         const latInpt = document.getElementById('location[lat]');
         const lngInpt = document.getElementById('location[lng]');
         
-        const collectionSelect = document.getElementById('location[area]');
+        const collectionSelect = document.getElementById('location[coll]');
         const collectionOpts = collectionSelect.getElementsByTagName('option');
 
         // DB
         const selectedJSON = '<%- JSON.stringify(selected) %>';  
-        //const locationsJSON = '<%- JSON.stringify(locations) %>';      
         const collectionsJSON = '<%- JSON.stringify(collections) %>';
         const projectJSON = '<%- JSON.stringify(project) %>';
 
         const selected = JSON.parse(selectedJSON);
-        //const locations = JSON.parse(locationsJSON);
         const collections = JSON.parse(collectionsJSON);
         const project = JSON.parse(projectJSON);
 

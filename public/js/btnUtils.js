@@ -54,7 +54,7 @@ const getSubmitBtn = (name) => {
 const getLocationButtons = (item, names) => {
     // names should be an array of any combination of:
     // ['back', 'edit', 'del']
-    if ( item.area ) {
+    if ( item.coll ) {
         const form = document.createElement('form');
         form.setAttribute('action', `/projects/${projectId}/locations/${item._id}/delete?_method=DELETE`);
         form.setAttribute('method', 'POST');
@@ -69,7 +69,7 @@ const getLocationButtons = (item, names) => {
         btnGroup.setAttribute('class', 'btn-group');
         btnGroup.setAttribute('role', 'group');
 
-        const backBtn = getABtn('Back to Collection', `/projects/${projectId}/?collectionId=${item.area}`);
+        const backBtn = getABtn('Back to Collection', `/projects/${projectId}/?collectionId=${item.coll}`);
         const editBtn = getABtn('Edit', `/projects/${projectId}/locations/${item._id}/edit`);
         const delBtn = getSubmitBtn('Del');
 
@@ -92,7 +92,7 @@ const getLocationButtons = (item, names) => {
 const getCollectionButtons = (item, names) => {
     // names should be an array of any combination of:
     // ['edit', 'del']
-    if ( item.cities ) {
+    if ( item.locs ) {
         const form = document.createElement('form');
         form.setAttribute('action', `/projects/${projectId}/collections/${item._id}/delete?_method=DELETE`);
         form.setAttribute('method', 'POST');

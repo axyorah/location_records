@@ -120,11 +120,11 @@ const addKeyValPairToLi = (parent, key, val, ignoredKeyList, lvl) => {
 }
 
 const addLocationsToULForEdit = (ul, obj, ignoredKeyList, lvl) => {
-    if (obj.cities) {
+    if (obj.locs) {
         const baseName = 'locations';
-        for (let i = 0; i < obj.cities.length; i++) {
+        for (let i = 0; i < obj.locs.length; i++) {
 
-            const location = obj.cities[i];
+            const location = obj.locs[i];
             const li = document.createElement('li');
             li.setAttribute('class', 'list-group-item');
             li.setAttribute('id', `${baseName}[${i}]_li`);
@@ -165,9 +165,9 @@ const addObjectForEdit = (parent, obj, ignoredKeyList, lvl) => {
         });
         resolveSingleItemForEdit(parent, arr, ignoredKeyList, lvl);
 
-    } else if ( keys[0] === 'cities' ) {
-        // if the key is 'cities' - append them to grandParent
-        addLocationsToULForEdit(grandParent, obj.cities, ignoredKeyList, lvl);
+    } else if ( keys[0] === 'locs' ) {
+        // if the key is 'locs' - append them to grandParent
+        addLocationsToULForEdit(grandParent, obj.locs, ignoredKeyList, lvl);
 
     } else {
         // if there is exactly one valid key - treat it normally

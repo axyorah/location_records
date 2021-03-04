@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const areaSchema = new Schema({
+const collectionSchema = new Schema({
     name: {
         type: String,
         required: true
@@ -18,10 +18,10 @@ const areaSchema = new Schema({
         type: String,
         required: true
     },
-    cities: {
+    locs: {
         type: [ {
             type: mongoose.Schema.Types.ObjectId,
-            ref: 'City'
+            ref: 'Location'
         } ],
     },
     project: {
@@ -30,7 +30,7 @@ const areaSchema = new Schema({
         required: true
     },
     'General Information': {},
-    'Area-Specific': {}
+    'Collection-Specific': {}
 });
 
-module.exports = mongoose.model('Area', areaSchema);
+module.exports = mongoose.model('Collection', collectionSchema);

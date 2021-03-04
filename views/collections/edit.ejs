@@ -79,8 +79,6 @@
         // get db entries
         const mapBoxToken = '<%= process.env.MAPBOX_TOKEN %>';
         const selectedJSON = '<%- JSON.stringify(selected) %>';  
-        //const locationsJSON = '<%- JSON.stringify(locations) %>';      
-        //const collectionsJSON = '<%- JSON.stringify(collections) %>';
         const selected = JSON.parse(selectedJSON);
 
         // unescape (textify) db entry for <input type="text"> elements;

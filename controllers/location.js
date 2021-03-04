@@ -27,7 +27,7 @@ module.exports.show = async (req,res) => {
     const project = await Project.findById(projectId);
     const selected = await Location.findById(id);    
     const locations = await Location.find({ project });
-    const collections = await Collection.find({ project }).populate('cities');     
+    const collections = await Collection.find({ project }).populate('locs');     
     
     res.render('./general/show.ejs', { selected, collections, locations, project });
 }
@@ -36,7 +36,7 @@ module.exports.renderNew = async (req,res) => {
     const { projectId } = req.params;
 
     const project = await Project.findById(projectId);
-    const collections = await Collection.find({ project }).populate('cities');
+    const collections = await Collection.find({ project }).populate('locs');
     const locations = await Location.find({ project });
 
     res.render('./locations/new.ejs', { collections, locations, project });
@@ -46,11 +46,11 @@ module.exports.addNew = async (req,res) => {
     if ( !req.body.location ) throw new ExpressError('Invalid Location Submission', 400);
     
     const { projectId } = req.params;
-    const { name, code, lat, lng, quickInfo, area } = req.body.location;
+    const { name, code, lat, lng, quickInfo, coll } = req.body.location;
     const generalInfo = req.body.location['General Information'];
     
     const project = await Project.findById(projectId);
-    const collectionObj = await Collection.findOne({ _id: area, project });
+    const collectionObj = await Collection.findOne({ _id: coll, project });
     if ( !collectionObj ) throw new ExpressError('Specified Collection Does Not Exist', 400);
 
     // skip if location with the same name already exists
@@ -68,7 +68,7 @@ module.exports.addNew = async (req,res) => {
         code: parseMixedSchema(code),
         quickInfo: parseMixedSchema(quickInfo),
         'General Information': parseMixedSchema(generalInfo),
-        area: collectionObj,
+        coll: collectionObj,
         project: project
     });
     
@@ -77,7 +77,7 @@ module.exports.addNew = async (req,res) => {
     await location.save();
 
     // add location to resp. collection and save
-    collectionObj.cities.push(location);
+    collectionObj.locs.push(location);
     await collectionObj.save();
 
     req.flash('success', `New Location "${location.name}" has been added!`);
@@ -90,7 +90,7 @@ module.exports.renderEdit = async (req,res) => {
     const project = await Project.findById( projectId );
     const selected = await Location.findById( id );    
     const locations = await Location.find({ project });
-    const collections = await Collection.find({ project }).populate('cities');
+    const collections = await Collection.find({ project }).populate('locs');
 
     res.render('./locations/edit.ejs', { selected, locations, collections, project });
 }
@@ -99,13 +99,13 @@ module.exports.updateEdited = async (req,res) => {
     if ( !req.body.location ) throw new ExpressError('Invalid Format', 400);
 
     const { projectId, id } = req.params;
-    const { name, code, lat, lng, quickInfo, area } = await req.body.location;
+    const { name, code, lat, lng, quickInfo, coll } = await req.body.location;
     const generalInfo = await req.body.location['General Information'];
     
     const project = await Project.findById(projectId);    
     const locationOld = await Location.findById(id);
-    const collectionOld = await Collection.findById(locationOld.area);
-    const collectionNew = await Collection.findById(area);
+    const collectionOld = await Collection.findById(locationOld.coll);
+    const collectionNew = await Collection.findById(coll);
     if ( !collectionNew ) throw new ExpressError('Specified Collection Does Not Exist', 400);
 
     // skip if location with the same name but different id already exists in this project
@@ -125,7 +125,7 @@ module.exports.updateEdited = async (req,res) => {
             },
             code: parseMixedSchema(code),
             quickInfo: parseMixedSchema(quickInfo),
-            area: collectionNew,
+            coll: collectionNew,
             project: project,
             'General Information': parseMixedSchema(generalInfo),
         },
@@ -143,12 +143,12 @@ module.exports.updateEdited = async (req,res) => {
     if ( collectionOld._id !== collectionNew._id ) {
         // delete location from old collection
         await collectionOld.updateOne({
-            $pull: { cities: location._id }
+            $pull: { locs: location._id }
         });
         await collectionOld.save();
 
         // add location to new collection
-        collectionNew.cities.push(location);
+        collectionNew.locs.push(location);
         await collectionNew.save();
     }    
 
@@ -164,8 +164,8 @@ module.exports.delete = async (req,res) => {
     
     // delete location from its parent Collection
     const collection = await Collection.findOneAndUpdate(
-        { cities: id },
-        { $pull: { cities: id } }
+        { locs: id },
+        { $pull: { locs: id } }
     );
     collection.save();
 

@@ -6,7 +6,7 @@ module.exports.locationSchema = Joi.object({
         lat: Joi.number().required(),
         lng: Joi.number().required(),
         code: Joi.string().required(),
-        area: Joi.string().required(),
+        coll: Joi.string().required(),
         quickInfo: Joi.string(),
         'General Information': Joi.array(),
         'Location-Specific': Joi.array()

@@ -21,8 +21,8 @@
                         </div>
 
                         <div class="form-box">
-                            <label for="location[area]">Collection that the location belongs to</label>
-                            <select class="form-control" id="location[area]" name="location[area]" required>
+                            <label for="location[coll]">Collection that the location belongs to</label>
+                            <select class="form-control" id="location[coll]" name="location[coll]" required>
                                 <option disabled selected value="">Select Collection</option>
                                 <% for (let collection of collections) { %>
                                     <option value="<%= collection._id %>">
@@ -69,7 +69,7 @@
         const latInpt = document.getElementById('location[lat]');
         const lngInpt = document.getElementById('location[lng]');
 
-        const collectionSelect = document.getElementById('location[area]');
+        const collectionSelect = document.getElementById('location[coll]');
         const collectionOpts = collectionSelect.getElementsByTagName('option');
 
         // DB        
@@ -82,8 +82,8 @@
         const project = JSON.parse(projectJSON);
 
         // text
-        // area names have already been set, but might not be htmlified correctly
-        // recall: areaOpts[0].innerHTML is 'Select Area'
+        // collection names have already been set, but might not be htmlified correctly
+        // recall: collectionOpts[0].innerHTML is 'Select Collection'
         for (let i = 0; i < collections.length; i++) {
             collectionOpts[i+1].innerHTML = jsonHtmlify(collections[i].name);
         }

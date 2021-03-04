@@ -143,11 +143,11 @@ const addObject = (parent, obj, ignoredKeyList, lvl) => {
 }
 
 const addLocationsToUL = (ul, obj, ignoredKeyList, lvl) => {    
-    if (obj.cities) {        
+    if (obj.locs) {        
         const baseName = 'locations';
-        for (let i = 0; i < obj.cities.length; i++) {
+        for (let i = 0; i < obj.locs.length; i++) {
 
-            const location = obj.cities[i];
+            const location = obj.locs[i];
             const li = document.createElement('li');
             li.setAttribute('class', 'list-group-item');
             li.setAttribute('id', `${baseName}[${i}]_li`);
@@ -174,7 +174,7 @@ const addRootObject = (parent, obj, ignoredKeyList, lvl) => {
 
     const baseName = 'selected';
 
-    const specialKeyList = ['cities', 'locations'];
+    const specialKeyList = ['cities', 'locations', 'locs'];
     const regularKeyList = Object.keys(obj)
         .filter(key => !ignoredKeyList.includes(key))
         .filter(key => !specialKeyList.includes(key));

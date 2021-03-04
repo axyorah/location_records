@@ -34,10 +34,10 @@ const projectSchema = new Schema({
         type: String,
         required: true
     },
-    areas: {
+    colls: {
         type: [{
             type: mongoose.Schema.Types.ObjectId,
-            ref: 'Area'
+            ref: 'Collection'
         }]
     }
 });

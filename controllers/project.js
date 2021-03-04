@@ -14,10 +14,10 @@ module.exports.show = async (req,res) => {
     res.cookie('projectId', project._id, { sameSite: 'strict' }); //secure: true, 
     res.locals.projectId = project._id;
 
-    const collections = await Collection.find({ project }).populate('cities');
+    const collections = await Collection.find({ project }).populate('locs');
     const locations = await Location.find({ project });
 
-    const selected = collectionId ? await Collection.findById(collectionId).populate('cities') : undefined;
+    const selected = collectionId ? await Collection.findById(collectionId).populate('locs') : undefined;
     
     res.render('./projects/show.ejs', { selected, collections, locations, project });
 }
@@ -100,7 +100,7 @@ module.exports.renderEdit = async (req,res) => {
 
     const project = await Project.findById(projectId);
     const locations = await Location.find({ project });
-    const collections = await Collection.find({ project }).populate('cities');
+    const collections = await Collection.find({ project }).populate('locs');
 
     res.render('./projects/edit.ejs', { locations, collections, project });
 }

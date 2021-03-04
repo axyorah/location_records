@@ -16,9 +16,9 @@ const ExpressError = require('../utils/ExpressError.js');
 module.exports.show = async (req,res) => {
     const { projectId, id } = req.params;
 
-    const selected = await Collection.findById(id).populate('cities');
+    const selected = await Collection.findById(id).populate('locs');
     const project = await Project.findById(projectId);
-    const collections = await Collection.find({ project }).populate('cities');
+    const collections = await Collection.find({ project }).populate('locs');
     const locations = await Location.find({ project });
 
     res.render('./general/show.ejs', { selected, collections, locations, project });
@@ -58,7 +58,7 @@ module.exports.addNew = async (req,res) => {
     collection.markModified('General Information');
     await collection.save();
 
-    project.areas.push(collection);
+    project.colls.push(collection);
     await project.save();
 
     req.flash('success', `New collection "${collection.name}" has been added!`);
@@ -71,7 +71,7 @@ module.exports.renderEdit = async (req,res) => {
     const selected = await Collection.findById(id);
     const project = await Project.findById(projectId);
     const locations = await Location.find({ project });
-    const collections = await Collection.find({ project }).populate('cities');
+    const collections = await Collection.find({ project }).populate('locs');
 
     res.render('./collections/edit.ejs', { selected, locations, collections, project });
 }
@@ -122,7 +122,7 @@ module.exports.delete = async (req,res) => {
     let project = await Project.findById(projectId);
 
     // if current collection is DEFAULT COLLECTION and it has children - ignore
-    if ( collection.name === 'DEFAULT COLLECTION' && collection.cities.length ) {
+    if ( collection.name === 'DEFAULT COLLECTION' && collection.locs.length ) {
         req.flash(
             'error', 
             `Can't delete the "DEFAULT COLLECTION" while there are locations ` + 
@@ -140,28 +140,28 @@ module.exports.delete = async (req,res) => {
     // if there are any locations that belong to deleted collection
     // they need to be reassigned to DEFAULT COLLECTION;
     // if DEFAULT COLLECTION doesn't yet exist - create it!
-    if ( collection.cities.length ) {
+    if ( collection.locs.length ) {
         // get/create default collection
         let defaultCollection;
         getOrCreateDefaultCollection().then(collection => { defaultCollection = collection });
 
         // set orphaned locations to be children of default collection        
-        const locations = await Location.find({ area: collection });
+        const locations = await Location.find({ coll: collection });
         for (let location of locations ) {
-            defaultCollection.cities.push(location);
-            location.area = defaultCollection;
+            defaultCollection.locs.push(location);
+            location.coll = defaultCollection;
             location.save();
         }
         // add default collection to deleted collection's parent project
         defaultCollection.project = project;
         defaultCollection.save();
-        project.areas.push(defaultCollection);
+        project.colls.push(defaultCollection);
     }
 
     // delete collection from its parent project
     project = await Project.findByIdAndUpdate(
         projectId,
-        { $pull: { areas: collection._id }}
+        { $pull: { colls: collection._id }}
     );
     await project.save();
 

@@ -20,7 +20,7 @@ class MapUtils {
             'type': 'geojson',
             'data': {
                 'type': 'FeatureCollection',
-                'features': collection.cities
+                'features': collection.locs
                 .filter(location => !exceptLocations.map(exLocation => exLocation._id).includes(location._id))
                 .map(location => ({
                     'type': 'Feature',
@@ -109,7 +109,8 @@ class MapUtils {
     }
 
     addLocationInfoToDOM = function (collections, titleHtml, infoHtml) {
-        // uses `postData(.)` and `showInfo(.)` functions!
+        // uses `postData(.)` and `addDataToDOM(.)` functions from `dataUtils.js`,
+        // and `projectId` global
         for (let collection of collections) {  
             // upadate detailed location info
             this.map.on('click', `locations-${collection.name}`, function (evt) {
@@ -169,7 +170,7 @@ class MapUtils {
     removeLocationFromSourcesOnEvent = function (selected, collections, event) {
         this.map.on(event, (evt) => {
             // get area corresponding to the selected location
-            const collection = collections.filter(collection => collection._id === selected.area)[0];
+            const collection = collections.filter(collection => collection._id === selected.coll)[0];
 
             // remove all markers that belong to the area of the selected location
             this.map.removeLayer(`locations-${collection.name}`);

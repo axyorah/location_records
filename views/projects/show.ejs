@@ -28,21 +28,21 @@
         <div class="card w-100">
             <!--
                 by default display label `Collections`;
-                this will be overwritten by City/Area (Location/Collection) name + buttons
+                this will be overwritten by Location/Collection name + buttons
                 by `showFullInfo(selected)`
-                when area link is clicked on the list or 
-                city marker is clicked on the map
+                when collection link is clicked on the list or 
+                location marker is clicked on the map
             -->
             <h1 id="region-name" class="d-flex justify-content-between m-4">
                 <%= selected === undefined ? 'Collections' : selected.name %>
             </h1>
 
             <!-- 
-                by default show all area links;
-                this will be overwritten with detailed City/Area (Location/Collection) info
+                by default show all collection links;
+                this will be overwritten with detailed Location/Collection info
                 by `showFullInfo(selected)`
-                when area link is clicked on the list or 
-                city marker is clicked on the map
+                when collection link is clicked on the list or 
+                location marker is clicked on the map
             -->
             <div class="card-body" id="region-info">
                 <ul class="list-group list-group-flush">
@@ -72,12 +72,9 @@
     const projectId = '<%= projectId %>'; // needed for postData
 
     const selectedJSON = '<%- JSON.stringify(selected) %>';
-    //const locationsJSON = '<%- JSON.stringify(locations) %>';
     const collectionsJSON = '<%- JSON.stringify(collections) %>';
     const projectJSON = '<%- JSON.stringify(project) %>';
     
-    //const selected = JSON.parse(selectedJSON); // below
-    //const locations = JSON.parse(locationsJSON); // needed for map
     const collections = JSON.parse(collectionsJSON); // needed for map
     const project = JSON.parse(projectJSON);
 
