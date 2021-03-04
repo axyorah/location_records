@@ -51,7 +51,7 @@ const getSubmitBtn = (name) => {
     return btn;
 }
 
-const getCityButtons = (item, names) => {
+const getLocationButtons = (item, names) => {
     // names should be an array of any combination of:
     // ['back', 'edit', 'del']
     if ( item.area ) {
@@ -89,7 +89,7 @@ const getCityButtons = (item, names) => {
     }
 }
 
-const getAreaButtons = (item, names) => {
+const getCollectionButtons = (item, names) => {
     // names should be an array of any combination of:
     // ['edit', 'del']
     if ( item.cities ) {

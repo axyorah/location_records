@@ -126,7 +126,7 @@
         const mu = new MapUtils('map-nl', project);
         const map = mu.getMap();
 
-        mu.populateMapWithCitiesOnEvent(collections, 'styledata');
+        mu.populateMapWithLocationsOnEvent(collections, 'styledata');
         updateFormInputsOnMapConfigChange(map, lngHtml, latHtml, zoomHtml);
         updateMapStyle(map, mapStyles, mapUrlBtn, mapUrlHtml, mapStyleHtml);
     </script>

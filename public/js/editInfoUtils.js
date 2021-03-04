@@ -119,12 +119,12 @@ const addKeyValPairToLi = (parent, key, val, ignoredKeyList, lvl) => {
     }
 }
 
-const addCitiesToULForEdit = (ul, obj, ignoredKeyList, lvl) => {
+const addLocationsToULForEdit = (ul, obj, ignoredKeyList, lvl) => {
     if (obj.cities) {
-        const baseName = 'cities';
+        const baseName = 'locations';
         for (let i = 0; i < obj.cities.length; i++) {
 
-            const city = obj.cities[i];
+            const location = obj.cities[i];
             const li = document.createElement('li');
             li.setAttribute('class', 'list-group-item');
             li.setAttribute('id', `${baseName}[${i}]_li`);
@@ -132,11 +132,11 @@ const addCitiesToULForEdit = (ul, obj, ignoredKeyList, lvl) => {
 
             // add key - title
             const titleArea = getTitleArea(parentName);
-            titleArea.value = `${city.name} (${city.code})`;//jsonHtmlify(key);
+            titleArea.value = `${location.name} (${location.code})`;//jsonHtmlify(key);
             li.appendChild(titleArea)
 
             // add val - info
-            resolveSingleItemForEdit(li, city, ignoredKeyList, lvl+1);
+            resolveSingleItemForEdit(li, location, ignoredKeyList, lvl+1);
         }
     }
 }
@@ -167,7 +167,7 @@ const addObjectForEdit = (parent, obj, ignoredKeyList, lvl) => {
 
     } else if ( keys[0] === 'cities' ) {
         // if the key is 'cities' - append them to grandParent
-        addCitiesToULForEdit(grandParent, obj.cities, ignoredKeyList, lvl);
+        addLocationsToULForEdit(grandParent, obj.cities, ignoredKeyList, lvl);
 
     } else {
         // if there is exactly one valid key - treat it normally
@@ -209,5 +209,5 @@ const showGenInfoInitForEdit = (item, genInfoRootHtml) => {
         resolveSingleItemForEdit(genInfoRootHtml, [item], ignoredDBKeys);
     } else {
         resolveSingleItemForEdit(genInfoRootHtml, item, ignoredDBKeys);
-    }    
+    }
 }

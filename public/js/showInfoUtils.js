@@ -142,26 +142,26 @@ const addObject = (parent, obj, ignoredKeyList, lvl) => {
     }
 }
 
-const addCitiesToUL = (ul, obj, ignoredKeyList, lvl) => {    
+const addLocationsToUL = (ul, obj, ignoredKeyList, lvl) => {    
     if (obj.cities) {        
-        const baseName = 'cities';
+        const baseName = 'locations';
         for (let i = 0; i < obj.cities.length; i++) {
 
-            const city = obj.cities[i];
+            const location = obj.cities[i];
             const li = document.createElement('li');
             li.setAttribute('class', 'list-group-item');
             li.setAttribute('id', `${baseName}[${i}]_li`);
             ul.appendChild(li); // set parent - child before `resolveSingleItem()`
 
-            makeDetails(li, `${city.name} (${city.code})`, city, ignoredKeyList, lvl);
+            makeDetails(li, `${location.name} (${location.code})`, location, ignoredKeyList, lvl);
 
             // if user is logged in:
-            //add city buttons next to city name
-            //(since several cities area added - we must be on Area page,
-            // so there's no need to add link that redirects back to parent area)
+            //add location buttons next to location name
+            //(since several locations are added - we must be on Collection page,
+            // so there's no need to add link that redirects back to parent collection)
             if ( username !== "anonymous" ) {
                 const summary = li.firstChild.firstChild; // li -> details -> summary
-                const btns = getCityButtons(city, ['edit', 'del']);
+                const btns = getLocationButtons(location, ['edit', 'del']);
                 summary.appendChild(btns);
             }            
         }
@@ -174,7 +174,7 @@ const addRootObject = (parent, obj, ignoredKeyList, lvl) => {
 
     const baseName = 'selected';
 
-    const specialKeyList = ['cities'];
+    const specialKeyList = ['cities', 'locations'];
     const regularKeyList = Object.keys(obj)
         .filter(key => !ignoredKeyList.includes(key))
         .filter(key => !specialKeyList.includes(key));
@@ -184,7 +184,7 @@ const addRootObject = (parent, obj, ignoredKeyList, lvl) => {
     ul.setAttribute('id', `${baseName}_ul`);
     parent.appendChild(ul);
 
-    // add valid non-city keys
+    // add valid non-location keys
     for (let i = 0; i < regularKeyList.length; i++ ) {
         const key = regularKeyList[i];
         const li = document.createElement('li');
@@ -194,8 +194,8 @@ const addRootObject = (parent, obj, ignoredKeyList, lvl) => {
 
         makeDetails(li, key, obj[key], ignoredKeyList, lvl);
     }
-    // add cities to ul
-    addCitiesToUL(ul, obj, ignoredKeyList, lvl);
+    // add locations to ul
+    addLocationsToUL(ul, obj, ignoredKeyList, lvl);
 }
 
 const resolveSingleItem = (parent, item, ignoredKeyList, lvl) => {

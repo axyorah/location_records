@@ -131,9 +131,9 @@
         mapboxgl.accessToken = mapBoxToken;
 
         const mu = new MapUtils('map-nl', project);
-        mu.populateMapWithCitiesOnEvent(collections, 'load');
+        mu.populateMapWithLocationsOnEvent(collections, 'load');
 
-        mu.removeCityFromSourcesOnEvent(selected, collections, 'load'); // instead of a circle we'll add movabel marker
+        mu.removeLocationFromSourcesOnEvent(selected, collections, 'load'); // instead of a circle we'll add movabel marker
         mu.addMarkerAtLngLatToMapOnEvent(selected.geometry.coordinates, 'load');
 
         mu.addNewMarkerToMapOnEvent('click');

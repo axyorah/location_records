@@ -14,40 +14,40 @@ class MapUtils {
         return this.map;
     }
 
-    getAreaSource = function (area, exceptCities) {
-        exceptCities = exceptCities ? exceptCities : [];
+    getCollectionSource = function (collection, exceptLocations) {
+        exceptLocations = exceptLocations ? exceptLocations : [];
         return {
             'type': 'geojson',
             'data': {
                 'type': 'FeatureCollection',
-                'features': area.cities
-                .filter(city => !exceptCities.map(exCity => exCity._id).includes(city._id))
-                .map(city => ({
+                'features': collection.cities
+                .filter(location => !exceptLocations.map(exLocation => exLocation._id).includes(location._id))
+                .map(location => ({
                     'type': 'Feature',
-                    'geometry': city.geometry,
+                    'geometry': location.geometry,
                     'properties': {
-                        '_id': city._id,
-                        'name': city.name,
+                        '_id': location._id,
+                        'name': location.name,
                         'description': 
-                            `<strong>${jsonHtmlify(city.name)} `+
-                            `(${jsonHtmlify(city.code)})</strong><br>`+
-                            `${jsonHtmlify(city.quickInfo)}`+
+                            `<strong>${jsonHtmlify(location.name)} `+
+                            `(${jsonHtmlify(location.code)})</strong><br>`+
+                            `${jsonHtmlify(location.quickInfo)}`+
                             '<hr>'+
-                            `${jsonHtmlify(area.quickInfo)}`
+                            `${jsonHtmlify(collection.quickInfo)}`
                     }
                 })),
             }
         };
     }
 
-    getAreaLayer = function (area) {
+    getCollectionLayer = function (collection) {
         return {
-            'id': `cities-${area.name}`,
+            'id': `locations-${collection.name}`,
             'interactive': true,
             'type': 'circle',
-            'source': `cities-${area.name}`,
+            'source': `locations-${collection.name}`,
             'paint': { 
-                'circle-color': area.color,
+                'circle-color': collection.color,
                 'circle-radius': 8,
                 'circle-opacity': 0.7,
             }
@@ -82,37 +82,37 @@ class MapUtils {
         }
     }
 
-    populateMapWithCities = function (areas) {
-        for (let area of areas) {
-            if ( !this.map.getSource(`cities-${area.name}`) ) {
-                // add city-data of the current area in correct format
-                this.map.addSource(`cities-${area.name}`, this.getAreaSource(area));
+    populateMapWithLocations = function (collections) {
+        for (let collection of collections) {
+            if ( !this.map.getSource(`locations-${collection.name}`) ) {
+                // add location-data of the current collection in correct format
+                this.map.addSource(`locations-${collection.name}`, this.getCollectionSource(collection));
                     
-                // add a layer showing the city markers for the current area
-                this.map.addLayer(this.getAreaLayer(area));
+                // add a layer showing the location markers for the current collection
+                this.map.addLayer(this.getCollectionLayer(collection));
             
                 // show popup on mouseenter, remove on mouseleave
                 let popup = new mapboxgl.Popup();
-                this.map.on('mouseenter', `cities-${area.name}`, this.addPopupCallback(popup));
-                this.map.on('mouseleave', `cities-${area.name}`, this.removePopupCallback(popup));
+                this.map.on('mouseenter', `locations-${collection.name}`, this.addPopupCallback(popup));
+                this.map.on('mouseleave', `locations-${collection.name}`, this.removePopupCallback(popup));
             }
         }
     }
 
-    populateMapWithCitiesOnEvent = function(areas, event) {
-        // areas: array of `area` objects (db entries) with schema defined in `./models/area.js`
+    populateMapWithLocationsOnEvent = function(collections, event) {
+        // collections: array of `collection` objects (db entries) with schema defined in `./models/collection.js`
         // event: String: either of'load', 'sourcedata', 'styledata'
         this.map.on(event, () => {
             // this: MapUtils.object
-            this.populateMapWithCities(areas);
+            this.populateMapWithLocations(collections);
         })
     }
 
-    addCityInfoToDOM = function (areas, titleHtml, infoHtml) {
+    addLocationInfoToDOM = function (collections, titleHtml, infoHtml) {
         // uses `postData(.)` and `showInfo(.)` functions!
-        for (let area of areas) {  
-            // upadate detailed city info
-            this.map.on('click', `cities-${area.name}`, function (evt) {
+        for (let collection of collections) {  
+            // upadate detailed location info
+            this.map.on('click', `locations-${collection.name}`, function (evt) {
                 const id = evt.features[0].properties._id;
                 postData(`/projects/${projectId}/locations/${id}`, { id })
                     .then((data) => addDataToDOM(data, titleHtml, infoHtml))
@@ -121,12 +121,12 @@ class MapUtils {
         }  
     }
 
-    addCityInfoToDOMOnEvent = function (areas, titleHtml, infoHtml, event) {
-        // areas: array of `area` objects (db entries) with schema defined in `./models/area.js`
-        // event: String: either of: 'click', 'mouseover'
+    addLocationInfoToDOMOnEvent = function (collections, titleHtml, infoHtml, event) {
+        // collections: array of `collection` objects (db entries) with schema defined in `./models/collection.js`
+        // event: String: either of 'click', 'mouseover'
         this.map.on(event, () => {
             // this: MapUtils
-            this.addCityInfoToDOM(areas, titleHtml, infoHtml);
+            this.addLocationInfoToDOM(collections, titleHtml, infoHtml);
         })
     }
 
@@ -166,21 +166,21 @@ class MapUtils {
         })
     }
 
-    removeCityFromSourcesOnEvent = function (selected, areas, event) {
+    removeLocationFromSourcesOnEvent = function (selected, collections, event) {
         this.map.on(event, (evt) => {
-            // get area corresponding to the selected city
-            const area = areas.filter(area => area._id === selected.area)[0];
+            // get area corresponding to the selected location
+            const collection = collections.filter(collection => collection._id === selected.area)[0];
 
-            // remove all markers that belong to the area of the selected city
-            this.map.removeLayer(`cities-${area.name}`);
-            this.map.removeSource(`cities-${area.name}`);
+            // remove all markers that belong to the area of the selected location
+            this.map.removeLayer(`locations-${collection.name}`);
+            this.map.removeSource(`locations-${collection.name}`);
 
-            // add again all markers EXCEPT for selected city
-            const source = this.getAreaSource(area, [selected]);
-            this.map.addSource(`cities-${area.name}`, source );
+            // add again all markers EXCEPT for selected location
+            const source = this.getCollectionSource(collection, [selected]);
+            this.map.addSource(`locations-${collection.name}`, source );
 
             // add a layer showing the places.
-            const layer = this.getAreaLayer(area);
+            const layer = this.getCollectionLayer(collection);
             this.map.addLayer( layer );
         });
     }

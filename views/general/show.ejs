@@ -45,6 +45,6 @@
     mapboxgl.accessToken = mapBoxToken;
 
     const mu = new MapUtils('map-nl', project);
-    mu.populateMapWithCitiesOnEvent(collections, 'load');
-    mu.addCityInfoToDOMOnEvent(collections, regionNameHtml, regionInfoHtml, 'click');
+    mu.populateMapWithLocationsOnEvent(collections, 'load');
+    mu.addLocationInfoToDOMOnEvent(collections, regionNameHtml, regionInfoHtml, 'click');
 </script>

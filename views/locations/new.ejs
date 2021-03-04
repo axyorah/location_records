@@ -95,7 +95,7 @@
         mapboxgl.accessToken = mapBoxToken;
 
         const mu = new MapUtils('map-nl', project);
-        mu.populateMapWithCitiesOnEvent(collections, 'load');
+        mu.populateMapWithLocationsOnEvent(collections, 'load');
         mu.addNewMarkerToMapOnEvent('click');
         mu.addNewMarkerCoordinatesToFormOnEvent(latInpt, lngInpt, 'click');
         mu.removeLastMarkerOnKey('Escape');

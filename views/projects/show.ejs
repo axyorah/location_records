@@ -90,12 +90,12 @@
 
     mapboxgl.accessToken = mapBoxToken;
     const mu = new MapUtils('map-nl', project);
-    mu.populateMapWithCitiesOnEvent(collections, 'load');
+    mu.populateMapWithLocationsOnEvent(collections, 'load');
 
-    // add city info on map click
-    mu.addCityInfoToDOMOnEvent(collections, regionNameHtml, regionInfoHtml, 'click');
+    // add location info on map click
+    mu.addLocationInfoToDOMOnEvent(collections, regionNameHtml, regionInfoHtml, 'click');
 
-    // add area info if path is `/projects/<projectId>/?collectionId=<collectionId>`    
+    // add collection info if path is `/projects/<projectId>/?collectionId=<collectionId>`    
     if (selectedJSON) {
         const selected = JSON.parse(selectedJSON);
         addDataToDOM(selected, regionNameHtml, regionInfoHtml);

@@ -5,6 +5,7 @@ const ignoredDBKeys = [
     'geometry', 
     'code', 
     'area', 
+    'collection',
     'color',
     'project',
     '_id', 
@@ -31,19 +32,19 @@ async function postData(url, data) {
 
 function addDataToDOM (item, titleHtml, infoHtml) {
     // show detailed info on City or Area next to the map
-    // set City/Area name
+    // set Location(City)/Collection(Area) name
     if ( item.area ) {
-        // cities have ref to parent area        
+        // locations (cities) have ref to parent area        
         titleHtml.innerHTML =  
             `${jsonHtmlify(item.name)} (${jsonHtmlify(item.code)})`;
 
-        const btns = getCityButtons(item, ['back', 'edit', 'del']);
+        const btns = getLocationButtons(item, ['back', 'edit', 'del']);
         titleHtml.appendChild(btns);     
     } else if ( item.cities ) {
-        // areas have ref to child cities        
+        // collections (areas) have ref to child cities        
         titleHtml.innerHTML = `${jsonHtmlify(item.name)}`;
 
-        const btns = getAreaButtons(item, ['edit', 'del']);
+        const btns = getCollectionButtons(item, ['edit', 'del']);
         titleHtml.appendChild(btns);
     } else {
         return;
