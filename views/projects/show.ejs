@@ -29,7 +29,7 @@
             <!--
                 by default display label `Collections`;
                 this will be overwritten by Location/Collection name + buttons
-                by `showFullInfo(selected)`
+                by `addDataToDOM(selected, ..., ...)`
                 when collection link is clicked on the list or 
                 location marker is clicked on the map
             -->
@@ -40,7 +40,7 @@
             <!-- 
                 by default show all collection links;
                 this will be overwritten with detailed Location/Collection info
-                by `showFullInfo(selected)`
+                by `addDataToDOM(selected, ..., ...)`
                 when collection link is clicked on the list or 
                 location marker is clicked on the map
             -->
@@ -48,10 +48,9 @@
                 <ul class="list-group list-group-flush">
                     <% for (let collection of collections) { %>
                         <li class="list-group-item">
-                            <!-- <a href="/projects/<%= project._id %>/?collectionId=<%= collection._id %>">
-                                <h3><%= collection.name %></h3>
-                            </a> -->
-                            <a href="#"><h3 id="<%= collection._id %>"><%= collection.name %></h3></a>
+                            <a href="#">
+                                <h3 id="<%= collection._id %>"><%= collection.name %></h3>
+                            </a>
                         </li>
                     <% } %>
                 </ul>
