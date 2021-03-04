@@ -1,6 +1,6 @@
 
 const sanitizeHtml = require('sanitize-html');
-const Area = require('../models/collection.js');
+const Collection = require('../models/collection.js');
 const Project = require('../models/project.js');
 
 const jsonEscape = (str) => {
@@ -38,10 +38,10 @@ const parseMixedSchema = ( inArray ) => {
 
 module.exports.parseMixedSchema = parseMixedSchema;
 
-const getOrCreateDefaultArea = async () => {
-    let defaultCollection = await Area.findOne({ name: 'DEFAULT COLLECTION' });
+const getOrCreateDefaultCollection = async () => {
+    let defaultCollection = await Collection.findOne({ name: 'DEFAULT COLLECTION' });
     if ( !defaultCollection ) {
-        defaultCollection = new Area({
+        defaultCollection = new Collection({
             name: 'DEFAULT COLLECTION',
             code: 'DEFAULT COLLECTION',
             color: '#ff0000',
@@ -58,7 +58,7 @@ const getOrCreateDefaultArea = async () => {
     return defaultCollection;
 }
 
-module.exports.getOrCreateDefaultArea = getOrCreateDefaultArea;
+module.exports.getOrCreateDefaultCollection = getOrCreateDefaultCollection;
 
 const createDefaultProject = ( projectToken ) => {
     return new Project({

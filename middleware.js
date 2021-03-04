@@ -1,8 +1,8 @@
 const { locationSchema, collectionSchema } = require('./validationSchemas.js');
 const ExpressError = require('./utils/ExpressError.js');
 const catchAsync = require('./utils/catchAsync.js');
-const City = require('./models/location.js');
-const Area = require('./models/collection.js');
+const Location = require('./models/location.js');
+const Collection = require('./models/collection.js');
 const User = require('./models/user.js');
 const Project = require('./models/project.js');
 
@@ -16,7 +16,7 @@ module.exports.setLocals = (req,res,next) => {
     next();
 }
 
-module.exports.validateCity = (req,res,next) => {
+module.exports.validateLocation = (req,res,next) => {
 
     // validate with Joi
     const { error } = locationSchema.validate(req.body);
@@ -28,7 +28,7 @@ module.exports.validateCity = (req,res,next) => {
     }
 }
 
-module.exports.validateArea = (req,res,next) => {
+module.exports.validateCollection = (req,res,next) => {
 
     // validate with Joi
     const { error } = collectionSchema.validate(req.body);
@@ -70,18 +70,18 @@ module.exports.isProjectInDB = catchAsync(async (req,res,next) => {
     }
 })
 
-module.exports.isAreaInDB = catchAsync(async (req,res,next) => {
+module.exports.isCollectionInDB = catchAsync(async (req,res,next) => {
     const { id } = req.params;
-    if ( !(await Area.findById(id)) ){
+    if ( !(await Collection.findById(id)) ){
         throw new ExpressError('Collection with Specified ID Does Not Exist', 400);
     } else {
         next();
     }
 })
 
-module.exports.isCityInDB = catchAsync(async (req,res,next) => {
+module.exports.isLocationInDB = catchAsync(async (req,res,next) => {
     const { id } = req.params;
-    if ( !(await City.findById(id)) ) {
+    if ( !(await Location.findById(id)) ) {
         throw new ExpressError('Location with Specified ID Does Not Exist', 400);
     } else {
         next();

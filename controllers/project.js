@@ -1,5 +1,5 @@
-const Area = require('../models/collection.js');
-const City = require('../models/location.js');
+const Collection = require('../models/collection.js');
+const Location = require('../models/location.js');
 const User = require('../models/user.js');
 const Project = require('../models/project.js');
 const ExpressError = require('../utils/ExpressError.js');
@@ -14,10 +14,10 @@ module.exports.show = async (req,res) => {
     res.cookie('projectId', project._id, { sameSite: 'strict' }); //secure: true, 
     res.locals.projectId = project._id;
 
-    const collections = await Area.find({ project }).populate('cities');
-    const locations = await City.find({ project });
+    const collections = await Collection.find({ project }).populate('cities');
+    const locations = await Location.find({ project });
 
-    const selected = collectionId ? await Area.findById(collectionId).populate('cities') : undefined;
+    const selected = collectionId ? await Collection.findById(collectionId).populate('cities') : undefined;
     
     res.render('./projects/show.ejs', { selected, collections, locations, project });
 }
@@ -99,8 +99,8 @@ module.exports.renderEdit = async (req,res) => {
     const { projectId } = req.params;
 
     const project = await Project.findById(projectId);
-    const locations = await City.find({ project });
-    const collections = await Area.find({ project }).populate('cities');
+    const locations = await Location.find({ project });
+    const collections = await Collection.find({ project }).populate('cities');
 
     res.render('./projects/edit.ejs', { locations, collections, project });
 }
@@ -139,8 +139,8 @@ module.exports.delete = async (req,res) => {
 
     const user = await User.findOne({ username });
     const project = await Project.findById(projectId);
-    const collections = await Area.find({ project });
-    const locations = await City.find({ project });
+    const collections = await Collection.find({ project });
+    const locations = await Location.find({ project });
 
     // remove prjectId from cookies    
     res.cookie('projectId', undefined, { sameSite: 'strict' });
@@ -150,10 +150,10 @@ module.exports.delete = async (req,res) => {
     if ( (await User.find({ projects: project._id })).length === 1 ) {
         // delete project's children cities and areas
         for (let location of locations) {
-            await City.findByIdAndDelete(location._id);
+            await Location.findByIdAndDelete(location._id);
         }
         for (let collection of collections) {
-            await Area.findByIdAndDelete(collection._id);
+            await Collection.findByIdAndDelete(collection._id);
         }
 
         // delete project

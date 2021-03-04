@@ -5,23 +5,21 @@ const baseClient = mbxClient({ accessToken: mbxToken });
 
 const sanitizeHtml = require('sanitize-html');
 
-const Area = require('../models/collection.js');
-const City = require('../models/location.js');
+const Collection = require('../models/collection.js');
+const Location = require('../models/location.js');
 const User = require('../models/user.js');
 const Project = require('../models/project.js');
-const { parseMixedSchema, getOrCreateDefaultArea } = require('../utils/formUtils.js');
+const { parseMixedSchema, getOrCreateDefaultCollection } = require('../utils/formUtils.js');
 
 const ExpressError = require('../utils/ExpressError.js');
-
-// TODO: check whether project/area belongs to user
 
 module.exports.show = async (req,res) => {
     const { projectId, id } = req.params;
 
-    const selected = await Area.findById(id).populate('cities');
+    const selected = await Collection.findById(id).populate('cities');
     const project = await Project.findById(projectId);
-    const collections = await Area.find({ project }).populate('cities');
-    const locations = await City.find({ project });
+    const collections = await Collection.find({ project }).populate('cities');
+    const locations = await Location.find({ project });
 
     res.render('./general/show.ejs', { selected, collections, locations, project });
 }
@@ -42,13 +40,13 @@ module.exports.addNew = async (req,res) => {
 
     const project = await Project.findById(projectId);
     
-    // skip if area with the same name already exists in this project
-    if ( await Area.findOne({ project, name })) {
+    // skip if collection with the same name already exists in this project
+    if ( await Collection.findOne({ project, name })) {
         req.flash('error', `${name} already exists in this project`);
         return res.redirect(`/projects/${projectId}/collections/new`);
     }
     
-    let collection = new Area({
+    let collection = new Collection({
         name: parseMixedSchema(name),
         code: parseMixedSchema(code),
         color: parseMixedSchema(color),
@@ -70,10 +68,10 @@ module.exports.addNew = async (req,res) => {
 module.exports.renderEdit = async (req,res) => {
     const { projectId, id } = req.params;
 
-    const selected = await Area.findById(id);
+    const selected = await Collection.findById(id);
     const project = await Project.findById(projectId);
-    const locations = await City.find({ project });
-    const collections = await Area.find({ project }).populate('cities');
+    const locations = await Location.find({ project });
+    const collections = await Collection.find({ project }).populate('cities');
 
     res.render('./collections/edit.ejs', { selected, locations, collections, project });
 }
@@ -85,17 +83,17 @@ module.exports.updateEdited = async (req,res) => {
     const { name, code, color, quickInfo } = await req.body.collection;
     const generalInfo = await req.body.collection['General Information'];
 
-    const collection = await Area.findById(id);
+    const collection = await Collection.findById(id);
     const project = await Project.findById(projectId);
 
-    // skip if area with the same name but different id already exists in this project
-    if ( await Area.findOne({ project, name }) &&
-         !(await Area.findOne({ project, name, _id: id })) ) {
+    // skip if collection with the same name but different id already exists in this project
+    if ( await Collection.findOne({ project, name }) &&
+         !(await Collection.findOne({ project, name, _id: id })) ) {
         req.flash('error', `${name} already exists in this project`);
         return res.redirect(`/projects/${projectId}/collections/${id}/edit`);
     }
 
-    const collectionNew = await Area.findByIdAndUpdate(
+    const collectionNew = await Collection.findByIdAndUpdate(
         id, 
         {
             name: parseMixedSchema(name),
@@ -120,10 +118,10 @@ module.exports.updateEdited = async (req,res) => {
 module.exports.delete = async (req,res) => {
     const { projectId, id } = req.params;
 
-    const collection = await Area.findById(id);
+    const collection = await Collection.findById(id);
     let project = await Project.findById(projectId);
 
-    // if current area is DEFAULT COLLECTION and it has children - ignore
+    // if current collection is DEFAULT COLLECTION and it has children - ignore
     if ( collection.name === 'DEFAULT COLLECTION' && collection.cities.length ) {
         req.flash(
             'error', 
@@ -135,32 +133,32 @@ module.exports.delete = async (req,res) => {
         return;
     }
 
-    // delete area from Area collection
+    // delete collection from Collection collection
     console.log(`DELETING ${collection.name} (${id})`);
-    await Area.findByIdAndDelete(id);
+    await Collection.findByIdAndDelete(id);
 
-    // if there are any cities that belong to deleted area
+    // if there are any locations that belong to deleted collection
     // they need to be reassigned to DEFAULT COLLECTION;
     // if DEFAULT COLLECTION doesn't yet exist - create it!
     if ( collection.cities.length ) {
-        // get/create default area
+        // get/create default collection
         let defaultCollection;
-        getOrCreateDefaultArea().then(collection => { defaultCollection = collection });
+        getOrCreateDefaultCollection().then(collection => { defaultCollection = collection });
 
-        // set orphaned cities to be children of default area        
-        const locations = await City.find({ area: collection });
+        // set orphaned locations to be children of default collection        
+        const locations = await Location.find({ area: collection });
         for (let location of locations ) {
             defaultCollection.cities.push(location);
             location.area = defaultCollection;
             location.save();
         }
-        // add default area to deleted area's parent project
+        // add default collection to deleted collection's parent project
         defaultCollection.project = project;
         defaultCollection.save();
         project.areas.push(defaultCollection);
     }
 
-    // delete area from its parent project
+    // delete collection from its parent project
     project = await Project.findByIdAndUpdate(
         projectId,
         { $pull: { areas: collection._id }}

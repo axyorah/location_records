@@ -5,8 +5,8 @@ const baseClient = mbxClient({ accessToken: mbxToken });
 
 const sanitizeHtml = require('sanitize-html');
 
-const Area = require('../models/collection.js');
-const City = require('../models/location.js');
+const Collection = require('../models/collection.js');
+const Location = require('../models/location.js');
 const User = require('../models/user.js');
 const Project = require('../models/project.js');
 const ExpressError = require('../utils/ExpressError.js');
@@ -15,7 +15,7 @@ const { parseMixedSchema } = require('../utils/formUtils.js');
 module.exports.data = async (req,res) => {
     const { id } = req.params;
     
-    const selected = await City.findById(id);
+    const selected = await Location.findById(id);
       
     res.send(selected);
 }
@@ -25,9 +25,9 @@ module.exports.show = async (req,res) => {
     const { projectId, id } = req.params;
 
     const project = await Project.findById(projectId);
-    const selected = await City.findById(id);    
-    const locations = await City.find({ project });
-    const collections = await Area.find({ project }).populate('cities');     
+    const selected = await Location.findById(id);    
+    const locations = await Location.find({ project });
+    const collections = await Collection.find({ project }).populate('cities');     
     
     res.render('./general/show.ejs', { selected, collections, locations, project });
 }
@@ -36,8 +36,8 @@ module.exports.renderNew = async (req,res) => {
     const { projectId } = req.params;
 
     const project = await Project.findById(projectId);
-    const collections = await Area.find({ project }).populate('cities');
-    const locations = await City.find({ project });
+    const collections = await Collection.find({ project }).populate('cities');
+    const locations = await Location.find({ project });
 
     res.render('./locations/new.ejs', { collections, locations, project });
 }
@@ -50,16 +50,16 @@ module.exports.addNew = async (req,res) => {
     const generalInfo = req.body.location['General Information'];
     
     const project = await Project.findById(projectId);
-    const collectionObj = await Area.findOne({ _id: area, project });
+    const collectionObj = await Collection.findOne({ _id: area, project });
     if ( !collectionObj ) throw new ExpressError('Specified Collection Does Not Exist', 400);
 
-    // skip if city with the same name already exists
-    if ( await City.findOne({ project, name })) {
+    // skip if location with the same name already exists
+    if ( await Location.findOne({ project, name })) {
         req.flash('error', `${name} already exists in this project`);
         return res.redirect(`/projects/${projectId}/locations/new`);
     }
 
-    let location = new City({
+    let location = new Location({
         name: parseMixedSchema(name),
         geometry: {
             type: 'Point',        
@@ -76,7 +76,7 @@ module.exports.addNew = async (req,res) => {
     location.markModified('General Information');     
     await location.save();
 
-    // add city to resp. area and save
+    // add location to resp. collection and save
     collectionObj.cities.push(location);
     await collectionObj.save();
 
@@ -88,9 +88,9 @@ module.exports.renderEdit = async (req,res) => {
     const { projectId, id } = req.params;
 
     const project = await Project.findById( projectId );
-    const selected = await City.findById( id );    
-    const locations = await City.find({ project });
-    const collections = await Area.find({ project }).populate('cities');
+    const selected = await Location.findById( id );    
+    const locations = await Location.find({ project });
+    const collections = await Collection.find({ project }).populate('cities');
 
     res.render('./locations/edit.ejs', { selected, locations, collections, project });
 }
@@ -103,19 +103,19 @@ module.exports.updateEdited = async (req,res) => {
     const generalInfo = await req.body.location['General Information'];
     
     const project = await Project.findById(projectId);    
-    const locationOld = await City.findById(id);
-    const collectionOld = await Area.findById(locationOld.area);
-    const collectionNew = await Area.findById(area);
+    const locationOld = await Location.findById(id);
+    const collectionOld = await Collection.findById(locationOld.area);
+    const collectionNew = await Collection.findById(area);
     if ( !collectionNew ) throw new ExpressError('Specified Collection Does Not Exist', 400);
 
-    // skip if city with the same name but different id already exists in this project
-    if ( await City.findOne({ project, name }) &&
-         !(await City.findOne({ project, name, _id: id })) ) {
+    // skip if location with the same name but different id already exists in this project
+    if ( await Location.findOne({ project, name }) &&
+         !(await Location.findOne({ project, name, _id: id })) ) {
         req.flash('error', `${name} already exists in this project`);
         return res.redirect(`/projects/${projectId}/locations/${id}/edit`);
     }
 
-    const location = await City.findByIdAndUpdate(
+    const location = await Location.findByIdAndUpdate(
         id, 
         {
             name: parseMixedSchema(name),
@@ -139,15 +139,15 @@ module.exports.updateEdited = async (req,res) => {
     location.markModified('General Information');
     await location.save();
 
-    // if area was changed:
+    // if collection was changed:
     if ( collectionOld._id !== collectionNew._id ) {
-        // delete city from old area
+        // delete location from old collection
         await collectionOld.updateOne({
             $pull: { cities: location._id }
         });
         await collectionOld.save();
 
-        // add city to new area
+        // add location to new collection
         collectionNew.cities.push(location);
         await collectionNew.save();
     }    
@@ -159,11 +159,11 @@ module.exports.updateEdited = async (req,res) => {
 module.exports.delete = async (req,res) => {
     const { projectId, id } = req.params;
 
-    // delete city from City collection
-    const location = await City.findByIdAndDelete(id);
+    // delete location from Location 
+    const location = await Location.findByIdAndDelete(id);
     
-    // delete city from its parent Area
-    const collection = await Area.findOneAndUpdate(
+    // delete location from its parent Collection
+    const collection = await Collection.findOneAndUpdate(
         { cities: id },
         { $pull: { cities: id } }
     );
