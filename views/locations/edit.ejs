@@ -121,8 +121,7 @@
             collectionOpts[i+1].innerHTML = jsonHtmlify(collections[i].name);
         }
         // 'General Information' is handled separately
-        //showGenInfoInit(genInfoRootHtml);
-        showGenInfoInitForEdit(selected['General Information'], genInfoRootHtml);
+        showGenInfoInitForEdit(genInfoRootHtml, selected['General Information']);
 
         // map
         const mapBoxToken = '<%= process.env.MAPBOX_TOKEN %>';

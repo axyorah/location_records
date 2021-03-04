@@ -88,5 +88,5 @@
         titleHtml.innerHTML = `Edit "${jsonHtmlify(selected.name)}"`; // already set, but possible not correctly displayed
         quickInfoHtml.innerHTML = selected.quickInfo;
         // 'General Information' is handled separately 
-        showGenInfoInitForEdit(selected['General Information'], genInfoRootHtml);
+        showGenInfoInitForEdit(genInfoRootHtml, selected['General Information']);
     </script>

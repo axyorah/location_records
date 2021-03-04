@@ -47,8 +47,8 @@
                         </div>
 
                         <div class="form-box">
-                            <label for="location[generalInfo]">General Information</label>
-                            <div id="location[generalInfo]"></div>
+                            <label for="location[General Information]">General Information</label>
+                            <div id="location[General Information]"></div>
                         </div>
 
                     </div>
@@ -65,7 +65,7 @@
 
     <script>
         // DOM
-        const genInfoRootHtml = document.getElementById('location[generalInfo]');
+        const genInfoRootHtml = document.getElementById('location[General Information]');
         const latInpt = document.getElementById('location[lat]');
         const lngInpt = document.getElementById('location[lng]');
 
@@ -87,8 +87,7 @@
         for (let i = 0; i < collections.length; i++) {
             collectionOpts[i+1].innerHTML = jsonHtmlify(collections[i].name);
         }
-        showGenInfoInit(genInfoRootHtml);
-        //showGenInfoInitForEdit('', genInfoRootHtml);
+        showGenInfoInitForEdit(genInfoRootHtml);
 
         // map
         const mapBoxToken = '<%= process.env.MAPBOX_TOKEN %>';
