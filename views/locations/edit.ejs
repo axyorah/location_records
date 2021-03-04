@@ -3,7 +3,7 @@
     <div class="row">
         <div class="col-xl-8 offset-xl-2">
 
-            <h1 class="my-5">Edit Location</h1>
+            <h1 class="my-5">Edit "<%= selected.name %>"</h1>
 
             <form method="POST" action="/projects/<%= projectId %>/locations/<%= selected._id %>/edit" class="needs-validation" novalidate>
 
@@ -25,7 +25,7 @@
                         </div>
 
                         <div class="form-box">
-                            <label for="location[coll]">Collection that the location belongs to</label>
+                            <label for="location[coll]">Collection that this location belongs to</label>
                             <select class="form-control" id="location[coll]" name="location[coll]" required>
                                 <option disabled value="">Select Collection</option>
                                 <% for (let collection of collections) { %>
