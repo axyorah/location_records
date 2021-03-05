@@ -152,11 +152,13 @@ const getTitleButton = (parentName, childName) => {
 
     btn.addEventListener('mouseenter', function (evt) {
         // if title exists: set it's color to red to indicate that it's about to be deleted
+        childName = getBtnChildId(btn.id);
         setTitleBackgroundColor( childName, 'rgba(255,0,0,0.1)');     
     })
 
     btn.addEventListener('mouseleave', function (evt) {
         // set title background color back to white
+        childName = getBtnChildId(btn.id);
         setTitleBackgroundColor( childName, 'rgba(255,255,255,1');
     })
 
