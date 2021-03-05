@@ -140,10 +140,6 @@ module.exports.delete = async (req,res) => {
         return;
     }
 
-    // delete collection from Collection collection
-    console.log(`DELETING ${collection.name} (${id})`);
-    await Collection.findByIdAndDelete(id);
-
     // if there are any locations that belong to deleted collection
     // they need to be reassigned to DEFAULT COLLECTION;
     // if DEFAULT COLLECTION doesn't yet exist - create it!
@@ -151,7 +147,7 @@ module.exports.delete = async (req,res) => {
         // get/create default collection
         let defaultCollection;
         getOrCreateDefaultCollection().then(collection => { defaultCollection = collection });
-
+        
         // set orphaned locations to be children of default collection        
         const locations = await Location.find({ coll: collection });
         for (let location of locations ) {
@@ -171,6 +167,10 @@ module.exports.delete = async (req,res) => {
         { $pull: { colls: collection._id }}
     );
     await project.save();
+
+    // delete collection from Collection collection
+    console.log(`DELETING ${collection.name} (${id})`);
+    await Collection.findByIdAndDelete(id);
 
     req.flash('success', `"${collection.name}" has been succesfully deleted!`);
     res.redirect(`/projects/${projectId}`);
