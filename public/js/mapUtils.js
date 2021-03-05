@@ -108,27 +108,41 @@ class MapUtils {
         })
     }
 
-    addLocationInfoToDOM = function (collections, titleHtml, infoHtml) {
-        // uses `postData(.)` and `addDataToDOM(.)` functions from `dataUtils.js`,
-        // and `projectId` global
-        for (let collection of collections) {  
-            // upadate detailed location info
-            this.map.on('click', `${collection._id}`, function (evt) {
-                const id = evt.features[0].properties._id;
-                postData(`/projects/${projectId}/locations/${id}`, { id })
-                    .then((data) => addDataToDOM(data, titleHtml, infoHtml))
-                    .catch((err) => console.log(err));
-            });
-        }  
-    }
-
-    addLocationInfoToDOMOnEvent = function (collections, titleHtml, infoHtml, event) {
+    addOnTheFlyLocationDataToDOMOnEvent = function (collections, titleHtml, infoHtml, event) {
+        // gets location data on the fly by querying DB;
+        // use it if locations array is 'too big'
+        // and collections array is not populated with locations;
         // collections: array of `collection` objects (db entries) with schema defined in `./models/collection.js`
         // event: String: either of 'click', 'mouseover'
-        this.map.on(event, () => {
+        this.map.on('load', () => {
             // this: MapUtils
-            this.addLocationInfoToDOM(collections, titleHtml, infoHtml);
+            for (let collection of collections) {  
+                // upadate detailed location info
+                this.map.on(event, `${collection._id}`, function (evt) {
+                    const id = evt.features[0].properties._id;
+                    postData(`/projects/${projectId}/locations/${id}`, { id })
+                        .then((data) => addDataToDOM(data, titleHtml, infoHtml))
+                        .catch((err) => console.log(err));
+                });
+            }
         })
+    }
+
+    addLocationDataToDOMOnEvent = function (collections, titleHtml, infoHtml, event) {
+        // on click gets location with requested id from populated(!) collections array
+        // use it if locations array is 'small'
+        // and collections array is populated with locations
+        this.map.on('load', () => {
+            // this: MapUtils
+            for (let collection of collections) {  
+                // upadate detailed location info                
+                this.map.on(event, `${collection._id}`, (evt) => {
+                    const id = evt.features[0].properties._id;
+                    const location = collection.locs.filter(loc => loc._id === id)[0];
+                    addDataToDOM(location, titleHtml, infoHtml);
+                });
+            }
+        });
     }
 
     addNewMarkerToMapOnEvent = function (event) {

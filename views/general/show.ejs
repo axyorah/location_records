@@ -24,6 +24,7 @@
     const regionNameHtml = document.querySelector('#region-name');
     const regionInfoHtml = document.querySelector('#region-info');
 
+    // collections array should be populated with locations on server side!
     const selectedJSON = '<%- JSON.stringify(selected) %>';
     const collectionsJSON = '<%- JSON.stringify(collections) %>';
     const projectJSON = '<%- JSON.stringify(project) %>';
@@ -44,5 +45,5 @@
 
     const mu = new MapUtils('map-nl', project);
     mu.populateMapWithLocationsOnEvent(collections, 'load');
-    mu.addLocationInfoToDOMOnEvent(collections, regionNameHtml, regionInfoHtml, 'click');
+    mu.addLocationDataToDOMOnEvent(collections, regionNameHtml, regionInfoHtml, 'click');
 </script>

@@ -71,6 +71,7 @@
     const username = '<%= username %>'; // needed for btnUtils.js
     const projectId = '<%= projectId %>'; // needed for postData
 
+    // collections array should be populated with locations on server side!
     const selectedJSON = '<%- JSON.stringify(selected) %>';
     const collectionsJSON = '<%- JSON.stringify(collections) %>';
     const projectJSON = '<%- JSON.stringify(project) %>';
@@ -90,7 +91,7 @@
     mu.populateMapWithLocationsOnEvent(collections, 'load');
 
     // add location info on map click
-    mu.addLocationInfoToDOMOnEvent(collections, regionNameHtml, regionInfoHtml, 'click');
+    mu.addLocationDataToDOMOnEvent(collections, regionNameHtml, regionInfoHtml, 'click');
 
     // add collection info on link click
     for (i = 0; i < h3s.length; i++) {
