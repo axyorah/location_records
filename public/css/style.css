@@ -28,6 +28,12 @@ summary {
     margin-left: -15px;
 }
 
+@media (min-width: 1200px) {
+    .card {
+        min-height: 480px;
+    }
+}
+
 @keyframes sweep {
     0%    {opacity: 0; margin-left: -1px}
     100%  {opacity: 1; margin-left: 0px}
