@@ -15,11 +15,10 @@ module.exports.show = async (req,res) => {
     res.locals.projectId = project._id;
 
     const collections = await Collection.find({ project }).populate('locs');
-    const locations = await Location.find({ project });
 
     const selected = collectionId ? await Collection.findById(collectionId).populate('locs') : undefined;
     
-    res.render('./projects/show.ejs', { selected, collections, locations, project });
+    res.render('./projects/show.ejs', { selected, collections, project });
 }
 
 module.exports.share = async (req,res) => {
@@ -64,7 +63,7 @@ module.exports.renderNew = async (req,res) => {
         });
         await project.save();
     }
-    res.render('./projects/new.ejs', { locations: [], collections: [], project });
+    res.render('./projects/new.ejs', { collections: [], project });
 }
 
 module.exports.addNew = async (req,res) => {
@@ -99,10 +98,9 @@ module.exports.renderEdit = async (req,res) => {
     const { projectId } = req.params;
 
     const project = await Project.findById(projectId);
-    const locations = await Location.find({ project });
     const collections = await Collection.find({ project }).populate('locs');
 
-    res.render('./projects/edit.ejs', { locations, collections, project });
+    res.render('./projects/edit.ejs', { collections, project });
 }
 
 module.exports.updateEdited = async (req,res) => {

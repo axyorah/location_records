@@ -25,11 +25,10 @@ module.exports.show = async (req,res) => {
     const { projectId, id } = req.params;
 
     const project = await Project.findById(projectId);
-    const selected = await Location.findById(id);    
-    const locations = await Location.find({ project });
+    const selected = await Location.findById(id);
     const collections = await Collection.find({ project }).populate('locs');     
     
-    res.render('./general/show.ejs', { selected, collections, locations, project });
+    res.render('./general/show.ejs', { selected, collections, project });
 }
 
 module.exports.renderNew = async (req,res) => {
@@ -37,9 +36,8 @@ module.exports.renderNew = async (req,res) => {
 
     const project = await Project.findById(projectId);
     const collections = await Collection.find({ project }).populate('locs');
-    const locations = await Location.find({ project });
 
-    res.render('./locations/new.ejs', { collections, locations, project });
+    res.render('./locations/new.ejs', { collections, project });
 }
 
 module.exports.addNew = async (req,res) => {
@@ -88,11 +86,10 @@ module.exports.renderEdit = async (req,res) => {
     const { projectId, id } = req.params;
 
     const project = await Project.findById( projectId );
-    const selected = await Location.findById( id );    
-    const locations = await Location.find({ project });
+    const selected = await Location.findById( id );
     const collections = await Collection.find({ project }).populate('locs');
 
-    res.render('./locations/edit.ejs', { selected, locations, collections, project });
+    res.render('./locations/edit.ejs', { selected, collections, project });
 }
 
 module.exports.updateEdited = async (req,res) => {

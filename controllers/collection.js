@@ -19,9 +19,8 @@ module.exports.show = async (req,res) => {
     const selected = await Collection.findById(id).populate('locs');
     const project = await Project.findById(projectId);
     const collections = await Collection.find({ project }).populate('locs');
-    const locations = await Location.find({ project });
 
-    res.render('./general/show.ejs', { selected, collections, locations, project });
+    res.render('./general/show.ejs', { selected, collections, project });
 }
 
 module.exports.renderNew = async (req,res) => {
