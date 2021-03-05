@@ -42,6 +42,39 @@ const getABtn = (name, href) => {
     return btn;
 }
 
+const getPostDataBtn = (name, path) => {
+    // instead of redirecting to a diff page modify current page
+    // iff #region-name and #region-info elements are present
+    // and path corresponds to <item>.data route and supports POST req
+    const btn = document.createElement('a');
+    btn.innerHTML = name;
+    btn.setAttribute('class', 'btn btn-sm btn-outline-secondary');
+    btn.setAttribute('href', '#');
+
+    // get item id
+    const pattern = /\/projects\/[a-zA-Z0-9]*\/[a-zA-Z]*\/(?<id>[a-zA-Z0-9]*)$/;
+    const match = path.match(pattern);
+    const id = match.groups ? match.groups.id : undefined;
+
+    // get DOM elements for posting data to
+    const titleHtml = document.getElementById('region-name');
+    const infoHtml = document.getElementById('region-info');
+
+    if ( titleHtml && infoHtml && id ) {
+        // on click: send POST req to path and post fetched data to DOM
+        btn.addEventListener('click', () => {
+            postData(path, { id })
+            .then((data) => addDataToDOM(data, titleHtml, infoHtml))
+            .catch((err) => console.log(err));
+        });
+        return btn;
+    } else {
+        // if DOM elements do not exist or path is wrong get normal link btn
+        btn.setAttribute('href', path);
+        return btn;
+    }
+}
+
 const getSubmitBtn = (name) => {
     const btn = document.createElement('button');
     btn.innerHTML = name;
@@ -69,7 +102,7 @@ const getLocationButtons = (item, names) => {
         btnGroup.setAttribute('class', 'btn-group');
         btnGroup.setAttribute('role', 'group');
 
-        const backBtn = getABtn('Back to Collection', `/projects/${projectId}/?collectionId=${item.coll}`);
+        const backBtn = getPostDataBtn('Back to Collection', `/projects/${projectId}/collections/${item.coll}`);
         const editBtn = getABtn('Edit', `/projects/${projectId}/locations/${item._id}/edit`);
         const delBtn = getSubmitBtn('Del');
 
