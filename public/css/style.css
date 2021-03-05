@@ -29,7 +29,7 @@ summary {
 }
 
 @media (min-width: 1200px) {
-    .card {
+    #info {
         min-height: 480px;
     }
 }
