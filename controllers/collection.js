@@ -13,6 +13,14 @@ const { parseMixedSchema, getOrCreateDefaultCollection } = require('../utils/for
 
 const ExpressError = require('../utils/ExpressError.js');
 
+module.exports.data = async (req,res) => {
+    const { id } = req.params;
+    
+    const selected = await Collection.findById(id).populate('locs');
+      
+    res.send(selected);
+}
+
 module.exports.show = async (req,res) => {
     const { projectId, id } = req.params;
 

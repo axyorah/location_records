@@ -18,6 +18,7 @@ router.route('/projects/:projectId/collections/:id/delete')
     .delete(setLocals, isLoggedIn, isProjectDefined, isProjectInDB, doesProjectBelongToUser, isCollectionInDB, catchAsync(collection.delete));
 
 router.route('/projects/:projectId/collections/:id')
-    .get(setLocals, isProjectDefined, isProjectInDB, doesProjectBelongToUser, isCollectionInDB, catchAsync(collection.show));
+    .get(setLocals, isLoggedIn, isProjectDefined, isProjectInDB, doesProjectBelongToUser, isCollectionInDB, catchAsync(collection.show))
+    .post(setLocals, isLoggedIn, isProjectDefined, isProjectInDB, doesProjectBelongToUser, isCollectionInDB, catchAsync(collection.data));
 
 module.exports = router;
