@@ -187,7 +187,7 @@ const resolveSingleItemForEdit = (parent, item, ignoredKeyList, lvl) => {
     ignoredKeyList = (ignoredKeyList === undefined) ? [] : ignoredKeyList;
     lvl = (lvl === undefined) ? 5 : Math.min(lvl, 5);    
 
-    if ( item === undefined ) {
+    if ( !item ) {
         const ul = getNewUl(parent.id.split('_')[0]);
         parent.appendChild(ul); 
         // always add btns
@@ -205,7 +205,9 @@ const resolveSingleItemForEdit = (parent, item, ignoredKeyList, lvl) => {
 }
 
 const showGenInfoInitForEdit = (genInfoRootHtml, item) => {
-    if ( typeof(item) === "string" || typeof(item) === "number" ) {
+    if ( !item ) {
+        resolveSingleItemForEdit(genInfoRootHtml, [' '], ignoredDBKeys);
+    } else if ( typeof(item) === "string" || typeof(item) === "number" ) {
         resolveSingleItemForEdit(genInfoRootHtml, [item], ignoredDBKeys);
     } else {
         resolveSingleItemForEdit(genInfoRootHtml, item, ignoredDBKeys);
