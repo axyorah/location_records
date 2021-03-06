@@ -1,6 +1,6 @@
-# Simple Express App For Adding Notes to GeoLocations
+# Simple Express App For Attaching Text Records to GeoLocations
 
-<p style="color:grey;">ExpressApp test project. Under construction...</p>
+<p style="color:grey;">This is purely educational test project meant to get comfortable with MongoDB + Express combination.</p>
 
 - Create isolated environments (**projects**) that can be shared with other people;
 - Define colorcoded **collections** (e.g., 'bird watching spots' or 'coffee places');

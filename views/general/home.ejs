@@ -1,69 +1,72 @@
-<% layout('layout/boilerplate.ejs') %>
+    <% layout('layout/boilerplate.ejs') %>
 
-<div class="row">
+    <div class="row">
 
-    <h1 class="col-lg-8 col-12 offset-lg-2 offset-0 text-center mt-3">GEONOTES</h1>
+        <h1 class="col-lg-8 col-12 offset-lg-2 offset-0 text-center mt-3">LOCATION RECORDS</h1>
 
-    <div class="col-lg-8 col-12 offset-lg-2 offset-0 mt-3">
-        <div id="map-world" class="w-100" style="height: 350px;"></div>
+        <div class="col-lg-8 col-12 offset-lg-2 offset-0 mt-3">
+            <div id="map-world" class="w-100" style="height: 350px;"></div>
+        </div>
+
+        <% if ( username !== 'anonymous' ) { %>
+        <div class="col-lg-8 col-12 offset-lg-2 offset-0 mt-3">
+            <div class="dropdown my-4">
+                <button class="btn btn-lg btn-outline-secondary dropdown-toggle w-100" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                    Select Your Project
+                </button>
+                <ul class="dropdown-menu w-100" aria-labelledby="dropdownMenuButton">
+                    <% for (let project of projects) { %>
+                        <li class="w-100">
+                            <a class="dropdown-item w-100" href="/projects/<%= project._id %>"><%= project.name %></a>
+                        </li>
+                    <% } %>            
+                </ul>
+            </div>
+
+            <div>
+                <p>.. or insert shared Project Token</p>
+                <form action="/projects/share" method="POST" class="row">
+                    <div class="form-group col-md-10">                    
+                        <input type="text" class="form-control" id="projectToken" name="projectToken" placeholder="Project Token">
+                    </div>
+                    <div class="col-md-2">
+                        <button type="submit" class="btn btn-outline-secondary w-100">Submit</button>
+                    </div>                
+                </form>
+            </div>
+        </div>
+        <% } %>
+
+        
     </div>
 
-    <% if ( username !== 'anonymous' ) { %>
-    <div class="col-lg-8 col-12 offset-lg-2 offset-0 mt-3">
-        <div class="dropdown my-4">
-            <button class="btn btn-lg btn-outline-secondary dropdown-toggle w-100" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-                Select Your Project
-            </button>
-            <ul class="dropdown-menu w-100" aria-labelledby="dropdownMenuButton">
-                <% for (let project of projects) { %>
-                    <li class="w-100">
-                        <a class="dropdown-item w-100" href="/projects/<%= project._id %>"><%= project.name %></a>
-                    </li>
-                <% } %>            
-            </ul>
-        </div>
-
-        <div>
-            <p>.. or insert shared Project Token</p>
-            <form action="/projects/share" method="POST" class="row">
-                <div class="form-group col-md-10">                    
-                    <input type="text" class="form-control" id="projectToken" name="projectToken" placeholder="Project Token">
-                </div>
-                <div class="col-md-2">
-                    <button type="submit" class="btn btn-outline-secondary w-100">Submit</button>
-                </div>                
-            </form>
-        </div>
+    <div class="row">
+        <% if ( username === 'anonymous' ) { %>
+            <div class="col-lg-8 col-12 offset-lg-2 offset-0 text-center">
+                <p class="text-muted mt-5 mx-3">
+                    You can add new and edit existing information 
+                    after <a href="/users/login">logging in</a>. 
+                    Don't have an account? <a href="/users/new">Register!</a>
+                </p>
+            </div>
+        <% } %> 
     </div>
-    <% } %>
-
-    
-</div>
-
-<div class="row">
-    <% if ( username === 'anonymous' ) { %>
-        <div class="col-lg-8 col-12 offset-lg-2 offset-0 text-center">
-            <p class="text-muted mt-5 mx-3">
-                You can add new and edit existing information 
-                after <a href="/users/login">logging in</a>. 
-                Don't have an account? <a href="/users/new">Register!</a>
-            </p>
-        </div>
-    <% } %> 
-</div>
 
 
-<script>
-    const mapBoxToken = '<%= process.env.MAPBOX_TOKEN %>';
-    mapboxgl.accessToken = mapBoxToken;
+    <script>
+        const bodyHtml = document.getElementsByTagName('body')[0];
+        const mapBoxToken = '<%= process.env.MAPBOX_TOKEN %>';
+        mapboxgl.accessToken = mapBoxToken;
 
-    const projectsJSON = '<%- JSON.stringify(projects) %>';
-    const projects = JSON.parse(projectsJSON);
+        const projectsJSON = '<%- JSON.stringify(projects) %>';
+        const projects = JSON.parse(projectsJSON);
 
-    const map = new mapboxgl.Map({
-        container: 'map-world',
-        style: 'mapbox://styles/mapbox/light-v10',
-        center: [0, 25],
-        zoom: 0.7
-    });    
-</script>
+        const map = new mapboxgl.Map({
+            container: 'map-world',
+            style: 'mapbox://styles/mapbox/light-v10',
+            center: [0, 25],
+            zoom: 0.7
+        }); 
+
+        bodyHtml.setAttribute('id', 'body-home');
+    </script>
