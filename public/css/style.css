@@ -2,8 +2,17 @@ html, body {
     height: 100%;
 }
 
+#body-home {
+    background-image: linear-gradient(rgba(255,255,255,0.95), rgba(255,255,255,0.88)),
+        url("https://images.unsplash.com/photo-1488375634201-b85b28653a79?ixlib=rb-1.2.1&ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&auto=format&fit=crop&w=1273&q=80");
+    background-size: cover;
+    background-position: center;
+}
+
 .footer {
     bottom: 0;
+    display: flex;
+    justify-content: space-between;
 }
 
 .row {
