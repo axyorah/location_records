@@ -12,6 +12,7 @@ const getABtn = (name, href) => {
     btn.innerHTML = name;
     btn.setAttribute('class', 'btn btn-sm btn-outline-secondary');
     btn.setAttribute('href', href);
+    btn.setAttribute('style', 'display: flex; align-items: center;');
 
     return btn;
 }
