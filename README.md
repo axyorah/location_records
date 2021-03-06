@@ -65,7 +65,12 @@ MAPBOX_TOKEN=<mapboxgl token>
 
 Replace `<mapboxgl token>` with your **Default public token**.
 
-That's it! You can access the app by going to `localhost:3000` in your browser.
+That's it! You can now start the app by going to the project root and typing:
+```bash
+$ node index.js
+```
+
+You can now access the app by going to `localhost:3000` in your browser.
 
 ## Use
 Start with creating a user account. Its only purpose is to manage access to isolated environments (projects). After creating an account new default project "My First Project" will be automatically created for you. You can start by editing this project to adjust its name, description and map settings (center, zoom and style).
