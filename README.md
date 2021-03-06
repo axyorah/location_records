@@ -1,12 +1,17 @@
-# Simple Express App For Attaching Notes to GeoLocations
+# Simple Express App For Adding Notes to GeoLocations
 
-<p style="color:grey;">pet project under construction...</p>
+<p style="color:grey;">ExpressApp test project. Under construction...</p>
 
 - Create isolated environments (**projects**) that can be shared with other people;
 - Define colorcoded **collections** (e.g., 'bird watching spots' or 'coffee places');
 - Add collection-bound **location markers** to the map with some notes attached.
 
-
+<table>
+    <tr>
+        <td><img src="./imgs/index.png"></td>
+        <td><img src="./imgs/selected.png"></td>
+    </tr>
+</table>
 
 ## Description
 This is a simple Express App for creating notes attached to geolocations. Under the hood it uses MongoDB to store user-supplied information and MapBoxGL to render maps with interactive location markers.
