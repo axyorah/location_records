@@ -29,7 +29,7 @@ You need to have [node.js](https://nodejs.org/en/) version 15.0.0 or higher.
 
 If you have the correct version of node, clone this repo as:
 ```bash
-$ git clone https://github.com/axyorah/geonotes.git
+$ git clone https://github.com/axyorah/location_records.git
 ```
 
 Go to the root of the cloned repo and install all the dependencies by running:
