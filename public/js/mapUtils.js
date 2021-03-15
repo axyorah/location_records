@@ -7,11 +7,30 @@ class MapUtils {
             zoom: project.zoom
         });
 
+        // if cutom img map url is specified: overlay the map with the img
+        if (project.mapUrl) this.overlay(project.mapUrl);
+
+        // initialize location markers
         this.markers = [];
     }
 
     getMap = function () {
         return this.map;
+    }
+
+    overlay(imgUrl) {
+        const img = document.createElement('img');
+        img.src = imgUrl;
+        img.onload = () => {
+            // adjust the map setting to cover the entire world map with the image
+            const aspectRatio = img.width / img.height;
+            const lng = aspectRatio > 1 ? 180 : 89 * aspectRatio * 2;
+            const lat = aspectRatio > 1 ? 180 / aspectRatio / 2 : 89;
+
+            const mapStyle = getOverlayedMapStyle(imgUrl, lng, lat); // defined in projectUtils.js
+    
+            this.map.setStyle(mapStyle);
+        };
     }
 
     getCollectionSource = function (collection, exceptLocations) {

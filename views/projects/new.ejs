@@ -45,17 +45,25 @@
                                 value="streets-v11">                            
                         </div>
 
-                        <!-- temporarily unavailable -->
-                        <div class="form-box" style="display: none;">
+                        <div class="form-box">
                             <label for="project[mapUrl]">Custom Map Image URL [Optional]</label>
+                            <p class="text-muted">
+                                Instead of using the world map with preset styles, you can use your own custom image as a map!
+                                This can be an old stylized map, fantazy-world map or something completely different, like 
+                                a photo of your new gaming rig. <br>
+                                Whatever it is, make sure you provide a valid image url (it should end with 
+                                <code>.png</code>, <code>.jpg</code>, <code>.jpeg</code>, etc) and try it out!
+                            </p>
                             <div class="row">
                                 <div class="col-10">
-                                    <input class="form-control text-muted" type="text" id="project[mapUrl]" name="project[mapUrl]"
-                                        value="">
+                                    <input id="map-url-inpt" class="form-control text-muted" type="text" value="">
                                 </div>
                                 <div class="col-2">
                                     <button id="map-url-btn" type="button" class="btn btn-outline-secondary w-100">Try</button>
                                 </div>
+                            </div>
+                            <div style="display: none;">
+                                <input class="form-control text-muted" type="text" id="project[mapUrl]" name="project[mapUrl]" value="">
                             </div>
                         </div>
 
@@ -84,7 +92,8 @@
         const latHtml = document.getElementById('project[lat]');
         const zoomHtml = document.getElementById('project[zoom]');
         const mapStyleHtml = document.getElementById('project[mapStyle]');
-        const mapUrlHtml = document.getElementById('project[mapUrl]');
+        const mapUrlInptHtml = document.getElementById('map-url-inpt'); // raw unchecked img url
+        const mapUrlFormHtml = document.getElementById('project[mapUrl]'); // valid img url that will be added to db
         const tokenPHtml = document.getElementById('project-token');
         const tokenInptHtml = document.getElementById('project[token]');
 
@@ -103,6 +112,6 @@
         const map = mu.getMap();
 
         updateFormInputsOnMapConfigChange(map, lngHtml, latHtml, zoomHtml);
-        updateMapStyle(map, mapStyles, mapUrlBtn, mapUrlHtml, mapStyleHtml);
+        updateMapStyle(map, mapStyles, mapUrlBtn, mapUrlFormHtml, mapUrlInptHtml, mapStyleHtml);
         addToken(tokenPHtml, tokenInptHtml);
     </script>

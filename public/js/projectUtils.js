@@ -44,15 +44,18 @@ const updateFormInputsOnMapConfigChange = (map, lngHtml, latHtml, zoomHtml) => {
     }    
 }
 
-const overlayImage = (map, imgUrl, mapUrlHtml) => {
+const overlayImage = (map, imgUrl, mapUrlFormHtml, mapUrlInptHtml) => {
     const img = document.createElement('img');
     img.src = imgUrl;
     img.onload = () => {
+        // adjust the map setting to cover the entire world map with the image
         const aspectRatio = img.width / img.height;
         const lng = aspectRatio > 1 ? 180 : 89 * aspectRatio * 2;
         const lat = aspectRatio > 1 ? 180 / aspectRatio / 2 : 89;
 
         const mapStyle = getOverlayedMapStyle(imgUrl, lng, lat);
+        mapUrlFormHtml.value = mapUrlInptHtml.value;
+        mapUrlInptHtml.style.backgroundColor = 'rgba(0,0,0,0)';
     
         map.setStyle(mapStyle);
         map.setZoom(0);  
@@ -60,28 +63,35 @@ const overlayImage = (map, imgUrl, mapUrlHtml) => {
     };
     img.onerror = (evt) => {
         console.log(evt);
-        mapUrlHtml.value = '';
+        // reset both raw unchecked inpt and legit form inpt and provide an error color cue
+        mapUrlFormHtml.value = '';
+        mapUrlInptHtml.value = '';
+        mapUrlInptHtml.style.backgroundColor = 'rgba(255,0,0,0.1)';
     };
 }
 
-const updateMapStyle = (map, mapStyles, mapUrlBtn, mapUrlHtml, mapStyleHtml) => {
+const updateMapStyle = (map, mapStyles, mapUrlBtn, mapUrlFormHtml, mapUrlInptHtml, mapStyleHtml) => {
     // default styles
     for (let i = 0; i < mapStyles.length; i++) {
         mapStyles[i].addEventListener('click', (evt) => {
             const layerId = evt.target.id;
             map.setStyle('mapbox://styles/mapbox/' + layerId);
             mapStyleHtml.value = layerId;
-            mapUrlHtml.value = '';
+            mapUrlFormHtml.value = ''; // reset the map img url 
+            mapUrlFormHtml.style.backgroundColor = 'rgba(0,0,0,0)';
         })
     }
 
     // custom img
     mapUrlBtn.addEventListener('click', () => {
-        if ( mapUrlHtml.value ) {
-            //const url = 'https://miro.medium.com/max/2400/1*vAKUjotJ3K6djUeEQIwyHw.jpeg';
-            //const url = 'https://images.unsplash.com/photo-1613929905911-96040610a54d?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=701&q=80';
-            const imgUrl = mapUrlHtml.value;
-            overlayImage(map, imgUrl, mapUrlHtml);
+        if ( mapUrlInptHtml.value ) {
+            // check raw img url inpt 
+            // and if it's legit img url:
+            // - display img on the map
+            // - set value for the actual form element that will be used by db
+            //url example for testing: 'https://miro.medium.com/max/2400/1*vAKUjotJ3K6djUeEQIwyHw.jpeg'
+            const imgUrl = mapUrlInptHtml.value;
+            overlayImage(map, imgUrl, mapUrlFormHtml, mapUrlInptHtml);
         }
     });
 }
