@@ -82,3 +82,13 @@ On project home page you can view all the collections that belong to this projec
 You can also access the location-data from the map: hover over the location markers to see a short note or click on the marker to see the detailed information.
 
 You can always edit or delete any location or collection information by clicking location/collection edit or delete buttons. Finally, you can create a New Project and share it with other people by via Project Token, which is always visitble on the project home page.
+
+For an example of a project use these tokens:
+- WUR Campus
+```
+NuRWQ325ZoNV5RXiomBkngmOftVJQY7wWLAGtK18DbpWxhMHwx5fF31UGk8tqoDj
+```
+- Old Scotland
+```
+8mTGg2XPFoOpZsZjH6jqdCtNhmQ78CtAD2vBkvjNZy1b4ZpIAp8Xhku3Ilyay4bF
+```
