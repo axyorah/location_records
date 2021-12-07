@@ -13,7 +13,7 @@ module.exports.register = async (req,res,next) => {
 
         const user = new User({ 
             username: username, 
-            email: email
+            email: `${username}@example.com`
         });
 
         const project = createDefaultProject(projectToken);
